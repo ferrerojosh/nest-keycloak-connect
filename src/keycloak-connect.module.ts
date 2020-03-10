@@ -20,8 +20,9 @@ export class KeycloakConnectModule {
           provide: KEYCLOAK_CONNECT_OPTIONS,
           useValue: opts,
         },
-        this.keycloakProvider(),
+        this.keycloakProvider,
       ],
+      exports: [this.keycloakProvider],
     };
   }
 
@@ -31,7 +32,7 @@ export class KeycloakConnectModule {
     return {
       module: KeycloakConnectModule,
       imports: opts.imports || [],
-      providers: [this.createConnectProviders(opts), this.keycloakProvider()],
+      providers: [this.createConnectProviders(opts), this.keycloakProvider],
     };
   }
 
@@ -70,22 +71,20 @@ export class KeycloakConnectModule {
     };
   }
 
-  private static keycloakProvider(): Provider {
-    return {
-      provide: KEYCLOAK_INSTANCE,
-      useFactory: (opts: KeycloakConnectOptions) => {
-        const keycloakOpts: any = opts;
-        const keycloak: any = new Keycloak({}, keycloakOpts);
+  private static keycloakProvider: Provider = {
+    provide: KEYCLOAK_INSTANCE,
+    useFactory: (opts: KeycloakConnectOptions) => {
+      const keycloakOpts: any = opts;
+      const keycloak: any = new Keycloak({}, keycloakOpts);
 
-        // Access denied is called, add a flag to request so our resource guard knows
-        keycloak.accessDenied = (req: any, res: any, next: any) => {
-          req.resourceDenied = true;
-          next();
-        };
+      // Access denied is called, add a flag to request so our resource guard knows
+      keycloak.accessDenied = (req: any, res: any, next: any) => {
+        req.resourceDenied = true;
+        next();
+      };
 
-        return keycloak;
-      },
-      inject: [KEYCLOAK_CONNECT_OPTIONS],
-    };
-  }
+      return keycloak;
+    },
+    inject: [KEYCLOAK_CONNECT_OPTIONS],
+  };
 }
