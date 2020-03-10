@@ -1,3 +1,5 @@
+import KeycloakConnect = require('keycloak-connect');
+
 /**
  * Keycloak Connect options.
  */

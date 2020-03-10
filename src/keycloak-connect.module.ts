@@ -74,7 +74,8 @@ export class KeycloakConnectModule {
     return {
       provide: KEYCLOAK_INSTANCE,
       useFactory: (opts: KeycloakConnectOptions) => {
-        const keycloak: any = new Keycloak({}, opts);
+        const keycloakOpts: any = opts;
+        const keycloak: any = new Keycloak({}, keycloakOpts);
 
         // Access denied is called, add a flag to request so our resource guard knows
         keycloak.accessDenied = (req: any, res: any, next: any) => {
