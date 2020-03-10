@@ -4,13 +4,16 @@
   "description": "keycloak-nodejs-connect module for Nest",
   "author": "John Joshua Ferrer <johnjoshuaferrer@disroot.org>",
   "license": "MIT",
+  "files": [
+    "dist/**/*",
+    "*.md"
+  ],
   "scripts": {
     "start:dev": "tsc -w",
     "build": "tsc",
     "prepare": "npm run build",
     "format": "prettier --write \"src/**/*.ts\"",
-    "lint": "tslint -p tsconfig.json -c tslint.json",
-    "npm:publish": "cd dist && npm publish"
+    "lint": "tslint -p tsconfig.json -c tslint.json"
   },
   "keywords": [
     "nestjs",
