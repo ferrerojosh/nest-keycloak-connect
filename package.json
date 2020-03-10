@@ -1,17 +1,15 @@
 {
   "name": "nest-keycloak-connect",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "keycloak-nodejs-connect module for Nest",
   "author": "John Joshua Ferrer <johnjoshuaferrer@disroot.org>",
   "license": "MIT",
-  "files": [
-    "dist/**/*",
-    "*.md"
-  ],
   "scripts": {
     "start:dev": "tsc -w",
+    "prebuild": "rimraf dist",
     "build": "tsc",
-    "prepare": "npm run build",
+    "postbuild": "cpr README.md dist/ && cpr package.json dist/",
+    "npm:publish": "npm run build && cd dist && npm publish",
     "format": "prettier --write \"src/**/*.ts\"",
     "lint": "tslint -p tsconfig.json -c tslint.json"
   },
@@ -37,8 +35,10 @@
     "@nestjs/common": "^6.0.0",
     "@nestjs/core": "^6.0.0",
     "@types/express": "4.16.1",
+    "cpr": "^3.0.1",
     "prettier": "^1.19.1",
     "reflect-metadata": "^0.1.12",
+    "rimraf": "^3.0.2",
     "rxjs": "^6.0.0",
     "ts-node": "^8.6.2",
     "typescript": "^3.8.3"
