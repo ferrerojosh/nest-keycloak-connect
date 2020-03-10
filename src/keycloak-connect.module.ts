@@ -33,6 +33,7 @@ export class KeycloakConnectModule {
       module: KeycloakConnectModule,
       imports: opts.imports || [],
       providers: [this.createConnectProviders(opts), this.keycloakProvider],
+      exports: [this.keycloakProvider],
     };
   }
 
