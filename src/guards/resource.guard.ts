@@ -20,6 +20,11 @@ declare module 'keycloak-connect' {
   }
 }
 
+/**
+ * This adds a resource guard, which is permissive.
+ * Only controllers annotated with `@Resource` and methods with `@Scopes`
+ * are handled by this guard.
+ */
 @Injectable()
 export class ResourceGuard implements CanActivate {
   logger = new Logger(ResourceGuard.name);
@@ -33,6 +38,11 @@ export class ResourceGuard implements CanActivate {
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const resource = this.reflector.get<string>('resource', context.getClass());
     const scopes = this.reflector.get<string[]>('scopes', context.getHandler());
+
+    // No resource given, since we are permissive, allow
+    if (!resource) {
+      return true;
+    }
 
     this.logger.verbose(
       `Protecting resource '${resource}' with scopes: [ ${scopes} ]`,

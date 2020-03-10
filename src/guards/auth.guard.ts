@@ -8,6 +8,10 @@ import {
 import KeycloakConnect from 'keycloak-connect';
 import { KEYCLOAK_INSTANCE } from '../constants';
 
+/**
+ * An authentication guard. Will return a 401 unauthorized when it is unable to
+ * verify the JWT token or Bearer header is missing.
+ */
 @Injectable()
 export class AuthGuard implements CanActivate {
   constructor(
