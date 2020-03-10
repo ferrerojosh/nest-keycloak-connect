@@ -28,10 +28,15 @@ Register the module in app.module.ts
 
 ```typescript
 import { Module } from '@nestjs/common';
-import { KeycloakConnectModule, AuthGuard } from 'nest-keycloak-connect';
+import { KeycloakConnectModule, ResourceGuard, AuthGuard } from 'nest-keycloak-connect';
 
 @Module({
-  imports: [KeycloakConnectModule.register({})],
+  imports: [KeycloakConnectModule.register({
+    authServerUrl: 'http://localhost:8080/auth',
+    realm: 'master',
+    clientId: 'my-nestjs-app',
+    secret: 'secret',
+  })],
   providers: [
     // These are in order, see https://docs.nestjs.com/guards#binding-guards
     // for more information
