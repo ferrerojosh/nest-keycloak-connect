@@ -1,11 +1,21 @@
-import Keycloak from 'keycloak-connect';
-
 /**
- * Keycloak Connect options. Extends `keycloak-connect` configuration.
+ * Keycloak Connect options.
  */
-export interface KeycloakConnectOptions extends Keycloak.KeycloakConfig {
+export interface KeycloakConnectOptions {
+  /**
+   * Authentication server URL as defined in keycloak.json
+   */
   authServerUrl: string;
+  /**
+   * Client secret credientials.
+   */
   secret: string;
+  /**
+   * Client identifier.
+   */
   clientId: string;
-  bearerOnly: boolean;
+  /**
+   * Keycloak realm.
+   */
+  realm: string;
 }
