@@ -5,7 +5,7 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
-import KeycloakConnect from 'keycloak-connect';
+import { Keycloak } from 'keycloak-connect';
 import { KEYCLOAK_INSTANCE } from '../constants';
 
 /**
@@ -16,7 +16,7 @@ import { KEYCLOAK_INSTANCE } from '../constants';
 export class AuthGuard implements CanActivate {
   constructor(
     @Inject(KEYCLOAK_INSTANCE)
-    private keycloak: KeycloakConnect.Keycloak,
+    private keycloak: Keycloak,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
