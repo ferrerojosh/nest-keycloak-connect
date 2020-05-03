@@ -1,6 +1,8 @@
 # Nest Keycloak Connect
 
-An adapter for [keycloak-nodejs-connect](https://github.com/keycloak/keycloak-nodejs-connect).
+[![Build Status](https://travis-ci.com/ferrerojosh/nest-keycloak-connect.svg?branch=master)](https://travis-ci.com/ferrerojosh/nest-keycloak-connect)
+
+> An adapter for [keycloak-nodejs-connect](https://github.com/keycloak/keycloak-nodejs-connect).
 
 ## Features
 
@@ -28,15 +30,21 @@ Register the module in app.module.ts
 
 ```typescript
 import { Module } from '@nestjs/common';
-import { KeycloakConnectModule, ResourceGuard, AuthGuard } from 'nest-keycloak-connect';
+import {
+  KeycloakConnectModule,
+  ResourceGuard,
+  AuthGuard,
+} from 'nest-keycloak-connect';
 
 @Module({
-  imports: [KeycloakConnectModule.register({
-    authServerUrl: 'http://localhost:8080/auth',
-    realm: 'master',
-    clientId: 'my-nestjs-app',
-    secret: 'secret',
-  })],
+  imports: [
+    KeycloakConnectModule.register({
+      authServerUrl: 'http://localhost:8080/auth',
+      realm: 'master',
+      clientId: 'my-nestjs-app',
+      secret: 'secret',
+    }),
+  ],
   providers: [
     // These are in order, see https://docs.nestjs.com/guards#binding-guards
     // for more information

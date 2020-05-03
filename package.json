@@ -11,7 +11,9 @@
     "postbuild": "cpr README.md dist/ && cpr LICENSE dist/ && cpr package.json dist/",
     "npm:publish": "npm run build && cd dist && npm publish",
     "format": "prettier --write \"src/**/*.ts\"",
-    "lint": "tslint -p tsconfig.json -c tslint.json"
+    "lint": "tslint -p tsconfig.json -c tslint.json",
+    "semantic-release": "semantic-release",
+    "test": "mocha --require espower-typescript/guess \"test/**/*.ts\""
   },
   "keywords": [
     "nestjs",
@@ -35,11 +37,17 @@
     "@nestjs/common": "^7.0.3",
     "@nestjs/core": "^7.0.3",
     "@types/express": "4.16.1",
+    "@types/mocha": "^7.0.2",
+    "@types/node": "^13.13.5",
     "cpr": "^3.0.1",
+    "espower-typescript": "^9.0.2",
+    "mocha": "^7.1.2",
+    "power-assert": "^1.6.1",
     "prettier": "^1.19.1",
     "reflect-metadata": "^0.1.12",
     "rimraf": "^3.0.2",
     "rxjs": "^6.0.0",
+    "semantic-release": "^17.0.7",
     "ts-node": "^8.6.2",
     "typescript": "^3.8.3"
   }
