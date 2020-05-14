@@ -6,7 +6,8 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { Keycloak } from 'keycloak-connect';
-import { KEYCLOAK_INSTANCE } from '../constants';
+import { KEYCLOAK_INSTANCE, KEYCLOAK_CONNECT_OPTIONS } from '../constants';
+import { KeycloakConnectOptions } from 'src/interface/keycloak-connect-options.interface';
 
 /**
  * An authentication guard. Will return a 401 unauthorized when it is unable to
@@ -17,12 +18,14 @@ export class AuthGuard implements CanActivate {
   constructor(
     @Inject(KEYCLOAK_INSTANCE)
     private keycloak: Keycloak,
+    @Inject(KEYCLOAK_CONNECT_OPTIONS)
+    private keycloakOpts: KeycloakConnectOptions,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
     const jwt =
-      AuthGuard.extractJwtFromCookie(request.cookies) ??
+      this.extractJwtFromCookie(request.cookies) ??
       this.extractJwt(request.headers);
     const result = await this.keycloak.grantManager.validateAccessToken(jwt);
 
@@ -50,7 +53,7 @@ export class AuthGuard implements CanActivate {
     return auth[1];
   }
 
-  static extractJwtFromCookie(cookies: { [key: string]: string }) {
-    return cookies?.keycloakJWT;
+  extractJwtFromCookie(cookies: { [key: string]: string }) {
+    return cookies[this.keycloakOpts.cookieKey] || cookies.KEYCLOAK_JWT;
   }
 }

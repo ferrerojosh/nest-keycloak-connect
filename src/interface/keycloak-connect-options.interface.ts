@@ -1,5 +1,3 @@
-import KeycloakConnect = require('keycloak-connect');
-
 /**
  * Keycloak Connect options.
  */
@@ -20,4 +18,8 @@ export interface KeycloakConnectOptions {
    * Keycloak realm.
    */
   realm: string;
+  /**
+   * Keycloak cookie key.
+   */
+  cookieKey?: string;
 }

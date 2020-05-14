@@ -43,6 +43,8 @@ import {
       realm: 'master',
       clientId: 'my-nestjs-app',
       secret: 'secret',
+      // optional if you want to retrieve JWT from cookie
+      cookieKey: 'KEYCLOAK_JWT'
     }),
   ],
   providers: [
