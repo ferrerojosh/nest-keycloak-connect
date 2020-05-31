@@ -32,6 +32,8 @@ export class AuthGuard implements CanActivate {
     if (typeof result === 'string') {
       // Attach user info object
       request.user = await this.keycloak.grantManager.userInfo(jwt);
+      // Attach raw access token JWT extracted from bearer/cookie
+      request.accessTokenJWT = jwt;
       return true;
     }
 

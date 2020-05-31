@@ -7,8 +7,11 @@ import { KeycloakConnectOptions } from './interface/keycloak-connect-options.int
 
 export * from './decorators/resource.decorator';
 export * from './decorators/scopes.decorator';
+export * from './decorators/roles.decorator';
+export * from './decorators/allow-any-role.decorator';
 export * from './guards/auth.guard';
 export * from './guards/resource.guard';
+export * from './guards/role.guard';
 
 @Module({})
 export class KeycloakConnectModule {
@@ -20,10 +23,7 @@ export class KeycloakConnectModule {
 
     return {
       module: KeycloakConnectModule,
-      providers: [
-        optsProvider,
-        this.keycloakProvider,
-      ],
+      providers: [optsProvider, this.keycloakProvider],
       exports: [optsProvider, this.keycloakProvider],
     };
   }
@@ -31,7 +31,7 @@ export class KeycloakConnectModule {
   public static registerAsync(
     opts: KeycloakConnectModuleAsyncOptions,
   ): DynamicModule {
-    const optsProvider = this.createConnectProviders(opts)
+    const optsProvider = this.createConnectProviders(opts);
 
     return {
       module: KeycloakConnectModule,

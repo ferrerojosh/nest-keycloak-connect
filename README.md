@@ -7,7 +7,7 @@
 ## Features
 
 - Protect your resources using [Keycloak's Authorization Services](https://www.keycloak.org/docs/latest/authorization_services/).
-- Simply add `@Resource` and `@Scopes` in your controllers and you're good to go.
+- Simply add `@Resource`, `@Scopes`, or `@Roles` in your controllers and you're good to go.
 - Compatible with [Fastify](https://github.com/fastify/fastify) platform.
 
 ## Installation
@@ -33,6 +33,7 @@ import { Module } from '@nestjs/common';
 import {
   KeycloakConnectModule,
   ResourceGuard,
+  RoleGuard,
   AuthGuard,
 } from 'nest-keycloak-connect';
 
@@ -44,7 +45,7 @@ import {
       clientId: 'my-nestjs-app',
       secret: 'secret',
       // optional if you want to retrieve JWT from cookie
-      cookieKey: 'KEYCLOAK_JWT'
+      cookieKey: 'KEYCLOAK_JWT',
     }),
   ],
   providers: [
@@ -67,6 +68,14 @@ import {
       provide: APP_GUARD,
       useClass: ResourceGuard,
     },
+    // New in 1.1.0
+    // This adds a global level role guard, which is permissive.
+    // Used by `@Roles` decorator with the optional `@AllowAnyRole` decorator for allowing any
+    // specified role passed.
+    {
+      provide: APP_GUARD,
+      useClass: RoleGuard,
+    },
   ],
 })
 export class AppModule {}
@@ -75,7 +84,7 @@ export class AppModule {}
 In your controllers, simply do:
 
 ```typescript
-import { Resource, Scopes } from 'nest-keycloak-connect';
+import { Resource, Roles, Scopes, AllowAnyRole } from 'nest-keycloak-connect';
 import { Controller, Get, Delete, Put, Post, Param } from '@nestjs/common';
 import { Product } from './product';
 import { ProductService } from './product.service';
@@ -89,6 +98,15 @@ export class ProductController {
   @Scopes('View', 'View All')
   async findAll() {
     return await this.service.findAll();
+  }
+
+  // New in 1.1.0, allows you to set roles
+  @Get()
+  @Roles('master:admin', 'myrealm:admin', 'admin')
+  // Optional, allows any role passed in `@Roles` to be permitted
+  @AllowAnyRole()
+  async findAllBarcodes() {
+    return await this.service.findAllBarcodes();
   }
 
   @Get(':code')
