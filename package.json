@@ -14,6 +14,7 @@
     "build": "tsc",
     "postbuild": "cpr README.md dist/README.md && cpr LICENSE dist/LICENSE && cpr package.json dist/package.json",
     "npm:publish": "npm run build && cd dist && npm publish",
+    "npm:publish:next": "npm run build && cd dist && npm publish --tag next",
     "format": "prettier --write \"src/**/*.ts\"",
     "lint": "tslint -p tsconfig.json -c tslint.json"
   },
