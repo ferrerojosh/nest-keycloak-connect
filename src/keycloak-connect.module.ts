@@ -13,27 +13,31 @@ export * from './guards/resource.guard';
 @Module({})
 export class KeycloakConnectModule {
   public static register(opts: KeycloakConnectOptions): DynamicModule {
+    const optsProvider = {
+      provide: KEYCLOAK_CONNECT_OPTIONS,
+      useValue: opts,
+    };
+
     return {
       module: KeycloakConnectModule,
       providers: [
-        {
-          provide: KEYCLOAK_CONNECT_OPTIONS,
-          useValue: opts,
-        },
+        optsProvider,
         this.keycloakProvider,
       ],
-      exports: [this.keycloakProvider],
+      exports: [optsProvider, this.keycloakProvider],
     };
   }
 
   public static registerAsync(
     opts: KeycloakConnectModuleAsyncOptions,
   ): DynamicModule {
+    const optsProvider = this.createConnectProviders(opts)
+
     return {
       module: KeycloakConnectModule,
       imports: opts.imports || [],
-      providers: [this.createConnectProviders(opts), this.keycloakProvider],
-      exports: [this.keycloakProvider],
+      providers: [optsProvider, this.keycloakProvider],
+      exports: [optsProvider, this.keycloakProvider],
     };
   }
 
