@@ -5,9 +5,9 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
-import { Keycloak } from 'keycloak-connect';
+import * as KeycloakConnect from 'keycloak-connect';
 import { KEYCLOAK_INSTANCE, KEYCLOAK_CONNECT_OPTIONS } from '../constants';
-import { KeycloakConnectOptions } from 'src/interface/keycloak-connect-options.interface';
+import { KeycloakConnectOptions } from '../interface/keycloak-connect-options.interface';
 
 /**
  * An authentication guard. Will return a 401 unauthorized when it is unable to
@@ -17,7 +17,7 @@ import { KeycloakConnectOptions } from 'src/interface/keycloak-connect-options.i
 export class AuthGuard implements CanActivate {
   constructor(
     @Inject(KEYCLOAK_INSTANCE)
-    private keycloak: Keycloak,
+    private keycloak: KeycloakConnect.Keycloak,
     @Inject(KEYCLOAK_CONNECT_OPTIONS)
     private keycloakOpts: KeycloakConnectOptions,
   ) {}

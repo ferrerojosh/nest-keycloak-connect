@@ -7,7 +7,7 @@ import {
   Logger,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { Keycloak } from 'keycloak-connect';
+import * as KeycloakConnect from 'keycloak-connect';
 import { KEYCLOAK_INSTANCE } from '../constants';
 
 // Temporary until keycloak-connect can have full typescript definitions
@@ -31,7 +31,7 @@ export class ResourceGuard implements CanActivate {
 
   constructor(
     @Inject(KEYCLOAK_INSTANCE)
-    private keycloak: Keycloak,
+    private keycloak: KeycloakConnect.Keycloak,
     private readonly reflector: Reflector,
   ) {}
 
@@ -82,7 +82,7 @@ export class ResourceGuard implements CanActivate {
 }
 
 const createEnforcerContext = (request: any, response: any) => (
-  keycloak: Keycloak,
+  keycloak: KeycloakConnect.Keycloak,
   permissions: string[],
 ) =>
   new Promise<boolean>((resolve, reject) =>
