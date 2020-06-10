@@ -84,7 +84,7 @@ export class AppModule {}
 In your controllers, simply do:
 
 ```typescript
-import { Resource, Roles, Scopes, AllowAnyRole } from 'nest-keycloak-connect';
+import { Resource, Roles, Scopes, AllowAnyRole, Unprotected, Public } from 'nest-keycloak-connect';
 import { Controller, Get, Delete, Put, Post, Param } from '@nestjs/common';
 import { Product } from './product';
 import { ProductService } from './product.service';
@@ -94,8 +94,9 @@ import { ProductService } from './product.service';
 export class ProductController {
   constructor(private service: ProductService) {}
 
+  // New in 1.2.0, allows you add unprotected/public routes
   @Get()
-  @Scopes('View', 'View All')
+  @Unprotected() // Use `@Public` if the verb seems weird to you
   async findAll() {
     return await this.service.findAll();
   }
