@@ -1,6 +1,10 @@
 # Nest Keycloak Connect
 
+![License](https://badgen.net/npm/license/nest-keycloak-connect)
+[![Package Version](https://badgen.net/npm/v/nest-keycloak-connect)](https://www.npmjs.com/package/nest-keycloak-connect)
 [![Build Status](https://travis-ci.com/ferrerojosh/nest-keycloak-connect.svg?branch=master)](https://travis-ci.com/ferrerojosh/nest-keycloak-connect)
+![Weekly Download](https://badgen.net/npm/dw/nest-keycloak-connect)
+![Total Download](https://badgen.net/npm/dt/nest-keycloak-connect)
 
 > An adapter for [keycloak-nodejs-connect](https://github.com/keycloak/keycloak-nodejs-connect).
 
