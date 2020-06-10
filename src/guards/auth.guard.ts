@@ -20,21 +20,27 @@ export class AuthGuard implements CanActivate {
     private keycloak: KeycloakConnect.Keycloak,
     @Inject(KEYCLOAK_CONNECT_OPTIONS)
     private keycloakOpts: KeycloakConnectOptions,
-  ) {}
+  ) {
+  }
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
     const jwt =
       this.extractJwtFromCookie(request.cookies) ??
       this.extractJwt(request.headers);
-    const result = await this.keycloak.grantManager.validateAccessToken(jwt);
 
-    if (typeof result === 'string') {
-      // Attach user info object
-      request.user = await this.keycloak.grantManager.userInfo(jwt);
-      // Attach raw access token JWT extracted from bearer/cookie
-      request.accessTokenJWT = jwt;
-      return true;
+    try {
+      const result = await this.keycloak.grantManager.validateAccessToken(jwt);
+
+      if (typeof result === 'string') {
+        // Attach user info object
+        request.user = await this.keycloak.grantManager.userInfo(jwt);
+        // Attach raw access token JWT extracted from bearer/cookie
+        request.accessTokenJWT = jwt;
+        return true;
+      }
+    } catch (ex) {
+      console.error(`validateAccessToken Error: `, ex);
     }
 
     throw new UnauthorizedException();
