@@ -8,6 +8,8 @@ import {
 import * as KeycloakConnect from 'keycloak-connect';
 import { KEYCLOAK_INSTANCE, KEYCLOAK_CONNECT_OPTIONS } from '../constants';
 import { KeycloakConnectOptions } from '../interface/keycloak-connect-options.interface';
+import { Reflector } from '@nestjs/core';
+import { META_UNPROTECTED } from '../decorators/unprotected.decorator';
 
 /**
  * An authentication guard. Will return a 401 unauthorized when it is unable to
@@ -20,10 +22,20 @@ export class AuthGuard implements CanActivate {
     private keycloak: KeycloakConnect.Keycloak,
     @Inject(KEYCLOAK_CONNECT_OPTIONS)
     private keycloakOpts: KeycloakConnectOptions,
-  ) {
-  }
+    private readonly reflector: Reflector
+  ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
+    const isUnprotected = this.reflector.get<boolean>(
+      META_UNPROTECTED,
+      context.getHandler(),
+    );
+
+    // If unprotected is set skip Keycloak authentication
+    if (isUnprotected) {
+      return true;
+    }
+
     const request = context.switchToHttp().getRequest();
     const jwt =
       this.extractJwtFromCookie(request.cookies) ??
