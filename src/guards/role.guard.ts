@@ -55,8 +55,8 @@ export class RoleGuard implements CanActivate {
     // Grab access token from grant
     const accessToken: KeycloakConnect.Token = grant.access_token as any;
     const isInRole = allowAnyRole
-      ? roles.some(accessToken.hasRole)
-      : roles.every(accessToken.hasRole);
+      ? roles.some(r => accessToken.hasRole(r))
+      : roles.every(r => accessToken.hasRole(r));
 
     return isInRole;
   }
