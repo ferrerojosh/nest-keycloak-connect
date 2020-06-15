@@ -59,22 +59,18 @@ export class AuthGuard implements CanActivate {
   }
 
   extractJwt(headers: { [key: string]: string }) {
-    if (headers) {
-      if (!headers.authorization) {
-        throw new UnauthorizedException();
-      }
-
-      const auth = headers.authorization.split(' ');
-
-      // We only allow bearer
-      if (auth[0].toLowerCase() !== 'bearer') {
-        throw new UnauthorizedException();
-      }
-
-      return auth[1];
-    } else {
+    if (headers && !headers.authorization) {
       throw new UnauthorizedException();
     }
+
+    const auth = headers.authorization.split(' ');
+
+    // We only allow bearer
+    if (auth[0].toLowerCase() !== 'bearer') {
+      throw new UnauthorizedException();
+    }
+
+    return auth[1];
   }
 
   extractJwtFromCookie(cookies: { [key: string]: string }) {
