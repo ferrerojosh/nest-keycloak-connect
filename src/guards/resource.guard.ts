@@ -10,7 +10,7 @@ import * as KeycloakConnect from 'keycloak-connect';
 import { KEYCLOAK_INSTANCE } from '../constants';
 import { META_RESOURCE } from '../decorators/resource.decorator';
 import { META_SCOPES } from '../decorators/scopes.decorator';
-import { META_ENFORCER_CONFIG } from '../decorators/enforcer-config.decorator';
+import { META_ENFORCER_OPTIONS } from '../decorators/enforcer-options.decorator';
 
 /**
  * This adds a resource guard, which is permissive.
@@ -36,8 +36,8 @@ export class ResourceGuard implements CanActivate {
       META_RESOURCE,
       context.getHandler(),
     );
-    const enforcerConfig = this.reflector.get<KeycloakConnect.EnforcerOptions>(
-      META_ENFORCER_CONFIG,
+    const enforcerOpts = this.reflector.get<KeycloakConnect.EnforcerOptions>(
+      META_ENFORCER_OPTIONS,
       context.getHandler(),
     );
     const scopes = this.reflector.get<string[]>(
@@ -76,7 +76,7 @@ export class ResourceGuard implements CanActivate {
     const isAllowed = await enforcerFn(
       this.keycloak,
       permissions,
-      enforcerConfig,
+      enforcerOpts,
     );
 
     // If statement for verbose logging only
@@ -93,10 +93,10 @@ export class ResourceGuard implements CanActivate {
 const createEnforcerContext = (request: any, response: any) => (
   keycloak: KeycloakConnect.Keycloak,
   permissions: string[],
-  resourceConfig: KeycloakConnect.EnforcerOptions,
+  enforcerOpts: KeycloakConnect.EnforcerOptions,
 ) =>
   new Promise<boolean>((resolve, reject) =>
-    keycloak.enforcer(permissions, resourceConfig)(
+    keycloak.enforcer(permissions, enforcerOpts)(
       request,
       response,
       (next: any) => {
