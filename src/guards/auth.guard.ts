@@ -22,7 +22,7 @@ export class AuthGuard implements CanActivate {
     private keycloak: KeycloakConnect.Keycloak,
     @Inject(KEYCLOAK_CONNECT_OPTIONS)
     private keycloakOpts: KeycloakConnectOptions,
-    private readonly reflector: Reflector
+    private readonly reflector: Reflector,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -74,6 +74,9 @@ export class AuthGuard implements CanActivate {
   }
 
   extractJwtFromCookie(cookies: { [key: string]: string }) {
-    return cookies && cookies[this.keycloakOpts.cookieKey] || cookies && cookies.KEYCLOAK_JWT;
+    return (
+      (cookies && cookies[this.keycloakOpts.cookieKey]) ||
+      (cookies && cookies.KEYCLOAK_JWT)
+    );
   }
 }
