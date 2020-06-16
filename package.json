@@ -35,7 +35,7 @@
     "rxjs": "^6.0.0"
   },
   "dependencies": {
-    "keycloak-connect": "^9.0.0"
+    "keycloak-connect": "^10.0.0"
   },
   "devDependencies": {
     "@nestjs/common": "^7.0.3",
