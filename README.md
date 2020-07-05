@@ -34,6 +34,7 @@ Register the module in app.module.ts
 
 ```typescript
 import { Module } from '@nestjs/common';
+import { APP_GUARD } from '@nestjs/core';
 import {
   KeycloakConnectModule,
   ResourceGuard,
