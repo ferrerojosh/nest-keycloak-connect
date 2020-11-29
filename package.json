@@ -30,24 +30,26 @@
   },
   "bugs": "https://github.com/ferrerojosh/nest-keycloak-connect/issues",
   "peerDependencies": {
-    "@nestjs/common": "^7.0.3",
-    "reflect-metadata": "^0.1.12",
-    "rxjs": "^6.0.0"
+    "@nestjs/common": "^7.5.5",
+    "@nestjs/graphql": "^7.9.0",
+    "reflect-metadata": "^0.1.13",
+    "rxjs": "^6.6.3"
   },
   "dependencies": {
-    "keycloak-connect": "^9.0.0"
+    "keycloak-connect": "^11.0.0"
   },
   "devDependencies": {
-    "@nestjs/common": "^7.0.3",
-    "@nestjs/core": "^7.0.3",
-    "@types/express": "4.16.1",
-    "@types/node": "^13.13.5",
+    "@nestjs/common": "^7.5.5",
+    "@nestjs/graphql": "^7.9.0",
+    "@nestjs/core": "^7.5.5",
+    "@types/express": "4.17.9",
+    "@types/node": "^14.14.10",
     "cpr": "^3.0.1",
-    "prettier": "^1.19.1",
-    "reflect-metadata": "^0.1.12",
+    "prettier": "^2.2.1",
+    "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
-    "rxjs": "^6.0.0",
-    "ts-node": "^8.6.2",
-    "typescript": "^3.8.3"
+    "rxjs": "^6.6.3",
+    "ts-node": "^9.0.0",
+    "typescript": "^4.1.2"
   }
 }
