@@ -26,9 +26,9 @@ export class AuthGuard implements CanActivate {
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const isUnprotected = this.reflector.get<boolean>(
+    const isUnprotected = this.reflector.getAllAndOverride<boolean>(
       META_UNPROTECTED,
-      context.getHandler(),
+      [context.getClass(), context.getHandler()],
     );
 
     // If unprotected is set skip Keycloak authentication
