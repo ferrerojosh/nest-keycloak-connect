@@ -9,7 +9,7 @@ import * as KeycloakConnect from 'keycloak-connect';
 import { KEYCLOAK_INSTANCE, KEYCLOAK_CONNECT_OPTIONS } from '../constants';
 import { KeycloakConnectOptions } from '../interface/keycloak-connect-options.interface';
 import { Reflector } from '@nestjs/core';
-import { META_UNPROTECTED } from '../decorators/unprotected.decorator';
+import { META_SKIP_AUTH, META_UNPROTECTED } from '../decorators/unprotected.decorator';
 
 /**
  * An authentication guard. Will return a 401 unauthorized when it is unable to
@@ -30,9 +30,13 @@ export class AuthGuard implements CanActivate {
       META_UNPROTECTED,
       [context.getClass(), context.getHandler()],
     );
+    const skipAuth = this.reflector.getAllAndOverride<boolean>(
+      META_SKIP_AUTH,
+      [context.getClass(), context.getHandler()],
+    );
 
     // If unprotected is set skip Keycloak authentication
-    if (isUnprotected) {
+    if (isUnprotected && skipAuth) {
       return true;
     }
 
@@ -40,6 +44,12 @@ export class AuthGuard implements CanActivate {
     const jwt =
       this.extractJwtFromCookie(request.cookies) ??
       this.extractJwt(request.headers);
+    const isInvalidJwt = (jwt === null || jwt === undefined);
+
+    // Auth is not skipped, but no jwt token given, immediate return
+    if(isUnprotected && isInvalidJwt) {
+      return true;
+    }
 
     try {
       const result = await this.keycloak.grantManager.validateAccessToken(jwt);
