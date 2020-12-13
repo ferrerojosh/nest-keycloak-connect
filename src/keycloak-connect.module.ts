@@ -11,6 +11,7 @@ export * from './decorators/scopes.decorator';
 export * from './decorators/roles.decorator';
 export * from './decorators/allow-any-role.decorator';
 export * from './decorators/unprotected.decorator';
+export * from './decorators/enforcer-options.decorator';
 export * from './guards/auth.guard';
 export * from './guards/resource.guard';
 export * from './guards/role.guard';
