@@ -70,7 +70,8 @@ export class ResourceGuard implements CanActivate {
     if (context.switchToHttp().getRequest() != null) {
       request = context.switchToHttp().getRequest();
       response = context.switchToHttp().getResponse();
-    } else { // if request is graphql
+    } else {
+      // if request is graphql
       const ctx = GqlExecutionContext.create(context);
       request = ctx.getContext().req;
       response = ctx.getContext().res;

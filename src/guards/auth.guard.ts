@@ -46,10 +46,11 @@ export class AuthGuard implements CanActivate {
     }
 
     // check if request is coming from graphql or REST API
-    let request
+    let request;
     if (context.switchToHttp().getRequest() != null) {
       request = context.switchToHttp().getRequest();
-    } else { // if request is graphql
+    } else {
+      // if request is graphql
       const ctx = GqlExecutionContext.create(context);
       request = ctx.getContext().req;
     }
