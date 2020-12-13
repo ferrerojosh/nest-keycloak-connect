@@ -6,12 +6,12 @@ import {
   Logger,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
+import { GqlExecutionContext } from '@nestjs/graphql';
 import * as KeycloakConnect from 'keycloak-connect';
 
 import { KEYCLOAK_INSTANCE } from '../constants';
 import { META_RESOURCE } from '../decorators/resource.decorator';
 import { META_SCOPES } from '../decorators/scopes.decorator';
-import { GqlExecutionContext } from '@nestjs/graphql';
 
 // Temporary until keycloak-connect can have full typescript definitions
 // This is as of version 9.0.0
