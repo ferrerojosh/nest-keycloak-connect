@@ -6,11 +6,22 @@ import {
   Logger,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
+import { GqlExecutionContext } from '@nestjs/graphql';
 import * as KeycloakConnect from 'keycloak-connect';
+
 import { KEYCLOAK_INSTANCE } from '../constants';
 import { META_RESOURCE } from '../decorators/resource.decorator';
 import { META_SCOPES } from '../decorators/scopes.decorator';
-import { META_ENFORCER_OPTIONS } from '../decorators/enforcer-options.decorator';
+
+// Temporary until keycloak-connect can have full typescript definitions
+// This is as of version 9.0.0
+declare module 'keycloak-connect' {
+  interface Keycloak {
+    enforcer(
+      expectedPermissions: string | string[],
+    ): (req: any, res: any, next: any) => any;
+  }
+}
 
 /**
  * This adds a resource guard, which is permissive.
@@ -28,25 +39,14 @@ export class ResourceGuard implements CanActivate {
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const resourceClass = this.reflector.get<string>(
+    const resource = this.reflector.get<string>(
       META_RESOURCE,
       context.getClass(),
-    );
-    const resourceHandler = this.reflector.get<string>(
-      META_RESOURCE,
-      context.getHandler(),
-    );
-    const enforcerOpts = this.reflector.get<KeycloakConnect.EnforcerOptions>(
-      META_ENFORCER_OPTIONS,
-      context.getHandler(),
     );
     const scopes = this.reflector.get<string[]>(
       META_SCOPES,
       context.getHandler(),
     );
-
-    // Handler priority, then class
-    const resource = resourceHandler ?? resourceClass;
 
     // No resource given, since we are permissive, allow
     if (!resource) {
@@ -65,19 +65,22 @@ export class ResourceGuard implements CanActivate {
     // Build permissions
     const permissions = scopes.map(scope => `${resource}:${scope}`);
 
-    const [request, response] = [
-      context.switchToHttp().getRequest(),
-      context.switchToHttp().getResponse(),
-    ];
+    // check if request is coming from graphql or REST API
+    let request, response;
+    if (context.switchToHttp().getRequest() != null) {
+      request = context.switchToHttp().getRequest();
+      response = context.switchToHttp().getResponse();
+    } else {
+      // if request is graphql
+      const ctx = GqlExecutionContext.create(context);
+      request = ctx.getContext().req;
+      response = ctx.getContext().res;
+    }
 
     const user = request.user?.preferred_username ?? 'user';
 
     const enforcerFn = createEnforcerContext(request, response);
-    const isAllowed = await enforcerFn(
-      this.keycloak,
-      permissions,
-      enforcerOpts,
-    );
+    const isAllowed = await enforcerFn(this.keycloak, permissions);
 
     // If statement for verbose logging only
     if (!isAllowed) {
@@ -93,18 +96,13 @@ export class ResourceGuard implements CanActivate {
 const createEnforcerContext = (request: any, response: any) => (
   keycloak: KeycloakConnect.Keycloak,
   permissions: string[],
-  enforcerOpts: KeycloakConnect.EnforcerOptions,
 ) =>
   new Promise<boolean>((resolve, reject) =>
-    keycloak.enforcer(permissions, enforcerOpts)(
-      request,
-      response,
-      (next: any) => {
-        if (request.resourceDenied) {
-          resolve(false);
-        } else {
-          resolve(true);
-        }
-      },
-    ),
+    keycloak.enforcer(permissions)(request, response, (next: any) => {
+      if (request.resourceDenied) {
+        resolve(false);
+      } else {
+        resolve(true);
+      }
+    }),
   );

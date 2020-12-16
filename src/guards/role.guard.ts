@@ -6,7 +6,9 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
+import { GqlExecutionContext } from '@nestjs/graphql';
 import * as KeycloakConnect from 'keycloak-connect';
+
 import { KEYCLOAK_INSTANCE } from '../constants';
 import { META_ALLOW_ANY_ROLE } from '../decorators/allow-any-role.decorator';
 import { META_ROLES } from '../decorators/roles.decorator';
@@ -38,7 +40,15 @@ export class RoleGuard implements CanActivate {
       return true;
     }
 
-    const request = context.switchToHttp().getRequest();
+    // check if request is coming from graphql or REST API
+    let request;
+    if (context.switchToHttp().getRequest() != null) {
+      request = context.switchToHttp().getRequest();
+    } else {
+      // if request is graphql
+      const ctx = GqlExecutionContext.create(context);
+      request = ctx.getContext().req;
+    }
     const { accessTokenJWT } = request;
 
     if (!accessTokenJWT) {
@@ -52,12 +62,12 @@ export class RoleGuard implements CanActivate {
     const grant = await this.keycloak.grantManager.createGrant({
       access_token: accessTokenJWT,
     });
+
     // Grab access token from grant
     const accessToken: KeycloakConnect.Token = grant.access_token as any;
-    const isInRole = allowAnyRole
+
+    return allowAnyRole
       ? roles.some(r => accessToken.hasRole(r))
       : roles.every(r => accessToken.hasRole(r));
-
-    return isInRole;
   }
 }

@@ -1,4 +1,5 @@
 import { ModuleMetadata, Type } from '@nestjs/common/interfaces';
+
 import { KeycloakConnectOptionsFactory } from './keycloak-connect-options-factory.interface';
 import { KeycloakConnectOptions } from './keycloak-connect-options.interface';
 
