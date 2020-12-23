@@ -12,16 +12,6 @@ import { META_RESOURCE } from '../decorators/resource.decorator';
 import { META_SCOPES } from '../decorators/scopes.decorator';
 import { extractRequest } from '../util';
 
-// Temporary until keycloak-connect can have full typescript definitions
-// This is as of version 9.0.0
-declare module 'keycloak-connect' {
-  interface Keycloak {
-    enforcer(
-      expectedPermissions: string | string[],
-    ): (req: any, res: any, next: any) => any;
-  }
-}
-
 /**
  * This adds a resource guard, which is permissive.
  * Only controllers annotated with `@Resource` and methods with `@Scopes`
