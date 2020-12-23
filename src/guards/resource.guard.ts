@@ -6,12 +6,11 @@ import {
   Logger,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { GqlExecutionContext } from '@nestjs/graphql';
 import * as KeycloakConnect from 'keycloak-connect';
-
 import { KEYCLOAK_INSTANCE } from '../constants';
 import { META_RESOURCE } from '../decorators/resource.decorator';
 import { META_SCOPES } from '../decorators/scopes.decorator';
+import { extractRequest } from '../util';
 
 // Temporary until keycloak-connect can have full typescript definitions
 // This is as of version 9.0.0
@@ -64,18 +63,8 @@ export class ResourceGuard implements CanActivate {
 
     // Build permissions
     const permissions = scopes.map(scope => `${resource}:${scope}`);
-
-    // check if request is coming from graphql or REST API
-    let request: any, response: any;
-    if (context.switchToHttp().getRequest() != null) {
-      request = context.switchToHttp().getRequest();
-      response = context.switchToHttp().getResponse();
-    } else {
-      // if request is graphql
-      const ctx = GqlExecutionContext.create(context);
-      request = ctx.getContext().req;
-      response = ctx.getContext().res;
-    }
+    // Extract request/response
+    const [request, response] = extractRequest(context);
 
     const user = request.user?.preferred_username ?? 'user';
 

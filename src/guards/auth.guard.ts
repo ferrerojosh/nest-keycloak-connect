@@ -6,15 +6,14 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { GqlExecutionContext } from '@nestjs/graphql';
 import * as KeycloakConnect from 'keycloak-connect';
-
-import { KEYCLOAK_INSTANCE, KEYCLOAK_CONNECT_OPTIONS } from '../constants';
-import { KeycloakConnectOptions } from '../interface/keycloak-connect-options.interface';
+import { KEYCLOAK_CONNECT_OPTIONS, KEYCLOAK_INSTANCE } from '../constants';
 import {
   META_SKIP_AUTH,
   META_UNPROTECTED,
 } from '../decorators/unprotected.decorator';
+import { KeycloakConnectOptions } from '../interface/keycloak-connect-options.interface';
+import { extractRequest } from '../util';
 
 /**
  * An authentication guard. Will return a 401 unauthorized when it is unable to
@@ -45,15 +44,8 @@ export class AuthGuard implements CanActivate {
       return true;
     }
 
-    // check if request is coming from graphql or REST API
-    let request: any;
-    if (context.switchToHttp().getRequest() != null) {
-      request = context.switchToHttp().getRequest();
-    } else {
-      // if request is graphql
-      const ctx = GqlExecutionContext.create(context);
-      request = ctx.getContext().req;
-    }
+    // Extract request/response
+    const [request] = extractRequest(context);
     const jwt =
       this.extractJwtFromCookie(request.cookies) ??
       this.extractJwt(request.headers);
