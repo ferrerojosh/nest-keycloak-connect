@@ -6,8 +6,9 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { GqlExecutionContext } from '@nestjs/graphql';
+import { GqlContextType, GqlExecutionContext } from '@nestjs/graphql';
 import * as KeycloakConnect from 'keycloak-connect';
+import { extractRequest } from '../util';
 
 import { KEYCLOAK_INSTANCE } from '../constants';
 import { META_ALLOW_ANY_ROLE } from '../decorators/allow-any-role.decorator';
@@ -40,15 +41,8 @@ export class RoleGuard implements CanActivate {
       return true;
     }
 
-    // check if request is coming from graphql or REST API
-    let request;
-    if (context.switchToHttp().getRequest() != null) {
-      request = context.switchToHttp().getRequest();
-    } else {
-      // if request is graphql
-      const ctx = GqlExecutionContext.create(context);
-      request = ctx.getContext().req;
-    }
+    // Extract request
+    const [request] = extractRequest(context);
     const { accessTokenJWT } = request;
 
     if (!accessTokenJWT) {
