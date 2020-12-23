@@ -15,6 +15,7 @@ export * from './decorators/enforcer-options.decorator';
 export * from './guards/auth.guard';
 export * from './guards/resource.guard';
 export * from './guards/role.guard';
+export * from './constants';
 
 @Module({})
 export class KeycloakConnectModule {
