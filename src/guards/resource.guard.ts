@@ -66,7 +66,7 @@ export class ResourceGuard implements CanActivate {
     const permissions = scopes.map(scope => `${resource}:${scope}`);
 
     // check if request is coming from graphql or REST API
-    let request, response;
+    let request: any, response: any;
     if (context.switchToHttp().getRequest() != null) {
       request = context.switchToHttp().getRequest();
       response = context.switchToHttp().getResponse();
