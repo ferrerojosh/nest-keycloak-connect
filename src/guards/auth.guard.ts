@@ -81,7 +81,7 @@ export class AuthGuard implements CanActivate {
     throw new UnauthorizedException();
   }
 
-  extractJwt(headers: { [key: string]: string }) {
+  private extractJwt(headers: { [key: string]: string }) {
     if (headers && !headers.authorization) {
       throw new UnauthorizedException();
     }
@@ -96,7 +96,7 @@ export class AuthGuard implements CanActivate {
     return auth[1];
   }
 
-  extractJwtFromCookie(cookies: { [key: string]: string }) {
+  private extractJwtFromCookie(cookies: { [key: string]: string }) {
     return (
       (cookies && cookies[this.keycloakOpts.cookieKey]) ||
       (cookies && cookies.KEYCLOAK_JWT)
