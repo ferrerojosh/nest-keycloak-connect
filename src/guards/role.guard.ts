@@ -41,7 +41,7 @@ export class RoleGuard implements CanActivate {
     }
 
     // check if request is coming from graphql or REST API
-    let request;
+    let request: any;
     if (context.switchToHttp().getRequest() != null) {
       request = context.switchToHttp().getRequest();
     } else {
