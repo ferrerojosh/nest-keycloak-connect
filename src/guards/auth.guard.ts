@@ -46,7 +46,7 @@ export class AuthGuard implements CanActivate {
     }
 
     // check if request is coming from graphql or REST API
-    let request;
+    let request: any;
     if (context.switchToHttp().getRequest() != null) {
       request = context.switchToHttp().getRequest();
     } else {
@@ -75,7 +75,7 @@ export class AuthGuard implements CanActivate {
         return true;
       }
     } catch (ex) {
-      console.error(`validateAccessToken Error: `, ex);
+      console.error(`Cannot validate access token: `, ex);
     }
 
     throw new UnauthorizedException();
