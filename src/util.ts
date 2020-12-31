@@ -1,5 +1,6 @@
-import { ExecutionContext } from '@nestjs/common';
-import { GqlContextType, GqlExecutionContext } from '@nestjs/graphql';
+import { ContextType, ExecutionContext } from '@nestjs/common';
+
+type GqlContextType = 'graphql' | ContextType;
 
 export const extractRequest = (context: ExecutionContext): [any, any] => {
   let request: any, response: any;
@@ -12,8 +13,16 @@ export const extractRequest = (context: ExecutionContext): [any, any] => {
     request = httpContext.getRequest();
     response = httpContext.getResponse();
   } else if (context.getType<GqlContextType>() === 'graphql') {
+    let gql: any;
+    // Check if graphql is installed
+    try {
+      gql = require('@nestjs/graphql');
+    } catch (er) {
+      throw new Error('@nestjs/graphql is not installed, cannot proceed');
+    }
+
     // graphql request
-    const gqlContext = GqlExecutionContext.create(context).getContext();
+    const gqlContext = gql.GqlExecutionContext.create(context).getContext();
 
     request = gqlContext.req;
     response = gqlContext.res;

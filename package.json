@@ -1,6 +1,6 @@
 {
   "name": "nest-keycloak-connect",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "keycloak-nodejs-connect module for Nest",
   "author": "John Joshua Ferrer <johnjoshuaferrer@disroot.org>",
   "license": "MIT",
@@ -26,9 +26,11 @@
   "bugs": "https://github.com/ferrerojosh/nest-keycloak-connect/issues",
   "peerDependencies": {
     "@nestjs/common": "^7.0.3",
-    "@nestjs/graphql": "^7.9.1",
     "reflect-metadata": "^0.1.12",
     "rxjs": "^6.0.0"
+  },
+  "optionalDependencies": {
+    "@nestjs/graphql": "^7.9.1"
   },
   "dependencies": {
     "keycloak-connect": "^11.0.0"
