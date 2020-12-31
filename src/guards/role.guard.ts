@@ -6,10 +6,8 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { GqlContextType, GqlExecutionContext } from '@nestjs/graphql';
 import * as KeycloakConnect from 'keycloak-connect';
 import { extractRequest } from '../util';
-
 import { KEYCLOAK_INSTANCE } from '../constants';
 import { META_ALLOW_ANY_ROLE } from '../decorators/allow-any-role.decorator';
 import { META_ROLES } from '../decorators/roles.decorator';
