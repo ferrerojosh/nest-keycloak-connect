@@ -51,9 +51,9 @@ export class AuthGuard implements CanActivate {
       this.extractJwt(request.headers);
     const isInvalidJwt = jwt === null || jwt === undefined;
 
-    // Auth is not skipped, but no jwt token given, immediate return
-    if (isUnprotected && isInvalidJwt) {
-      return true;
+    // No jwt token given, immediate return
+    if (isInvalidJwt) {
+      throw new UnauthorizedException();
     }
 
     try {
