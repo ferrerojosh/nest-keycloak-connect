@@ -66,13 +66,12 @@ export class ResourceGuard implements CanActivate {
     // Extract request/response
     const [request, response] = extractRequest(context);
 
-    if(!request.user && isUnprotected) {
+    if (!request.user && isUnprotected) {
       this.logger.verbose(`Route has no user, and is public, allowed`);
       return true;
     }
 
     const user = request.user?.preferred_username ?? 'user';
-
 
     const enforcerFn = createEnforcerContext(request, response);
     const isAllowed = await enforcerFn(this.keycloak, permissions);

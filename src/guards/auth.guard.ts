@@ -60,7 +60,9 @@ export class AuthGuard implements CanActivate {
 
     // Invalid JWT, but skipAuth = false, allow fallback
     if (isInvalidJwt && !skipAuth) {
-      this.logger.verbose('Invalid JWT, skipAuth disabled, allowed for fallback');
+      this.logger.verbose(
+        'Invalid JWT, skipAuth disabled, allowed for fallback',
+      );
       return true;
     }
 
