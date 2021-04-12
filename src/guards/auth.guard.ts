@@ -7,7 +7,12 @@ import {
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import * as KeycloakConnect from 'keycloak-connect';
-import { KEYCLOAK_CONNECT_OPTIONS, KEYCLOAK_INSTANCE } from '../constants';
+import { KeycloakLogger } from '../logger';
+import {
+  KEYCLOAK_CONNECT_OPTIONS,
+  KEYCLOAK_INSTANCE,
+  KEYCLOAK_LOGGER,
+} from '../constants';
 import {
   META_SKIP_AUTH,
   META_UNPROTECTED,
@@ -26,6 +31,8 @@ export class AuthGuard implements CanActivate {
     private keycloak: KeycloakConnect.Keycloak,
     @Inject(KEYCLOAK_CONNECT_OPTIONS)
     private keycloakOpts: KeycloakConnectOptions,
+    @Inject(KEYCLOAK_LOGGER)
+    private logger: KeycloakLogger,
     private readonly reflector: Reflector,
   ) {}
 
@@ -53,8 +60,11 @@ export class AuthGuard implements CanActivate {
 
     // No jwt token given, immediate return
     if (isInvalidJwt) {
+      this.logger.verbose('Invalid JWT, unauthorized');
       throw new UnauthorizedException();
     }
+
+    this.logger.verbose(`User JWT: ${jwt}`);
 
     try {
       const result = await this.keycloak.grantManager.validateAccessToken(jwt);
@@ -64,10 +74,14 @@ export class AuthGuard implements CanActivate {
         request.user = await this.keycloak.grantManager.userInfo(jwt);
         // Attach raw access token JWT extracted from bearer/cookie
         request.accessTokenJWT = jwt;
+
+        this.logger.verbose(
+          `Authenticated User: ${JSON.stringify(request.user)}`,
+        );
         return true;
       }
     } catch (ex) {
-      console.error(`Cannot validate access token: `, ex);
+      this.logger.warn(`Cannot validate access token: ${ex}`);
     }
 
     throw new UnauthorizedException();
@@ -82,6 +96,7 @@ export class AuthGuard implements CanActivate {
 
     // We only allow bearer
     if (auth[0].toLowerCase() !== 'bearer') {
+      this.logger.verbose(`No bearer header, unauthorized`);
       throw new UnauthorizedException();
     }
 

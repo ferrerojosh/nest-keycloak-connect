@@ -51,6 +51,7 @@ import {
       secret: 'secret',
       // optional if you want to retrieve JWT from cookie
       cookieKey: 'KEYCLOAK_JWT',
+      logLevel: ['warn']
     }),
   ],
   providers: [

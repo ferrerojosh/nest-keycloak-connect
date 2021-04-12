@@ -7,7 +7,8 @@ import {
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import * as KeycloakConnect from 'keycloak-connect';
-import { KEYCLOAK_INSTANCE } from '../constants';
+import { KeycloakLogger } from '../logger';
+import { KEYCLOAK_INSTANCE, KEYCLOAK_LOGGER } from '../constants';
 import { META_RESOURCE } from '../decorators/resource.decorator';
 import { META_SCOPES } from '../decorators/scopes.decorator';
 import { extractRequest } from '../util';
@@ -19,11 +20,11 @@ import { extractRequest } from '../util';
  */
 @Injectable()
 export class ResourceGuard implements CanActivate {
-  logger = new Logger(ResourceGuard.name);
-
   constructor(
     @Inject(KEYCLOAK_INSTANCE)
     private keycloak: KeycloakConnect.Keycloak,
+    @Inject(KEYCLOAK_LOGGER)
+    private logger: KeycloakLogger,
     private readonly reflector: Reflector,
   ) {}
 
@@ -39,17 +40,21 @@ export class ResourceGuard implements CanActivate {
 
     // No resource given, since we are permissive, allow
     if (!resource) {
+      this.logger.verbose(
+        `Controller has no @Resource defined, request allowed`,
+      );
+      return true;
+    }
+
+    // No scopes given, since we are permissive, allow
+    if (!scopes) {
+      this.logger.verbose(`Route has no @Scope defined, request allowed`);
       return true;
     }
 
     this.logger.verbose(
-      `Protecting resource '${resource}' with scopes: [ ${scopes} ]`,
+      `Protecting resource [ ${resource} ] with scopes: [ ${scopes} ]`,
     );
-
-    // No scopes given, since we are permissive, allow
-    if (!scopes) {
-      return true;
-    }
 
     // Build permissions
     const permissions = scopes.map(scope => `${resource}:${scope}`);
@@ -63,9 +68,9 @@ export class ResourceGuard implements CanActivate {
 
     // If statement for verbose logging only
     if (!isAllowed) {
-      this.logger.verbose(`Resource '${resource}' denied to ${user}.`);
+      this.logger.verbose(`Resource [ ${resource} ] denied to [ ${user} ]`);
     } else {
-      this.logger.verbose(`Resource '${resource}' granted to ${user}.`);
+      this.logger.verbose(`Resource [ ${resource} ] granted to [ ${user} ]`);
     }
 
     return isAllowed;

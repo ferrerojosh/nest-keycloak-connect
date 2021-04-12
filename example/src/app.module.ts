@@ -18,6 +18,7 @@ import { ProductModule } from './product/product.module';
       secret: '05c1ff5e-f9ba-4622-98e3-c4c9d280546e',
       // optional if you want to retrieve JWT from cookie
       cookieKey: 'KEYCLOAK_JWT',
+      logLevels: ['verbose']
     }),
     ProductModule,
   ],
