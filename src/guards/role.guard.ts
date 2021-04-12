@@ -8,9 +8,10 @@ import {
 import { Reflector } from '@nestjs/core';
 import * as KeycloakConnect from 'keycloak-connect';
 import { extractRequest } from '../util';
-import { KEYCLOAK_INSTANCE } from '../constants';
+import { KEYCLOAK_INSTANCE, KEYCLOAK_LOGGER } from '../constants';
 import { META_ALLOW_ANY_ROLE } from '../decorators/allow-any-role.decorator';
 import { META_ROLES } from '../decorators/roles.decorator';
+import { KeycloakLogger } from '../logger';
 
 /**
  * A permissive type of role guard. Roles are set via `@Roles` decorator.
@@ -21,6 +22,8 @@ export class RoleGuard implements CanActivate {
   constructor(
     @Inject(KEYCLOAK_INSTANCE)
     private keycloak: KeycloakConnect.Keycloak,
+    @Inject(KEYCLOAK_LOGGER)
+    private logger: KeycloakLogger,
     private readonly reflector: Reflector,
   ) {}
 
@@ -38,6 +41,8 @@ export class RoleGuard implements CanActivate {
     if (!roles) {
       return true;
     }
+
+    this.logger.verbose(`Roles: `, JSON.stringify(roles));
 
     // Extract request
     const [request] = extractRequest(context);

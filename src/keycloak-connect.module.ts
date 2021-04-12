@@ -1,21 +1,26 @@
 import { DynamicModule, Module, Provider } from '@nestjs/common';
 import * as KeycloakConnect from 'keycloak-connect';
-
-import { KEYCLOAK_CONNECT_OPTIONS, KEYCLOAK_INSTANCE } from './constants';
+import {
+  KEYCLOAK_CONNECT_OPTIONS,
+  KEYCLOAK_INSTANCE,
+  KEYCLOAK_LOGGER,
+} from './constants';
 import { KeycloakConnectModuleAsyncOptions } from './interface/keycloak-connect-module-async-options.interface';
 import { KeycloakConnectOptionsFactory } from './interface/keycloak-connect-options-factory.interface';
 import { KeycloakConnectOptions } from './interface/keycloak-connect-options.interface';
+import { KeycloakLogger } from './logger';
 
-export * from './decorators/resource.decorator';
-export * from './decorators/scopes.decorator';
-export * from './decorators/roles.decorator';
+export * from './constants';
 export * from './decorators/allow-any-role.decorator';
-export * from './decorators/unprotected.decorator';
+export * from './decorators/authenticated-user.decorator';
 export * from './decorators/enforcer-options.decorator';
+export * from './decorators/resource.decorator';
+export * from './decorators/roles.decorator';
+export * from './decorators/scopes.decorator';
+export * from './decorators/unprotected.decorator';
 export * from './guards/auth.guard';
 export * from './guards/resource.guard';
 export * from './guards/role.guard';
-export * from './constants';
 
 @Module({})
 export class KeycloakConnectModule {
@@ -27,8 +32,8 @@ export class KeycloakConnectModule {
 
     return {
       module: KeycloakConnectModule,
-      providers: [optsProvider, this.keycloakProvider],
-      exports: [optsProvider, this.keycloakProvider],
+      providers: [optsProvider, this.loggerProvider, this.keycloakProvider],
+      exports: [optsProvider, this.loggerProvider, this.keycloakProvider],
     };
   }
 
@@ -79,6 +84,15 @@ export class KeycloakConnectModule {
       inject: [options.useExisting || options.useClass],
     };
   }
+
+  private static loggerProvider: Provider = {
+    provide: KEYCLOAK_LOGGER,
+    useFactory: (opts: KeycloakConnectOptions) => {
+      const logger = new KeycloakLogger(opts.logLevels);
+      return logger;
+    },
+    inject: [KEYCLOAK_CONNECT_OPTIONS],
+  };
 
   private static keycloakProvider: Provider = {
     provide: KEYCLOAK_INSTANCE,

@@ -1,5 +1,7 @@
 // The typings are a bit of a mess, I'm sure there's a better way to do this.
 
+import { LogLevel } from '@nestjs/common';
+
 /**
  * Keycloak Connect options.
  */
@@ -10,6 +12,11 @@ export interface KeycloakConnectOptions {
    * Cookie key.
    */
   cookieKey?: string;
+
+  /**
+   * Log level.
+   */
+  logLevels?: LogLevel[];
 
   // Keycloak options
   // https://github.com/keycloak/keycloak-nodejs-connect/blob/f8e011aea5/middleware/auth-utils/config.js
