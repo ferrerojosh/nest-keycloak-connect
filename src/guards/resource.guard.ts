@@ -12,6 +12,7 @@ import { KEYCLOAK_INSTANCE, KEYCLOAK_LOGGER } from '../constants';
 import { META_RESOURCE } from '../decorators/resource.decorator';
 import { META_SCOPES } from '../decorators/scopes.decorator';
 import { extractRequest } from '../util';
+import { META_UNPROTECTED } from '../decorators/unprotected.decorator';
 
 /**
  * This adds a resource guard, which is permissive.
@@ -37,6 +38,10 @@ export class ResourceGuard implements CanActivate {
       META_SCOPES,
       context.getHandler(),
     );
+    const isUnprotected = this.reflector.getAllAndOverride<boolean>(
+      META_UNPROTECTED,
+      [context.getClass(), context.getHandler()],
+    );
 
     // No resource given, since we are permissive, allow
     if (!resource) {
@@ -61,7 +66,13 @@ export class ResourceGuard implements CanActivate {
     // Extract request/response
     const [request, response] = extractRequest(context);
 
+    if(!request.user && isUnprotected) {
+      this.logger.verbose(`Route has no user, and is public, allowed`);
+      return true;
+    }
+
     const user = request.user?.preferred_username ?? 'user';
+
 
     const enforcerFn = createEnforcerContext(request, response);
     const isAllowed = await enforcerFn(this.keycloak, permissions);

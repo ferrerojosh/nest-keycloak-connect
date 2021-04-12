@@ -58,6 +58,12 @@ export class AuthGuard implements CanActivate {
       this.extractJwt(request.headers);
     const isInvalidJwt = jwt === null || jwt === undefined;
 
+    // Invalid JWT, but skipAuth = false, allow fallback
+    if (isInvalidJwt && !skipAuth) {
+      this.logger.verbose('Invalid JWT, skipAuth disabled, allowed for fallback');
+      return true;
+    }
+
     // No jwt token given, immediate return
     if (isInvalidJwt) {
       this.logger.verbose('Invalid JWT, unauthorized');
@@ -89,15 +95,16 @@ export class AuthGuard implements CanActivate {
 
   private extractJwt(headers: { [key: string]: string }) {
     if (headers && !headers.authorization) {
-      throw new UnauthorizedException();
+      this.logger.verbose(`No authorization header`);
+      return null;
     }
 
     const auth = headers.authorization.split(' ');
 
     // We only allow bearer
     if (auth[0].toLowerCase() !== 'bearer') {
-      this.logger.verbose(`No bearer header, unauthorized`);
-      throw new UnauthorizedException();
+      this.logger.verbose(`No bearer header`);
+      return null;
     }
 
     return auth[1];

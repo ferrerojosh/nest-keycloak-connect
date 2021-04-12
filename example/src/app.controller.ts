@@ -1,9 +1,10 @@
 import { Controller, Get } from '@nestjs/common';
-import { AuthenticatedUser } from 'nest-keycloak-connect';
+import { AuthenticatedUser, Public } from 'nest-keycloak-connect';
 
 @Controller()
 export class AppController {
   @Get()
+  @Public(false)
   getHello(
     @AuthenticatedUser()
     user: any,

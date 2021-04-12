@@ -17,7 +17,8 @@ export class ProductController {
   constructor(private service: ProductService) {}
 
   @Get()
-  @Public()
+  @Public(false)
+  @Scopes('View')
   async findAll() {
     return await this.service.findAll();
   }
