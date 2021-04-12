@@ -123,7 +123,7 @@ export class ProductController {
 
   @Post()
   @Scopes('Create')
-  async create(@Body product: Product) {
+  async create(@Body() product: Product) {
     return await this.service.create(product);
   }
 
@@ -135,8 +135,11 @@ export class ProductController {
 
   @Put(':code')
   @Scopes('Edit')
-  async update(@Param('code') code: string, @Body product: Product) {
+  async update(@Param('code') code: string, @Body() product: Product) {
     return await this.service.update(code, product);
   }
 }
 ```
+## Example app
+
+An [example application](example) is provided in the source code with both Keycloak Realm and Postman requests for you to experiment with.

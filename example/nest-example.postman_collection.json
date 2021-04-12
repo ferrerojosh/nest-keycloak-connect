@@ -1,0 +1,180 @@
+{
+	"info": {
+		"_postman_id": "8d443cf7-da08-4808-ac51-5f847a8cbbac",
+		"name": "Nest Example",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get Token",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "grant_type",
+							"value": "password",
+							"type": "text"
+						},
+						{
+							"key": "scope",
+							"value": "openid",
+							"type": "text"
+						},
+						{
+							"key": "username",
+							"value": "user",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "user",
+							"type": "text"
+						},
+						{
+							"key": "client_id",
+							"value": "postman",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8080/auth/realms/nest-example/protocol/openid-connect/token",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"auth",
+						"realms",
+						"nest-example",
+						"protocol",
+						"openid-connect",
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "List Products",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/product",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"product"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Product",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"code\": \"1-000-4\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/product",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"product"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{token}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"const loginRequest = {",
+					"    url: 'http://localhost:8080/auth/realms/nest-example/protocol/openid-connect/token',",
+					"    method: 'POST',",
+					"    body: {",
+					"        mode: 'urlencoded',",
+					"        urlencoded: [",
+					"            { key: \"grant_type\", value: \"password\", disabled: false },",
+					"            { key: \"username\", value: \"user\", disabled: false },",
+					"            { key: \"password\", value: \"user\", disabled: false },",
+					"            { key: \"scope\", value: \"openid\", disabled: false },",
+					"            { key: \"client_id\", value: \"postman\", disabled: false },",
+					"        ]",
+					"    }",
+					"};",
+					"",
+					"// All in seconds",
+					"const currentTime = Math.floor(new Date().getTime() / 1000);",
+					"const expiryTime = parseInt(pm.collectionVariables.get('tokenExpiry'));",
+					"",
+					"if(expiryTime > currentTime) return;",
+					"",
+					"pm.sendRequest(loginRequest, (error, response) => {",
+					"    const result = response.json();",
+					"    const accessToken = result.access_token;",
+					"    const expiresIn = result.expires_in;",
+					"",
+					"    pm.collectionVariables.set('token', accessToken);",
+					"    pm.collectionVariables.set('tokenExpiry', currentTime + expiresIn);",
+					"});"
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "0a9d08c1-0b0d-4f57-be35-25672ca407f4",
+			"key": "tokenExpiry",
+			"value": "1618197764"
+		},
+		{
+			"id": "16b95c27-6b49-49a3-bb1b-ebf53959368d",
+			"key": "token",
+			"value": ""
+		}
+	]
+}
