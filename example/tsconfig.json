@@ -13,6 +13,7 @@
     "incremental": true,
     "paths": {
       "nest-keycloak-connect": ["../dist"]
-    }
+    },
+    "allowJs": true
   }
 }

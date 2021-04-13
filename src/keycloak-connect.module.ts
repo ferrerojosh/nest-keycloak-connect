@@ -1,5 +1,5 @@
 import { DynamicModule, Module, Provider } from '@nestjs/common';
-import * as KeycloakConnect from 'keycloak-connect';
+import KeycloakConnect from 'keycloak-connect';
 import {
   KEYCLOAK_CONNECT_OPTIONS,
   KEYCLOAK_INSTANCE,
@@ -98,7 +98,7 @@ export class KeycloakConnectModule {
     provide: KEYCLOAK_INSTANCE,
     useFactory: (opts: KeycloakConnectOptions) => {
       const keycloakOpts: any = opts;
-      const keycloak: any = new KeycloakConnect.default({}, keycloakOpts);
+      const keycloak: any = new KeycloakConnect({}, keycloakOpts);
 
       // Access denied is called, add a flag to request so our resource guard knows
       keycloak.accessDenied = (req: any, res: any, next: any) => {
