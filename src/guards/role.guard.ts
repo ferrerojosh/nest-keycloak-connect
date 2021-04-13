@@ -50,9 +50,10 @@ export class RoleGuard implements CanActivate {
 
     if (!accessTokenJWT) {
       // No access token attached, auth guard should have attached the necessary token
-      throw new UnauthorizedException(
-        'Are you sure AuthGuard is first in the chain?',
+      this.logger.warn(
+        'No access token found in request, are you sure AuthGuard is first in the chain?',
       );
+      return false;
     }
 
     // Create grant

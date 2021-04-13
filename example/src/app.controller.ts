@@ -15,4 +15,9 @@ export class AppController {
       return 'Hello world!';
     }
   }
+
+  @Get('private')
+  getPrivate() {
+    return 'Authenticated only!';
+  }
 }

@@ -58,10 +58,10 @@ export class AuthGuard implements CanActivate {
       this.extractJwt(request.headers);
     const isInvalidJwt = jwt === null || jwt === undefined;
 
-    // Invalid JWT, but skipAuth = false, allow fallback
-    if (isInvalidJwt && !skipAuth) {
+    // Invalid JWT, but skipAuth = false, isUnprotected = true allow fallback
+    if (isInvalidJwt && !skipAuth && isUnprotected) {
       this.logger.verbose(
-        'Invalid JWT, skipAuth disabled, allowed for fallback',
+        'Invalid JWT, skipAuth disabled, and a publicly marked route, allowed for fallback',
       );
       return true;
     }
@@ -69,7 +69,7 @@ export class AuthGuard implements CanActivate {
     // No jwt token given, immediate return
     if (isInvalidJwt) {
       this.logger.verbose('Invalid JWT, unauthorized');
-      throw new UnauthorizedException();
+      return false;
     }
 
     this.logger.verbose(`User JWT: ${jwt}`);
@@ -92,7 +92,7 @@ export class AuthGuard implements CanActivate {
       this.logger.warn(`Cannot validate access token: ${ex}`);
     }
 
-    throw new UnauthorizedException();
+    return false;
   }
 
   private extractJwt(headers: { [key: string]: string }) {
