@@ -2,17 +2,17 @@ import {
   CanActivate,
   ExecutionContext,
   Inject,
-  Injectable,
-  Logger,
+  Injectable
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import * as KeycloakConnect from 'keycloak-connect';
-import { KeycloakLogger } from '../logger';
 import { KEYCLOAK_INSTANCE, KEYCLOAK_LOGGER } from '../constants';
+import { META_ENFORCER_OPTIONS } from '../decorators/enforcer-options.decorator';
 import { META_RESOURCE } from '../decorators/resource.decorator';
 import { META_SCOPES } from '../decorators/scopes.decorator';
-import { extractRequest } from '../util';
 import { META_UNPROTECTED } from '../decorators/unprotected.decorator';
+import { KeycloakLogger } from '../logger';
+import { extractRequest } from '../util';
 
 /**
  * This adds a resource guard, which is permissive.
@@ -40,6 +40,10 @@ export class ResourceGuard implements CanActivate {
     );
     const isUnprotected = this.reflector.getAllAndOverride<boolean>(
       META_UNPROTECTED,
+      [context.getClass(), context.getHandler()],
+    );
+    const enforcerOpts = this.reflector.getAllAndOverride<KeycloakConnect.EnforcerOptions>(
+      META_ENFORCER_OPTIONS,
       [context.getClass(), context.getHandler()],
     );
 
@@ -73,7 +77,7 @@ export class ResourceGuard implements CanActivate {
 
     const user = request.user?.preferred_username ?? 'user';
 
-    const enforcerFn = createEnforcerContext(request, response);
+    const enforcerFn = createEnforcerContext(request, response, enforcerOpts);
     const isAllowed = await enforcerFn(this.keycloak, permissions);
 
     // If statement for verbose logging only
@@ -87,12 +91,12 @@ export class ResourceGuard implements CanActivate {
   }
 }
 
-const createEnforcerContext = (request: any, response: any) => (
+const createEnforcerContext = (request: any, response: any, options?: KeycloakConnect.EnforcerOptions) => (
   keycloak: KeycloakConnect.Keycloak,
   permissions: string[],
 ) =>
   new Promise<boolean>((resolve, reject) =>
-    keycloak.enforcer(permissions)(request, response, (next: any) => {
+    keycloak.enforcer(permissions, options)(request, response, (next: any) => {
       if (request.resourceDenied) {
         resolve(false);
       } else {
