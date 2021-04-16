@@ -45,8 +45,8 @@ export class KeycloakConnectModule {
     return {
       module: KeycloakConnectModule,
       imports: opts.imports || [],
-      providers: [optsProvider, this.keycloakProvider],
-      exports: [optsProvider, this.keycloakProvider],
+      providers: [optsProvider, this.loggerProvider, this.keycloakProvider],
+      exports: [optsProvider, this.loggerProvider, this.keycloakProvider],
     };
   }
 
