@@ -2,7 +2,7 @@ import {
   CanActivate,
   ExecutionContext,
   Inject,
-  Injectable
+  Injectable,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import * as KeycloakConnect from 'keycloak-connect';
@@ -42,10 +42,9 @@ export class ResourceGuard implements CanActivate {
       META_UNPROTECTED,
       [context.getClass(), context.getHandler()],
     );
-    const enforcerOpts = this.reflector.getAllAndOverride<KeycloakConnect.EnforcerOptions>(
-      META_ENFORCER_OPTIONS,
-      [context.getClass(), context.getHandler()],
-    );
+    const enforcerOpts = this.reflector.getAllAndOverride<
+      KeycloakConnect.EnforcerOptions
+    >(META_ENFORCER_OPTIONS, [context.getClass(), context.getHandler()]);
 
     // No resource given, since we are permissive, allow
     if (!resource) {
@@ -91,12 +90,15 @@ export class ResourceGuard implements CanActivate {
   }
 }
 
-const createEnforcerContext = (request: any, response: any, options?: KeycloakConnect.EnforcerOptions) => (
-  keycloak: KeycloakConnect.Keycloak,
-  permissions: string[],
-) =>
-  new Promise<boolean>((resolve, reject) =>
-    keycloak.enforcer(permissions, options)(request, response, (next: any) => {
+const createEnforcerContext = (
+  request: any,
+  response: any,
+  options?: KeycloakConnect.EnforcerOptions,
+) => (keycloak: KeycloakConnect.Keycloak, permissions: string[]) =>
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  new Promise<boolean>((resolve, _) =>
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    keycloak.enforcer(permissions, options)(request, response, (_: any) => {
       if (request.resourceDenied) {
         resolve(false);
       } else {

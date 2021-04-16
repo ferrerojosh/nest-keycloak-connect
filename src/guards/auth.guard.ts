@@ -3,11 +3,9 @@ import {
   ExecutionContext,
   Inject,
   Injectable,
-  UnauthorizedException,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import * as KeycloakConnect from 'keycloak-connect';
-import { KeycloakLogger } from '../logger';
 import {
   KEYCLOAK_CONNECT_OPTIONS,
   KEYCLOAK_INSTANCE,
@@ -18,6 +16,7 @@ import {
   META_UNPROTECTED,
 } from '../decorators/unprotected.decorator';
 import { KeycloakConnectOptions } from '../interface/keycloak-connect-options.interface';
+import { KeycloakLogger } from '../logger';
 import { extractRequest } from '../util';
 
 /**

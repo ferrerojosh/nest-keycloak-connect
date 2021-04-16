@@ -12,7 +12,7 @@
     "npm:publish": "npm run build && cd dist && npm publish",
     "npm:publish:next": "npm run build && cd dist && npm publish --tag next",
     "format": "prettier --write \"src/**/*.ts\"",
-    "lint": "tslint -p tsconfig.json -c tslint.json"
+    "lint": "eslint ./src --ext .ts"
   },
   "keywords": [
     "nestjs",
@@ -41,12 +41,17 @@
     "@nestjs/graphql": "^7.9.1",
     "@types/express": "4.16.1",
     "@types/node": "^13.13.5",
+    "@typescript-eslint/eslint-plugin": "^4.22.0",
+    "@typescript-eslint/parser": "^4.22.0",
     "cpr": "^3.0.1",
+    "eslint": "^7.24.0",
+    "eslint-config-prettier": "^8.2.0",
+    "eslint-plugin-prettier": "^3.4.0",
     "prettier": "^1.19.1",
     "reflect-metadata": "^0.1.12",
     "rimraf": "^3.0.2",
     "rxjs": "^6.0.0",
     "ts-node": "^8.6.2",
-    "typescript": "^3.8.3"
+    "typescript": "^3.9.9"
   }
 }

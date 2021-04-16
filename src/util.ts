@@ -1,5 +1,4 @@
 import { ContextType, ExecutionContext } from '@nestjs/common';
-import { KeycloakLogger } from './logger';
 
 type GqlContextType = 'graphql' | ContextType;
 
