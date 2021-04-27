@@ -5,8 +5,25 @@ import { Logger, LoggerService, LogLevel } from '@nestjs/common';
  */
 export class KeycloakLogger implements LoggerService {
   private logger = new Logger('Keycloak');
+  private logLevels: LogLevel[];
+  private readonly DEFAULT_LOG_LEVEL = 'verbose';
 
-  constructor(private readonly logLevels: LogLevel[]) {}
+  constructor(providedLogLevels: LogLevel[]) {
+    this.isLogLevelSet(providedLogLevels)
+      ? (this.logLevels = providedLogLevels)
+      : this.setDefaultLogLevel();
+  }
+
+  private setDefaultLogLevel = () => {
+    this.logLevels = [this.DEFAULT_LOG_LEVEL];
+    this.logger.verbose(
+      'No LogLevel for KeycloakLogger provided; falling back to default: ' +
+        this.DEFAULT_LOG_LEVEL,
+    );
+  };
+
+  private isLogLevelSet = (logLevels: LogLevel[]) =>
+    Array.isArray(logLevels) && logLevels.length;
 
   log(message: any, context?: string) {
     this.callWrapped('log', message, context);

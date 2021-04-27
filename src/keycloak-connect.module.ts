@@ -87,10 +87,8 @@ export class KeycloakConnectModule {
 
   private static loggerProvider: Provider = {
     provide: KEYCLOAK_LOGGER,
-    useFactory: (opts: KeycloakConnectOptions) => {
-      const logger = new KeycloakLogger(opts.logLevels);
-      return logger;
-    },
+    useFactory: (opts: KeycloakConnectOptions) =>
+      new KeycloakLogger(opts.logLevels),
     inject: [KEYCLOAK_CONNECT_OPTIONS],
   };
 
