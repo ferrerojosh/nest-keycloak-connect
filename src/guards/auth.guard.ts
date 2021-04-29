@@ -18,7 +18,7 @@ import {
 } from '../decorators/unprotected.decorator';
 import { KeycloakConnectOptions } from '../interface/keycloak-connect-options.interface';
 import { KeycloakLogger } from '../logger';
-import { extractRequest } from '../util';
+import { extractRequest, parseToken } from '../util';
 
 /**
  * An authentication guard. Will return a 401 unauthorized when it is unable to
@@ -79,7 +79,7 @@ export class AuthGuard implements CanActivate {
 
       if (typeof result === 'string') {
         // Attach user info object
-        request.user = await this.keycloak.grantManager.userInfo(jwt);
+        request.user = parseToken(jwt);
         // Attach raw access token JWT extracted from bearer/cookie
         request.accessTokenJWT = jwt;
 
