@@ -109,7 +109,7 @@ export class ProductController {
 
   // New in 1.1.0, allows you to set roles
   @Get()
-  @Roles('master:admin', 'myrealm:admin', 'admin')
+  @Roles('realm:admin', 'admin')
   // Optional, allows any role passed in `@Roles` to be permitted
   @AllowAnyRole()
   async findAllBarcodes() {
