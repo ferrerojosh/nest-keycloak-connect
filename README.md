@@ -50,7 +50,8 @@ import {
       clientId: 'my-nestjs-app',
       secret: 'secret',
       // optional if you want to retrieve JWT from cookie
-      cookieKey: 'KEYCLOAK_JWT',
+      cookieKey: 'KEYCLOAK_JWT', 
+      // optional loglevels. default is verbose
       logLevels: ['warn']
     }),
   ],
