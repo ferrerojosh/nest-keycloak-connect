@@ -6,7 +6,7 @@ import { Logger, LoggerService, LogLevel } from '@nestjs/common';
 export class KeycloakLogger implements LoggerService {
   private logger = new Logger('Keycloak');
   private logLevels: LogLevel[];
-  private readonly DEFAULT_LOG_LEVEL = 'verbose';
+  private readonly DEFAULT_LOG_LEVEL = 'log';
 
   constructor(providedLogLevels: LogLevel[]) {
     this.isLogLevelSet(providedLogLevels)
