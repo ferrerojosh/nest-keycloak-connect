@@ -3,6 +3,7 @@ import {
   ExecutionContext,
   Inject,
   Injectable,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import * as KeycloakConnect from 'keycloak-connect';
@@ -68,7 +69,7 @@ export class AuthGuard implements CanActivate {
     // No jwt token given, immediate return
     if (isInvalidJwt) {
       this.logger.verbose('Invalid JWT, unauthorized');
-      return false;
+      throw new UnauthorizedException();
     }
 
     this.logger.verbose(`User JWT: ${jwt}`);
@@ -91,7 +92,7 @@ export class AuthGuard implements CanActivate {
       this.logger.warn(`Cannot validate access token: ${ex}`);
     }
 
-    return false;
+    throw new UnauthorizedException();
   }
 
   private extractJwt(headers: { [key: string]: string }) {
