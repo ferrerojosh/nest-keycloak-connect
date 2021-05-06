@@ -8,4 +8,5 @@ export const META_ROLES = 'roles';
  * @param roleMetaData - meta data for roles and matching mode
  * @since 1.1.0
  */
-export const Roles = (roleMetaData: RoleDecoratorOptionsInterface) => SetMetadata(META_ROLES, roleMetaData);
+export const Roles = (roleMetaData: RoleDecoratorOptionsInterface) =>
+  SetMetadata(META_ROLES, roleMetaData);

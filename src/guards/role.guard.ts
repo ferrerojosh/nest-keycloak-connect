@@ -1,4 +1,9 @@
-import { CanActivate, ExecutionContext, Inject, Injectable } from '@nestjs/common';
+import {
+  CanActivate,
+  ExecutionContext,
+  Inject,
+  Injectable,
+} from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import * as KeycloakConnect from 'keycloak-connect';
 import { KEYCLOAK_INSTANCE, KEYCLOAK_LOGGER } from '../constants';
