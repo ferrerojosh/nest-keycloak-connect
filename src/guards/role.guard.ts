@@ -39,6 +39,10 @@ export class RoleGuard implements CanActivate {
       return true;
     }
 
+    if (rolesMetaData && !rolesMetaData.RoleMatchingMode) {
+      rolesMetaData.RoleMatchingMode = RoleMatchingMode.any;
+    }
+
     this.logger.verbose(`Roles: `, JSON.stringify(rolesMetaData.roles));
 
     // Extract request
