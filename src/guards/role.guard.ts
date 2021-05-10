@@ -36,7 +36,7 @@ export class RoleGuard implements CanActivate {
     );
 
     if (!rolesMetaData || rolesMetaData.roles.length == 0) {
-      return false;
+      return true;
     }
 
     this.logger.verbose(`Roles: `, JSON.stringify(rolesMetaData.roles));
