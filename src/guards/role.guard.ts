@@ -6,7 +6,11 @@ import {
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import * as KeycloakConnect from 'keycloak-connect';
-import { KEYCLOAK_INSTANCE, KEYCLOAK_LOGGER, RoleMatchingMode } from '../constants';
+import {
+  KEYCLOAK_INSTANCE,
+  KEYCLOAK_LOGGER,
+  RoleMatchingMode,
+} from '../constants';
 import { META_ROLES } from '../decorators/roles.decorator';
 import { KeycloakLogger } from '../logger';
 import { extractRequest } from '../util';
