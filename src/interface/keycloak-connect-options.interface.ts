@@ -1,7 +1,7 @@
 // The typings are a bit of a mess, I'm sure there's a better way to do this.
 
 import { LogLevel } from '@nestjs/common';
-import { PolicyEnforcementMode } from 'src/constants';
+import { PolicyEnforcementMode } from '../constants';
 
 /**
  * Keycloak Connect options.

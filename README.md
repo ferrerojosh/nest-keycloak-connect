@@ -40,6 +40,7 @@ import {
   ResourceGuard,
   RoleGuard,
   AuthGuard,
+  PolicyEnforcementMode
 } from 'nest-keycloak-connect';
 
 @Module({
@@ -52,7 +53,11 @@ import {
       // optional if you want to retrieve JWT from cookie
       cookieKey: 'KEYCLOAK_JWT', 
       // optional loglevels. default is verbose
-      logLevels: ['warn']
+      logLevels: ['warn'],
+      // optional useNestLogger, uses the logger from app.useLogger() implementation
+      useNestLogger: false,
+      // optional, already defaults to permissive
+      policyEnforcement: PolicyEnforcementMode.PERMISSIVE
     }),
   ],
   providers: [
@@ -91,7 +96,7 @@ export class AppModule {}
 In your controllers, simply do:
 
 ```typescript
-import { Resource, Roles, Scopes, AllowAnyRole, Unprotected, Public, MatchingMode } from 'nest-keycloak-connect';
+import { Resource, Roles, Scopes, AllowAnyRole, Public, MatchingMode } from 'nest-keycloak-connect';
 import { Controller, Get, Delete, Put, Post, Param } from '@nestjs/common';
 import { Product } from './product';
 import { ProductService } from './product.service';

@@ -5,6 +5,7 @@ import {
   ResourceGuard,
   RoleGuard,
   AuthGuard,
+  PolicyEnforcementMode,
 } from 'nest-keycloak-connect';
 import { APP_GUARD } from '@nestjs/core';
 import { ProductModule } from './product/product.module';
@@ -18,7 +19,9 @@ import { ProductModule } from './product/product.module';
       secret: '05c1ff5e-f9ba-4622-98e3-c4c9d280546e',
       // optional if you want to retrieve JWT from cookie
       cookieKey: 'KEYCLOAK_JWT',
-      logLevels: ['verbose']
+      logLevels: ['verbose'],
+      useNestLogger: false,
+      policyEnforcement: PolicyEnforcementMode.PERMISSIVE
     }),
     ProductModule,
   ],
