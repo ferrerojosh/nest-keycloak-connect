@@ -3,7 +3,7 @@ import {
   ExecutionContext,
   Inject,
   Injectable,
-  Logger
+  Logger,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import * as KeycloakConnect from 'keycloak-connect';

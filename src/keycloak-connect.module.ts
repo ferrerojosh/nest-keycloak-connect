@@ -87,7 +87,7 @@ export class KeycloakConnectModule {
   private static loggerProvider: Provider = {
     provide: KEYCLOAK_LOGGER,
     useFactory: (opts: KeycloakConnectOptions) => {
-      if(opts.useNestLogger) {
+      if (opts.useNestLogger) {
         return new Logger('Keycloak');
       }
       return new KeycloakLogger(opts.logLevels);
