@@ -1,5 +1,5 @@
 import { Controller, Get } from '@nestjs/common';
-import { AuthenticatedUser, Public } from 'nest-keycloak-connect';
+import { AuthenticatedUser, Public, Roles, RoleMatchingMode } from 'nest-keycloak-connect';
 
 @Controller()
 export class AppController {
@@ -19,5 +19,11 @@ export class AppController {
   @Get('private')
   getPrivate() {
     return 'Authenticated only!';
+  }
+
+  @Get('admin')
+  @Roles({ roles: ['admin'], mode: RoleMatchingMode.ALL })
+  adminRole() {
+    return 'Admin only!'
   }
 }

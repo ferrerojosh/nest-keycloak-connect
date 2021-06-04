@@ -6,14 +6,11 @@ import {
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import * as KeycloakConnect from 'keycloak-connect';
-import { KEYCLOAK_INSTANCE, KEYCLOAK_LOGGER } from '../constants';
+import { KEYCLOAK_INSTANCE, KEYCLOAK_LOGGER, RoleMatchingMode } from '../constants';
 import { META_ROLES } from '../decorators/roles.decorator';
 import { KeycloakLogger } from '../logger';
 import { extractRequest } from '../util';
-import {
-  RoleDecoratorOptionsInterface,
-  RoleMatchingMode,
-} from '../interface/role-decorator-options.interface';
+import { RoleDecoratorOptionsInterface } from '../interface/role-decorator-options.interface';
 
 /**
  * A permissive type of role guard. Roles are set via `@Roles` decorator.
@@ -39,8 +36,8 @@ export class RoleGuard implements CanActivate {
       return true;
     }
 
-    if (rolesMetaData && !rolesMetaData.RoleMatchingMode) {
-      rolesMetaData.RoleMatchingMode = RoleMatchingMode.all;
+    if (rolesMetaData && !rolesMetaData.mode) {
+      rolesMetaData.mode = RoleMatchingMode.ANY;
     }
 
     this.logger.verbose(`Roles: `, JSON.stringify(rolesMetaData.roles));
@@ -65,7 +62,7 @@ export class RoleGuard implements CanActivate {
     // Grab access token from grant
     const accessToken: KeycloakConnect.Token = grant.access_token as any;
 
-    return rolesMetaData.RoleMatchingMode === RoleMatchingMode.any
+    return rolesMetaData.mode === RoleMatchingMode.ANY
       ? rolesMetaData.roles.some(r => accessToken.hasRole(r))
       : rolesMetaData.roles.every(r => accessToken.hasRole(r));
   }

@@ -20,7 +20,6 @@ export * from './decorators/unprotected.decorator';
 export * from './guards/auth.guard';
 export * from './guards/resource.guard';
 export * from './guards/role.guard';
-export * from './interface/role-decorator-options.interface';
 
 @Module({})
 export class KeycloakConnectModule {

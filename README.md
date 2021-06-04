@@ -91,7 +91,7 @@ export class AppModule {}
 In your controllers, simply do:
 
 ```typescript
-import { Resource, Roles, Scopes, AllowAnyRole, Unprotected, Public } from 'nest-keycloak-connect';
+import { Resource, Roles, Scopes, AllowAnyRole, Unprotected, Public, MatchingMode } from 'nest-keycloak-connect';
 import { Controller, Get, Delete, Put, Post, Param } from '@nestjs/common';
 import { Product } from './product';
 import { ProductService } from './product.service';
@@ -101,18 +101,14 @@ import { ProductService } from './product.service';
 export class ProductController {
   constructor(private service: ProductService) {}
 
-  // New in 1.2.0, allows you add unprotected/public routes
   @Get()
-  @Unprotected() // Use `@Public` if the verb seems weird to you
+  @Public() // Can also use `@Unprotected`
   async findAll() {
     return await this.service.findAll();
   }
 
-  // New in 1.1.0, allows you to set roles
   @Get()
-  @Roles('realm:admin', 'admin')
-  // Optional, allows any role passed in `@Roles` to be permitted
-  @AllowAnyRole()
+  @Roles({ roles: ['admin', 'other'] })
   async findAllBarcodes() {
     return await this.service.findAllBarcodes();
   }
@@ -131,6 +127,7 @@ export class ProductController {
 
   @Delete(':code')
   @Scopes('Delete')
+  @Roles({ roles: ['admin', 'realm:sysadmin'], mode: MatchingMode.ALL })
   async deleteByCode(@Param('code') code: string) {
     return await this.service.deleteByCode(code);
   }
