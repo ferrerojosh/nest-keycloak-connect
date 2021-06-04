@@ -11,7 +11,6 @@ import { KeycloakConnectOptions } from './interface/keycloak-connect-options.int
 import { KeycloakLogger } from './logger';
 
 export * from './constants';
-export * from './decorators/allow-any-role.decorator';
 export * from './decorators/authenticated-user.decorator';
 export * from './decorators/enforcer-options.decorator';
 export * from './decorators/resource.decorator';
@@ -21,6 +20,7 @@ export * from './decorators/unprotected.decorator';
 export * from './guards/auth.guard';
 export * from './guards/resource.guard';
 export * from './guards/role.guard';
+export * from './interface/role-decorator-options.interface';
 
 @Module({})
 export class KeycloakConnectModule {

@@ -7,10 +7,13 @@ import {
 import { Reflector } from '@nestjs/core';
 import * as KeycloakConnect from 'keycloak-connect';
 import { KEYCLOAK_INSTANCE, KEYCLOAK_LOGGER } from '../constants';
-import { META_ALLOW_ANY_ROLE } from '../decorators/allow-any-role.decorator';
 import { META_ROLES } from '../decorators/roles.decorator';
 import { KeycloakLogger } from '../logger';
 import { extractRequest } from '../util';
+import {
+  RoleDecoratorOptionsInterface,
+  RoleMatchingMode,
+} from '../interface/role-decorator-options.interface';
 
 /**
  * A permissive type of role guard. Roles are set via `@Roles` decorator.
@@ -27,21 +30,20 @@ export class RoleGuard implements CanActivate {
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const roles = this.reflector.get<string[]>(
+    const rolesMetaData = this.reflector.get<RoleDecoratorOptionsInterface>(
       META_ROLES,
       context.getHandler(),
     );
-    const allowAnyRole = this.reflector.get<boolean>(
-      META_ALLOW_ANY_ROLE,
-      context.getHandler(),
-    );
 
-    // No roles given, since we are permissive, allow
-    if (!roles) {
+    if (!rolesMetaData || rolesMetaData.roles.length == 0) {
       return true;
     }
 
-    this.logger.verbose(`Roles: `, JSON.stringify(roles));
+    if (rolesMetaData && !rolesMetaData.RoleMatchingMode) {
+      rolesMetaData.RoleMatchingMode = RoleMatchingMode.all;
+    }
+
+    this.logger.verbose(`Roles: `, JSON.stringify(rolesMetaData.roles));
 
     // Extract request
     const [request] = extractRequest(context);
@@ -63,8 +65,8 @@ export class RoleGuard implements CanActivate {
     // Grab access token from grant
     const accessToken: KeycloakConnect.Token = grant.access_token as any;
 
-    return allowAnyRole
-      ? roles.some(r => accessToken.hasRole(r))
-      : roles.every(r => accessToken.hasRole(r));
+    return rolesMetaData.RoleMatchingMode === RoleMatchingMode.any
+      ? rolesMetaData.roles.some(r => accessToken.hasRole(r))
+      : rolesMetaData.roles.every(r => accessToken.hasRole(r));
   }
 }
