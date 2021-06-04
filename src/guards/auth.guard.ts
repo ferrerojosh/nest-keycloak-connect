@@ -15,7 +15,7 @@ import {
 import {
   META_SKIP_AUTH,
   META_UNPROTECTED,
-} from '../decorators/unprotected.decorator';
+} from '../decorators/public.decorator';
 import { KeycloakConnectOptions } from '../interface/keycloak-connect-options.interface';
 import { KeycloakLogger } from '../logger';
 import { extractRequest, parseToken } from '../util';
