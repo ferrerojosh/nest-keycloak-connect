@@ -1,6 +1,7 @@
 // The typings are a bit of a mess, I'm sure there's a better way to do this.
 
 import { LogLevel } from '@nestjs/common';
+import { PolicyEnforcementMode } from '../constants';
 
 /**
  * Keycloak Connect options.
@@ -17,6 +18,16 @@ export interface KeycloakConnectOptions {
    * Log level.
    */
   logLevels?: LogLevel[];
+
+  /**
+   * Use the nest logger.
+   */
+  useNestLogger?: boolean;
+
+  /**
+   * Sets the policy enforcement mode for this adapter, defaults to {@link PolicyEnforcementMode.PERMISSIVE}.
+   */
+  policyEnforcement?: PolicyEnforcementMode;
 
   // Keycloak options
   // https://github.com/keycloak/keycloak-nodejs-connect/blob/f8e011aea5/middleware/auth-utils/config.js

@@ -1,4 +1,5 @@
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
+import { extractRequest } from '../util';
 
 /**
  * Retrieves the current Keycloak logged-in user.
@@ -6,7 +7,7 @@ import { createParamDecorator, ExecutionContext } from '@nestjs/common';
  */
 export const AuthenticatedUser = createParamDecorator(
   (data: unknown, ctx: ExecutionContext) => {
-    const req = ctx.switchToHttp().getRequest();
+    const [req] = extractRequest(ctx);
     return req.user;
   },
 );

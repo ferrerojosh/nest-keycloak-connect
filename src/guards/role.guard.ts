@@ -3,13 +3,17 @@ import {
   ExecutionContext,
   Inject,
   Injectable,
+  Logger,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import * as KeycloakConnect from 'keycloak-connect';
-import { KEYCLOAK_INSTANCE, KEYCLOAK_LOGGER } from '../constants';
-import { META_ALLOW_ANY_ROLE } from '../decorators/allow-any-role.decorator';
+import {
+  KEYCLOAK_INSTANCE,
+  KEYCLOAK_LOGGER,
+  RoleMatchingMode,
+} from '../constants';
 import { META_ROLES } from '../decorators/roles.decorator';
-import { KeycloakLogger } from '../logger';
+import { RoleDecoratorOptionsInterface } from '../interface/role-decorator-options.interface';
 import { extractRequest } from '../util';
 
 /**
@@ -22,26 +26,25 @@ export class RoleGuard implements CanActivate {
     @Inject(KEYCLOAK_INSTANCE)
     private keycloak: KeycloakConnect.Keycloak,
     @Inject(KEYCLOAK_LOGGER)
-    private logger: KeycloakLogger,
+    private logger: Logger,
     private readonly reflector: Reflector,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const roles = this.reflector.get<string[]>(
+    const rolesMetaData = this.reflector.get<RoleDecoratorOptionsInterface>(
       META_ROLES,
       context.getHandler(),
     );
-    const allowAnyRole = this.reflector.get<boolean>(
-      META_ALLOW_ANY_ROLE,
-      context.getHandler(),
-    );
 
-    // No roles given, since we are permissive, allow
-    if (!roles) {
+    if (!rolesMetaData || rolesMetaData.roles.length == 0) {
       return true;
     }
 
-    this.logger.verbose(`Roles: `, JSON.stringify(roles));
+    if (rolesMetaData && !rolesMetaData.mode) {
+      rolesMetaData.mode = RoleMatchingMode.ANY;
+    }
+
+    this.logger.verbose(`Roles: `, JSON.stringify(rolesMetaData.roles));
 
     // Extract request
     const [request] = extractRequest(context);
@@ -63,8 +66,8 @@ export class RoleGuard implements CanActivate {
     // Grab access token from grant
     const accessToken: KeycloakConnect.Token = grant.access_token as any;
 
-    return allowAnyRole
-      ? roles.some(r => accessToken.hasRole(r))
-      : roles.every(r => accessToken.hasRole(r));
+    return rolesMetaData.mode === RoleMatchingMode.ANY
+      ? rolesMetaData.roles.some(r => accessToken.hasRole(r))
+      : rolesMetaData.roles.every(r => accessToken.hasRole(r));
   }
 }

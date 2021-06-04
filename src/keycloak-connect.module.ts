@@ -1,4 +1,4 @@
-import { DynamicModule, Module, Provider } from '@nestjs/common';
+import { DynamicModule, Logger, Module, Provider } from '@nestjs/common';
 import KeycloakConnect from 'keycloak-connect';
 import {
   KEYCLOAK_CONNECT_OPTIONS,
@@ -11,13 +11,12 @@ import { KeycloakConnectOptions } from './interface/keycloak-connect-options.int
 import { KeycloakLogger } from './logger';
 
 export * from './constants';
-export * from './decorators/allow-any-role.decorator';
 export * from './decorators/authenticated-user.decorator';
 export * from './decorators/enforcer-options.decorator';
 export * from './decorators/resource.decorator';
 export * from './decorators/roles.decorator';
 export * from './decorators/scopes.decorator';
-export * from './decorators/unprotected.decorator';
+export * from './decorators/public.decorator';
 export * from './guards/auth.guard';
 export * from './guards/resource.guard';
 export * from './guards/role.guard';
@@ -87,8 +86,12 @@ export class KeycloakConnectModule {
 
   private static loggerProvider: Provider = {
     provide: KEYCLOAK_LOGGER,
-    useFactory: (opts: KeycloakConnectOptions) =>
-      new KeycloakLogger(opts.logLevels),
+    useFactory: (opts: KeycloakConnectOptions) => {
+      if (opts.useNestLogger) {
+        return new Logger('Keycloak');
+      }
+      return new KeycloakLogger(opts.logLevels);
+    },
     inject: [KEYCLOAK_CONNECT_OPTIONS],
   };
 
