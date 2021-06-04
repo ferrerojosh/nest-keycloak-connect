@@ -26,3 +26,17 @@ export enum RoleMatchingMode {
    */
   ANY = 'any',
 }
+
+/**
+ * Policy enforcement mode.
+ */
+export enum PolicyEnforcementMode {
+  /**
+   * Deny all request when there is no matching resource.
+   */
+  ENFORCING = 'enforcing',
+  /**
+   * Allow all request even when there's no matching resource.
+   */
+  PERMISSIVE = 'permissive',
+}

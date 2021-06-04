@@ -7,15 +7,21 @@ import {
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import * as KeycloakConnect from 'keycloak-connect';
-import { KEYCLOAK_INSTANCE, KEYCLOAK_LOGGER } from '../constants';
+import {
+  KEYCLOAK_CONNECT_OPTIONS,
+  KEYCLOAK_INSTANCE,
+  KEYCLOAK_LOGGER,
+  PolicyEnforcementMode,
+} from '../constants';
 import { META_ENFORCER_OPTIONS } from '../decorators/enforcer-options.decorator';
 import { META_UNPROTECTED } from '../decorators/public.decorator';
 import { META_RESOURCE } from '../decorators/resource.decorator';
 import { META_SCOPES } from '../decorators/scopes.decorator';
+import { KeycloakConnectOptions } from '../interface/keycloak-connect-options.interface';
 import { extractRequest } from '../util';
 
 /**
- * This adds a resource guard, which is permissive.
+ * This adds a resource guard, which is policy enforcement by default is permissive.
  * Only controllers annotated with `@Resource` and methods with `@Scopes`
  * are handled by this guard.
  */
@@ -24,6 +30,8 @@ export class ResourceGuard implements CanActivate {
   constructor(
     @Inject(KEYCLOAK_INSTANCE)
     private keycloak: KeycloakConnect.Keycloak,
+    @Inject(KEYCLOAK_CONNECT_OPTIONS)
+    private keycloakOpts: KeycloakConnectOptions,
     @Inject(KEYCLOAK_LOGGER)
     private logger: Logger,
     private readonly reflector: Reflector,
@@ -46,18 +54,37 @@ export class ResourceGuard implements CanActivate {
       KeycloakConnect.EnforcerOptions
     >(META_ENFORCER_OPTIONS, [context.getClass(), context.getHandler()]);
 
-    // No resource given, since we are permissive, allow
+    // Default to permissive
+    const pem =
+      this.keycloakOpts.policyEnforcement || PolicyEnforcementMode.PERMISSIVE;
+    const shouldAllow = pem === PolicyEnforcementMode.PERMISSIVE;
+
+    // No resource given, check policy enforcement mode
     if (!resource) {
-      this.logger.verbose(
-        `Controller has no @Resource defined, request allowed`,
-      );
-      return true;
+      if (shouldAllow) {
+        this.logger.verbose(
+          `Controller has no @Resource defined, request allowed due to policy enforcement`,
+        );
+      } else {
+        this.logger.verbose(
+          `Controller has no @Resource defined, request denied due to policy enforcement`,
+        );
+      }
+      return shouldAllow;
     }
 
-    // No scopes given, since we are permissive, allow
+    // No scopes given, check policy enforcement mode
     if (!scopes) {
-      this.logger.verbose(`Route has no @Scope defined, request allowed`);
-      return true;
+      if (shouldAllow) {
+        this.logger.verbose(
+          `Route has no @Scope defined, request allowed due to policy enforcement`,
+        );
+      } else {
+        this.logger.verbose(
+          `Route has no @Scope defined, request denied due to policy enforcement`,
+        );
+      }
+      return shouldAllow;
     }
 
     this.logger.verbose(
