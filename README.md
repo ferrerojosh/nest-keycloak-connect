@@ -96,7 +96,7 @@ export class AppModule {}
 In your controllers, simply do:
 
 ```typescript
-import { Resource, Roles, Scopes, AllowAnyRole, Public, MatchingMode } from 'nest-keycloak-connect';
+import { Resource, Roles, Scopes, AllowAnyRole, Public, RoleMatchingMode } from 'nest-keycloak-connect';
 import { Controller, Get, Delete, Put, Post, Param } from '@nestjs/common';
 import { Product } from './product';
 import { ProductService } from './product.service';
@@ -132,7 +132,7 @@ export class ProductController {
 
   @Delete(':code')
   @Scopes('Delete')
-  @Roles({ roles: ['admin', 'realm:sysadmin'], mode: MatchingMode.ALL })
+  @Roles({ roles: ['admin', 'realm:sysadmin'], mode: RoleMatchingMode.ALL })
   async deleteByCode(@Param('code') code: string) {
     return await this.service.deleteByCode(code);
   }
