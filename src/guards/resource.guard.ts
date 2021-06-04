@@ -3,15 +3,15 @@ import {
   ExecutionContext,
   Inject,
   Injectable,
+  Logger
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import * as KeycloakConnect from 'keycloak-connect';
 import { KEYCLOAK_INSTANCE, KEYCLOAK_LOGGER } from '../constants';
 import { META_ENFORCER_OPTIONS } from '../decorators/enforcer-options.decorator';
+import { META_UNPROTECTED } from '../decorators/public.decorator';
 import { META_RESOURCE } from '../decorators/resource.decorator';
 import { META_SCOPES } from '../decorators/scopes.decorator';
-import { META_UNPROTECTED } from '../decorators/public.decorator';
-import { KeycloakLogger } from '../logger';
 import { extractRequest } from '../util';
 
 /**
@@ -25,7 +25,7 @@ export class ResourceGuard implements CanActivate {
     @Inject(KEYCLOAK_INSTANCE)
     private keycloak: KeycloakConnect.Keycloak,
     @Inject(KEYCLOAK_LOGGER)
-    private logger: KeycloakLogger,
+    private logger: Logger,
     private readonly reflector: Reflector,
   ) {}
 

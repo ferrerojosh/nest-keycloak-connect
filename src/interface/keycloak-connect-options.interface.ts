@@ -18,6 +18,11 @@ export interface KeycloakConnectOptions {
    */
   logLevels?: LogLevel[];
 
+  /**
+   * Use the nest logger.
+   */
+  useNestLogger?: boolean;
+
   // Keycloak options
   // https://github.com/keycloak/keycloak-nodejs-connect/blob/f8e011aea5/middleware/auth-utils/config.js
 

@@ -3,6 +3,7 @@ import {
   ExecutionContext,
   Inject,
   Injectable,
+  Logger,
   UnauthorizedException,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
@@ -17,7 +18,6 @@ import {
   META_UNPROTECTED,
 } from '../decorators/public.decorator';
 import { KeycloakConnectOptions } from '../interface/keycloak-connect-options.interface';
-import { KeycloakLogger } from '../logger';
 import { extractRequest, parseToken } from '../util';
 
 /**
@@ -32,7 +32,7 @@ export class AuthGuard implements CanActivate {
     @Inject(KEYCLOAK_CONNECT_OPTIONS)
     private keycloakOpts: KeycloakConnectOptions,
     @Inject(KEYCLOAK_LOGGER)
-    private logger: KeycloakLogger,
+    private logger: Logger,
     private readonly reflector: Reflector,
   ) {}
 

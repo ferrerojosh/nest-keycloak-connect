@@ -3,18 +3,18 @@ import {
   ExecutionContext,
   Inject,
   Injectable,
+  Logger
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import * as KeycloakConnect from 'keycloak-connect';
 import {
   KEYCLOAK_INSTANCE,
   KEYCLOAK_LOGGER,
-  RoleMatchingMode,
+  RoleMatchingMode
 } from '../constants';
 import { META_ROLES } from '../decorators/roles.decorator';
-import { KeycloakLogger } from '../logger';
-import { extractRequest } from '../util';
 import { RoleDecoratorOptionsInterface } from '../interface/role-decorator-options.interface';
+import { extractRequest } from '../util';
 
 /**
  * A permissive type of role guard. Roles are set via `@Roles` decorator.
@@ -26,7 +26,7 @@ export class RoleGuard implements CanActivate {
     @Inject(KEYCLOAK_INSTANCE)
     private keycloak: KeycloakConnect.Keycloak,
     @Inject(KEYCLOAK_LOGGER)
-    private logger: KeycloakLogger,
+    private logger: Logger,
     private readonly reflector: Reflector,
   ) {}
 

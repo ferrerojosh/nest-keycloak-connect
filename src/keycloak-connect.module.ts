@@ -1,4 +1,4 @@
-import { DynamicModule, Module, Provider } from '@nestjs/common';
+import { DynamicModule, Logger, Module, Provider } from '@nestjs/common';
 import KeycloakConnect from 'keycloak-connect';
 import {
   KEYCLOAK_CONNECT_OPTIONS,
@@ -86,8 +86,12 @@ export class KeycloakConnectModule {
 
   private static loggerProvider: Provider = {
     provide: KEYCLOAK_LOGGER,
-    useFactory: (opts: KeycloakConnectOptions) =>
-      new KeycloakLogger(opts.logLevels),
+    useFactory: (opts: KeycloakConnectOptions) => {
+      if(opts.useNestLogger) {
+        return new Logger('Keycloak');
+      }
+      return new KeycloakLogger(opts.logLevels);
+    },
     inject: [KEYCLOAK_CONNECT_OPTIONS],
   };
 
