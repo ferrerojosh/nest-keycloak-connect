@@ -40,3 +40,21 @@ export enum PolicyEnforcementMode {
    */
   PERMISSIVE = 'permissive',
 }
+
+/**
+ * Token validation methods.
+ */
+export enum TokenValidation {
+  /**
+   * The default validation method, performs live validation via Keycloak servers.
+   */
+  ONLINE = 'online',
+  /**
+   * Validate offline against the configured keycloak options.
+   */
+  OFFLINE = 'offline',
+  /**
+   * Does not check for any validation. Should only be used for special cases (i.e development, internal networks)
+   */
+  NONE = 'none'
+}

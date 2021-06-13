@@ -6,6 +6,7 @@ import {
   RoleGuard,
   AuthGuard,
   PolicyEnforcementMode,
+  TokenValidation,
 } from 'nest-keycloak-connect';
 import { APP_GUARD } from '@nestjs/core';
 import { ProductModule } from './product/product.module';
@@ -21,7 +22,8 @@ import { ProductModule } from './product/product.module';
       cookieKey: 'KEYCLOAK_JWT',
       logLevels: ['verbose'],
       useNestLogger: false,
-      policyEnforcement: PolicyEnforcementMode.PERMISSIVE
+      policyEnforcement: PolicyEnforcementMode.PERMISSIVE,
+      tokenValidation: TokenValidation.NONE,
     }),
     ProductModule,
   ],

@@ -4,6 +4,7 @@ import {
   KEYCLOAK_CONNECT_OPTIONS,
   KEYCLOAK_INSTANCE,
   KEYCLOAK_LOGGER,
+  TokenValidation,
 } from './constants';
 import { KeycloakConnectModuleAsyncOptions } from './interface/keycloak-connect-module-async-options.interface';
 import { KeycloakConnectOptionsFactory } from './interface/keycloak-connect-options-factory.interface';
@@ -23,6 +24,9 @@ export * from './guards/role.guard';
 
 @Module({})
 export class KeycloakConnectModule {
+
+  private static logger = new Logger(KeycloakConnectModule.name);
+
   public static register(opts: KeycloakConnectOptions): DynamicModule {
     const optsProvider = {
       provide: KEYCLOAK_CONNECT_OPTIONS,
@@ -100,6 +104,16 @@ export class KeycloakConnectModule {
     useFactory: (opts: KeycloakConnectOptions) => {
       const keycloakOpts: any = opts;
       const keycloak: any = new KeycloakConnect({}, keycloakOpts);
+
+      // Warn if using token validation none
+      if (
+        opts.tokenValidation &&
+        opts.tokenValidation === TokenValidation.NONE
+      ) {
+        KeycloakConnectModule.logger.warn(
+          `Token validation is disabled, please only do this on development/special use-cases.`,
+        );
+      }
 
       // Access denied is called, add a flag to request so our resource guard knows
       keycloak.accessDenied = (req: any, res: any, next: any) => {
