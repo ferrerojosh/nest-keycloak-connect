@@ -6,22 +6,31 @@ import {
   RoleGuard,
   AuthGuard,
   PolicyEnforcementMode,
+  TokenValidation,
 } from 'nest-keycloak-connect';
 import { APP_GUARD } from '@nestjs/core';
 import { ProductModule } from './product/product.module';
 
 @Module({
   imports: [
-    KeycloakConnectModule.register({
-      authServerUrl: 'http://localhost:8080/auth',
-      realm: 'nest-example',
-      clientId: 'nest-api',
-      secret: '05c1ff5e-f9ba-4622-98e3-c4c9d280546e',
-      // optional if you want to retrieve JWT from cookie
+    // KeycloakConnectModule.register({
+    //   authServerUrl: 'http://localhost:8080/auth',
+    //   realm: 'nest-example',
+    //   clientId: 'nest-api',
+    //   secret: '05c1ff5e-f9ba-4622-98e3-c4c9d280546e',
+    //   // optional if you want to retrieve JWT from cookie
+    //   cookieKey: 'KEYCLOAK_JWT',
+    //   logLevels: ['verbose'],
+    //   useNestLogger: false,
+    //   policyEnforcement: PolicyEnforcementMode.ENFORCING,
+    //   tokenValidation: TokenValidation.NONE,
+    // }),
+    KeycloakConnectModule.register(`./keycloak.json`, {
       cookieKey: 'KEYCLOAK_JWT',
       logLevels: ['verbose'],
       useNestLogger: false,
-      policyEnforcement: PolicyEnforcementMode.PERMISSIVE
+      policyEnforcement: PolicyEnforcementMode.ENFORCING,
+      tokenValidation: TokenValidation.NONE,
     }),
     ProductModule,
   ],

@@ -1,14 +1,14 @@
 // The typings are a bit of a mess, I'm sure there's a better way to do this.
 
 import { LogLevel } from '@nestjs/common';
-import { PolicyEnforcementMode } from '../constants';
+import { PolicyEnforcementMode, TokenValidation } from '../constants';
+
+export type KeycloakConnectOptions = string | KeycloakConnectConfig;
 
 /**
- * Keycloak Connect options.
+ * Library only configuration.
  */
-export interface KeycloakConnectOptions {
-  // Library only options
-
+export interface NestKeycloakConfig {
   /**
    * Cookie key.
    */
@@ -29,9 +29,17 @@ export interface KeycloakConnectOptions {
    */
   policyEnforcement?: PolicyEnforcementMode;
 
-  // Keycloak options
-  // https://github.com/keycloak/keycloak-nodejs-connect/blob/f8e011aea5/middleware/auth-utils/config.js
+  /**
+   * Sets the token validation method, defaults to {@link TokenValidation.ONLINE}.
+   */
+  tokenValidation?: TokenValidation;
+}
 
+/**
+ * Keycloak Connect options.
+ * @see {@link https://github.com/keycloak/keycloak-nodejs-connect/blob/f8e011aea5/middleware/auth-utils/config.js}
+ */
+export interface KeycloakConnectConfig extends NestKeycloakConfig {
   /**
    * Realm ID.
    */

@@ -10,14 +10,16 @@ import { Reflector } from '@nestjs/core';
 import * as KeycloakConnect from 'keycloak-connect';
 import {
   KEYCLOAK_CONNECT_OPTIONS,
+  KEYCLOAK_COOKIE_DEFAULT,
   KEYCLOAK_INSTANCE,
   KEYCLOAK_LOGGER,
+  TokenValidation,
 } from '../constants';
 import {
   META_SKIP_AUTH,
   META_UNPROTECTED,
 } from '../decorators/public.decorator';
-import { KeycloakConnectOptions } from '../interface/keycloak-connect-options.interface';
+import { NestKeycloakConfig } from '../interface/keycloak-connect-options.interface';
 import { extractRequest, parseToken } from '../util';
 
 /**
@@ -30,7 +32,7 @@ export class AuthGuard implements CanActivate {
     @Inject(KEYCLOAK_INSTANCE)
     private keycloak: KeycloakConnect.Keycloak,
     @Inject(KEYCLOAK_CONNECT_OPTIONS)
-    private keycloakOpts: KeycloakConnectOptions,
+    private keycloakOpts: NestKeycloakConfig,
     @Inject(KEYCLOAK_LOGGER)
     private logger: Logger,
     private readonly reflector: Reflector,
@@ -74,25 +76,56 @@ export class AuthGuard implements CanActivate {
 
     this.logger.verbose(`User JWT: ${jwt}`);
 
+    const isValid = await this.validateToken(jwt);
+
+    if (isValid) {
+      // Attach user info object
+      request.user = parseToken(jwt);
+      // Attach raw access token JWT extracted from bearer/cookie
+      request.accessTokenJWT = jwt;
+
+      this.logger.verbose(
+        `Authenticated User: ${JSON.stringify(request.user)}`,
+      );
+      return true;
+    }
+
+    throw new UnauthorizedException();
+  }
+
+  private async validateToken(jwt: any) {
+    const tokenValidation =
+      this.keycloakOpts.tokenValidation || TokenValidation.ONLINE;
+
+    const gm = this.keycloak.grantManager;
+    const grant = await gm.createGrant({ access_token: jwt });
+    const token = grant.access_token;
+
+    this.logger.verbose(
+      `Using token validation method: ${tokenValidation.toUpperCase()}`,
+    );
+
     try {
-      const result = await this.keycloak.grantManager.validateAccessToken(jwt);
+      let result: boolean | KeycloakConnect.Token;
 
-      if (typeof result === 'string') {
-        // Attach user info object
-        request.user = parseToken(jwt);
-        // Attach raw access token JWT extracted from bearer/cookie
-        request.accessTokenJWT = jwt;
-
-        this.logger.verbose(
-          `Authenticated User: ${JSON.stringify(request.user)}`,
-        );
-        return true;
+      switch (tokenValidation) {
+        case TokenValidation.ONLINE:
+          result = await gm.validateAccessToken(token);
+          return result === token;
+        case TokenValidation.OFFLINE:
+          result = await gm.validateToken(token, 'Bearer');
+          return result === token;
+        case TokenValidation.NONE:
+          return true;
+        default:
+          this.logger.warn(`Unknown validation method: ${tokenValidation}`);
+          return false;
       }
     } catch (ex) {
       this.logger.warn(`Cannot validate access token: ${ex}`);
     }
 
-    throw new UnauthorizedException();
+    return false;
   }
 
   private extractJwt(headers: { [key: string]: string }) {
@@ -113,9 +146,8 @@ export class AuthGuard implements CanActivate {
   }
 
   private extractJwtFromCookie(cookies: { [key: string]: string }) {
-    return (
-      (cookies && cookies[this.keycloakOpts.cookieKey]) ||
-      (cookies && cookies.KEYCLOAK_JWT)
-    );
+    const cookieKey = this.keycloakOpts.cookieKey || KEYCLOAK_COOKIE_DEFAULT;
+
+    return cookies && cookies[cookieKey];
   }
 }
