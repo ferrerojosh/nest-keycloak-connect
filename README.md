@@ -93,6 +93,17 @@ import {
 export class AppModule {}
 ```
 
+You can also register by just providing the `keycloak.json` path:
+```typescript
+KeycloakConnectModule.register(`./keycloak.json`, {
+  cookieKey: 'KEYCLOAK_JWT',
+  logLevels: ['verbose'],
+  useNestLogger: false,
+  policyEnforcement: PolicyEnforcementMode.ENFORCING,
+  tokenValidation: TokenValidation.NONE,
+})
+```
+
 In your controllers, simply do:
 
 ```typescript

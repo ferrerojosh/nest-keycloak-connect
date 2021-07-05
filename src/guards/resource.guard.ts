@@ -17,7 +17,7 @@ import { META_ENFORCER_OPTIONS } from '../decorators/enforcer-options.decorator'
 import { META_UNPROTECTED } from '../decorators/public.decorator';
 import { META_RESOURCE } from '../decorators/resource.decorator';
 import { META_SCOPES } from '../decorators/scopes.decorator';
-import { KeycloakConnectOptions } from '../interface/keycloak-connect-options.interface';
+import { NestKeycloakConfig } from '../interface/keycloak-connect-options.interface';
 import { extractRequest } from '../util';
 
 /**
@@ -31,7 +31,7 @@ export class ResourceGuard implements CanActivate {
     @Inject(KEYCLOAK_INSTANCE)
     private keycloak: KeycloakConnect.Keycloak,
     @Inject(KEYCLOAK_CONNECT_OPTIONS)
-    private keycloakOpts: KeycloakConnectOptions,
+    private keycloakOpts: NestKeycloakConfig,
     @Inject(KEYCLOAK_LOGGER)
     private logger: Logger,
     private readonly reflector: Reflector,

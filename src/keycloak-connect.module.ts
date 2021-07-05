@@ -8,8 +8,14 @@ import {
 } from './constants';
 import { KeycloakConnectModuleAsyncOptions } from './interface/keycloak-connect-module-async-options.interface';
 import { KeycloakConnectOptionsFactory } from './interface/keycloak-connect-options-factory.interface';
-import { KeycloakConnectOptions } from './interface/keycloak-connect-options.interface';
+import {
+  KeycloakConnectConfig,
+  KeycloakConnectOptions,
+  NestKeycloakConfig,
+} from './interface/keycloak-connect-options.interface';
 import { KeycloakLogger } from './logger';
+import * as path from 'path';
+import * as fs from 'fs';
 
 export * from './constants';
 export * from './decorators/authenticated-user.decorator';
@@ -24,13 +30,34 @@ export * from './guards/role.guard';
 
 @Module({})
 export class KeycloakConnectModule {
-
   private static logger = new Logger(KeycloakConnectModule.name);
 
-  public static register(opts: KeycloakConnectOptions): DynamicModule {
+  private static parseConfig(
+    opts: KeycloakConnectOptions,
+    config?: NestKeycloakConfig,
+  ): KeycloakConnectConfig {
+    if (typeof opts === 'string') {
+      const configPath = path.join(process.cwd(), opts);
+      const json = fs.readFileSync(configPath);
+      const keycloakConfig = JSON.parse(json.toString());
+      return Object.assign(keycloakConfig, config);
+    }
+    return opts;
+  }
+
+  /**
+   * Register the `KeycloakConnect` module.
+   * @param opts `keycloak.json` path in string or {@link NestKeycloakConfig} object.
+   * @param config {@link NestKeycloakConfig} when using `keycloak.json` path, optional
+   * @returns
+   */
+  public static register(
+    opts: KeycloakConnectOptions,
+    config?: NestKeycloakConfig,
+  ): DynamicModule {
     const optsProvider = {
       provide: KEYCLOAK_CONNECT_OPTIONS,
-      useValue: opts,
+      useValue: KeycloakConnectModule.parseConfig(opts, config),
     };
 
     return {
@@ -91,6 +118,9 @@ export class KeycloakConnectModule {
   private static loggerProvider: Provider = {
     provide: KEYCLOAK_LOGGER,
     useFactory: (opts: KeycloakConnectOptions) => {
+      if (typeof opts === 'string') {
+        return new Logger('Keycloak');
+      }
       if (opts.useNestLogger) {
         return new Logger('Keycloak');
       }
@@ -107,6 +137,7 @@ export class KeycloakConnectModule {
 
       // Warn if using token validation none
       if (
+        typeof opts !== 'string' &&
         opts.tokenValidation &&
         opts.tokenValidation === TokenValidation.NONE
       ) {

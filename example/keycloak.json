@@ -1,0 +1,12 @@
+{
+  "realm": "nest-example",
+  "auth-server-url": "http://localhost:8080/auth/",
+  "ssl-required": "external",
+  "resource": "nest-api",
+  "verify-token-audience": true,
+  "credentials": {
+    "secret": "05c1ff5e-f9ba-4622-98e3-c4c9d280546e"
+  },
+  "confidential-port": 0,
+  "policy-enforcer": {}
+}

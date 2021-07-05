@@ -10,6 +10,7 @@ import { Reflector } from '@nestjs/core';
 import * as KeycloakConnect from 'keycloak-connect';
 import {
   KEYCLOAK_CONNECT_OPTIONS,
+  KEYCLOAK_COOKIE_DEFAULT,
   KEYCLOAK_INSTANCE,
   KEYCLOAK_LOGGER,
   TokenValidation,
@@ -18,7 +19,7 @@ import {
   META_SKIP_AUTH,
   META_UNPROTECTED,
 } from '../decorators/public.decorator';
-import { KeycloakConnectOptions } from '../interface/keycloak-connect-options.interface';
+import { NestKeycloakConfig } from '../interface/keycloak-connect-options.interface';
 import { extractRequest, parseToken } from '../util';
 
 /**
@@ -31,7 +32,7 @@ export class AuthGuard implements CanActivate {
     @Inject(KEYCLOAK_INSTANCE)
     private keycloak: KeycloakConnect.Keycloak,
     @Inject(KEYCLOAK_CONNECT_OPTIONS)
-    private keycloakOpts: KeycloakConnectOptions,
+    private keycloakOpts: NestKeycloakConfig,
     @Inject(KEYCLOAK_LOGGER)
     private logger: Logger,
     private readonly reflector: Reflector,
@@ -145,9 +146,8 @@ export class AuthGuard implements CanActivate {
   }
 
   private extractJwtFromCookie(cookies: { [key: string]: string }) {
-    return (
-      (cookies && cookies[this.keycloakOpts.cookieKey]) ||
-      (cookies && cookies.KEYCLOAK_JWT)
-    );
+    const cookieKey = this.keycloakOpts.cookieKey || KEYCLOAK_COOKIE_DEFAULT;
+
+    return cookies && cookies[cookieKey];
   }
 }
