@@ -40,7 +40,8 @@ import {
   ResourceGuard,
   RoleGuard,
   AuthGuard,
-  PolicyEnforcementMode
+  PolicyEnforcementMode,
+  TokenValidation
 } from 'nest-keycloak-connect';
 
 @Module({
@@ -57,7 +58,9 @@ import {
       // optional useNestLogger, uses the logger from app.useLogger() implementation
       useNestLogger: false,
       // optional, already defaults to permissive
-      policyEnforcement: PolicyEnforcementMode.PERMISSIVE
+      policyEnforcement: PolicyEnforcementMode.PERMISSIVE,
+      // optional, already defaults to online validation
+      tokenValidation: TokenValidation.NONE,
     }),
   ],
   providers: [
