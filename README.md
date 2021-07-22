@@ -30,6 +30,24 @@ yarn add nest-keycloak-connect
 npm install nest-keycloak-connect --save
 ```
 
+### Peer Dependencies
+
+Install the correct versions of each package, which are listed by the command:
+```bash
+npm info "nest-keycloak-connect@latest" peerDependencies
+```
+
+Linux/OSX users can run
+
+```bash
+(
+  export PKG=nest-keycloak-connect;
+  npm info "$PKG@latest" peerDependencies --json | command sed 's/[\{\},]//g ; s/: /@/g' | xargs yarn add --dev "$PKG@latest"
+)
+```
+
+You can also use [install-peerdeps](https://www.npmjs.com/package/install-peerdeps) tool for installing peer dependencies
+
 ## Getting Started
 
 Register the module in app.module.ts
