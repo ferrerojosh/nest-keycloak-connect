@@ -1,10 +1,12 @@
 # Nest Keycloak Connect
 
-![License](https://badgen.net/npm/license/nest-keycloak-connect)
-[![Package Version](https://badgen.net/npm/v/nest-keycloak-connect)](https://www.npmjs.com/package/nest-keycloak-connect)
+![GitHub](https://img.shields.io/github/license/ferrerojosh/nest-keycloak-connect)
+![npm](https://img.shields.io/npm/v/nest-keycloak-connect)
+![npm peer dependency version](https://img.shields.io/npm/dependency-version/nest-keycloak-connect/peer/@nestjs/common)
+![npm (prod) dependency version](https://img.shields.io/npm/dependency-version/nest-keycloak-connect/keycloak-connect)
 [![Build Status](https://travis-ci.com/ferrerojosh/nest-keycloak-connect.svg?branch=master)](https://travis-ci.com/ferrerojosh/nest-keycloak-connect)
-![Weekly Download](https://badgen.net/npm/dw/nest-keycloak-connect)
-![Total Download](https://badgen.net/npm/dt/nest-keycloak-connect)
+![npm](https://img.shields.io/npm/dw/nest-keycloak-connect)
+![npm](https://img.shields.io/npm/dt/nest-keycloak-connect)
 
 > An adapter for [keycloak-nodejs-connect](https://github.com/keycloak/keycloak-nodejs-connect).
 
