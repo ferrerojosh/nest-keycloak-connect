@@ -62,7 +62,7 @@ import {
       // optional, already defaults to permissive
       policyEnforcement: PolicyEnforcementMode.PERMISSIVE,
       // optional, already defaults to online validation
-      tokenValidation: TokenValidation.NONE,
+      tokenValidation: TokenValidation.ONLINE,
     }),
   ],
   providers: [
