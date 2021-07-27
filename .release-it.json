@@ -1,0 +1,7 @@
+{
+  "git": {
+    "commitMessage": "${version}",
+    "commitArgs": ["-S"],
+    "tagArgs": ["-s"]
+  }
+}
