@@ -2,8 +2,8 @@
 
 ![GitHub](https://img.shields.io/github/license/ferrerojosh/nest-keycloak-connect)
 ![npm](https://img.shields.io/npm/v/nest-keycloak-connect)
-![npm peer dependency version](https://img.shields.io/npm/dependency-version/nest-keycloak-connect/peer/@nestjs/common)
-![npm (prod) dependency version](https://img.shields.io/npm/dependency-version/nest-keycloak-connect/keycloak-connect)
+![npm peer dependency version](https://img.shields.io/npm/dependency-version/nest-keycloak-connect/peer/@nestjs/core)
+![npm peer dependency version](https://img.shields.io/npm/dependency-version/nest-keycloak-connect/peer/keycloak-connect)
 [![Build Status](https://travis-ci.com/ferrerojosh/nest-keycloak-connect.svg?branch=master)](https://travis-ci.com/ferrerojosh/nest-keycloak-connect)
 ![npm](https://img.shields.io/npm/dw/nest-keycloak-connect)
 ![npm](https://img.shields.io/npm/dt/nest-keycloak-connect)

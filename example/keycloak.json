@@ -1,6 +1,6 @@
 {
   "realm": "nest-example",
-  "auth-server-url": "http://localhost:8080/auth/",
+  "auth-server-url": "http://localhost:8180/auth/",
   "ssl-required": "external",
   "resource": "nest-api",
   "verify-token-audience": true,
