@@ -1,24 +1,20 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import {
-  KeycloakConnectModule,
-  ResourceGuard,
-  RoleGuard,
-  AuthGuard,
-  PolicyEnforcementMode,
-  TokenValidation,
-} from 'nest-keycloak-connect';
 import { APP_GUARD } from '@nestjs/core';
+import {
+  AuthGuard, KeycloakConnectModule,
+  ResourceGuard,
+  RoleGuard
+} from 'nest-keycloak-connect';
+import { AppController } from './app.controller';
+import { ConfigModule } from './config/config.module';
+import { KeycloakConfigService } from './config/keycloak-config.service';
 import { ProductModule } from './product/product.module';
 
 @Module({
   imports: [
-    KeycloakConnectModule.register(`./keycloak.json`, {
-      cookieKey: 'KEYCLOAK_JWT',
-      logLevels: ['verbose'],
-      useNestLogger: false,
-      policyEnforcement: PolicyEnforcementMode.ENFORCING,
-      tokenValidation: TokenValidation.NONE,
+    KeycloakConnectModule.registerAsync({
+      useExisting: KeycloakConfigService,
+      imports: [ConfigModule]
     }),
     ProductModule,
   ],
