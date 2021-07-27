@@ -21,13 +21,13 @@
 ### Yarn
 
 ```bash
-yarn add nest-keycloak-connect
+yarn add nest-keycloak-connect keycloak-connect
 ```
 
 ### NPM
 
 ```bash
-npm install nest-keycloak-connect --save
+npm install nest-keycloak-connect keycloak-connect --save
 ```
 
 ## Getting Started
