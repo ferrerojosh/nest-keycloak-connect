@@ -1,4 +1,4 @@
-import { DynamicModule, Logger, Module, Provider } from '@nestjs/common';
+import { ConsoleLogger, DynamicModule, Logger, Module, Provider } from '@nestjs/common';
 import KeycloakConnect from 'keycloak-connect';
 import {
   KEYCLOAK_CONNECT_OPTIONS,
@@ -13,7 +13,6 @@ import {
   KeycloakConnectOptions,
   NestKeycloakConfig,
 } from './interface/keycloak-connect-options.interface';
-import { KeycloakLogger } from './logger';
 import * as path from 'path';
 import * as fs from 'fs';
 
@@ -119,12 +118,14 @@ export class KeycloakConnectModule {
     provide: KEYCLOAK_LOGGER,
     useFactory: (opts: KeycloakConnectOptions) => {
       if (typeof opts === 'string') {
-        return new Logger('Keycloak');
+        return new Logger(KeycloakConnect.name);
       }
       if (opts.useNestLogger) {
-        return new Logger('Keycloak');
+        return new Logger(KeycloakConnect.name);
       }
-      return new KeycloakLogger(opts.logLevels);
+      return new ConsoleLogger(KeycloakConnect.name, {
+        logLevels: opts.logLevels
+      });
     },
     inject: [KEYCLOAK_CONNECT_OPTIONS],
   };
