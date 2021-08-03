@@ -6,12 +6,10 @@
   "license": "MIT",
   "scripts": {
     "start:dev": "tsc -w",
-    "prebuild": "rimraf dist",
+    "clean": "rimraf dist",
     "build": "tsc",
-    "postbuild": "cpr README.md dist/README.md && cpr LICENSE dist/LICENSE && cpr package.json dist/package.json",
+    "build:copy": "cpr README.md dist/README.md && cpr LICENSE dist/LICENSE && cpr package.json dist/package.json",
     "release": "release-it",
-    "npm:publish": "npm run build && cd dist && npm publish",
-    "npm:publish:next": "npm run build && cd dist && npm publish --tag next",
     "format": "prettier --write \"src/**/*.ts\"",
     "lint": "eslint ./src --ext .ts"
   },
@@ -27,14 +25,13 @@
   "bugs": "https://github.com/ferrerojosh/nest-keycloak-connect/issues",
   "peerDependencies": {
     "@nestjs/common": "^8.0.0",
+    "@nestjs/graphql": "^8.0.0",
     "keycloak-connect": "^10.0.0 || ^11.0.0 || ^12.0.0 || ^13.0.0 || ^14.0.0"
-  },
-  "optionalDependencies": {
-    "@nestjs/graphql": "^8.0.0"
   },
   "devDependencies": {
     "@nestjs/common": "^8.0.0",
     "@nestjs/core": "^8.0.0",
+    "@nestjs/graphql": "^8.0.0",
     "@types/express": "4.16.1",
     "@types/node": "^13.13.5",
     "@typescript-eslint/eslint-plugin": "^4.22.0",
@@ -55,5 +52,10 @@
     "rxjs": "^7.1.0",
     "ts-node": "^8.6.2",
     "typescript": "^4.3.5"
+  },
+  "peerDependenciesMeta": {
+    "@nestjs/graphql": {
+      "optional": true
+    }
   }
 }

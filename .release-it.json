@@ -4,10 +4,7 @@
     "commitArgs": ["-S"],
     "tagArgs": ["-s"]
   },
-  "npm": {
-    "publishPath": "dist"
-  },
   "hooks": {
-    "after:bump": "npm run build"
+    "after:bump": ["npm run clean", "npm run build", "npm run build:copy"]
   }
 }
