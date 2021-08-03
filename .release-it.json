@@ -6,5 +6,8 @@
   },
   "npm": {
     "publishPath": "dist"
+  },
+  "hooks": {
+    "after:bump": "npm run build"
   }
 }
