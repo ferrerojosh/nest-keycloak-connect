@@ -3,5 +3,8 @@
     "commitMessage": "${version}",
     "commitArgs": ["-S"],
     "tagArgs": ["-s"]
+  },
+  "npm": {
+    "publishPath": "dist"
   }
 }
