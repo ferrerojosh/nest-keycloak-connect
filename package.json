@@ -9,7 +9,7 @@
     "prebuild": "rimraf dist",
     "build": "tsc",
     "postbuild": "cpr README.md dist/README.md && cpr LICENSE dist/LICENSE && cpr package.json dist/package.json",
-    "prerelease": "npm run build",
+    "after:bump": "npm run build",
     "release": "release-it",
     "npm:publish": "npm run build && cd dist && npm publish",
     "npm:publish:next": "npm run build && cd dist && npm publish --tag next",
