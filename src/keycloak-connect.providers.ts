@@ -1,4 +1,4 @@
-import { ConsoleLogger, Logger, Provider } from '@nestjs/common';
+import { Logger, Provider } from '@nestjs/common';
 import * as fs from 'fs';
 import KeycloakConnect from 'keycloak-connect';
 import * as path from 'path';
@@ -14,6 +14,7 @@ import {
   NestKeycloakConfig,
 } from './interface/keycloak-connect-options.interface';
 import { KeycloakConnectModule } from './keycloak-connect.module';
+import { KeycloakLogger } from './logger';
 
 export const loggerProvider: Provider = {
   provide: KEYCLOAK_LOGGER,
@@ -21,12 +22,19 @@ export const loggerProvider: Provider = {
     if (typeof opts === 'string') {
       return new Logger(KeycloakConnect.name);
     }
-    if (opts.useNestLogger) {
-      return new Logger(KeycloakConnect.name);
+    if (opts.logLevels) {
+      KeycloakConnectModule.logger.warn(
+        `Option 'logLevels' will be deprecated in the future. It is recommended to override or extend NestJS logger instead.`,
+      );
     }
-    return new ConsoleLogger(KeycloakConnect.name, {
-      logLevels: opts.logLevels,
-    });
+    if (opts.useNestLogger !== null && opts.useNestLogger === false) {
+      KeycloakConnectModule.logger.warn(
+        `Setting 'useNestLogger' to false will be deprecated in the future. It is recommended to override or extend NestJS logger instead.`,
+      );
+      return new KeycloakLogger(opts.logLevels);
+    }
+
+    return new Logger(KeycloakConnect.name);
   },
   inject: [KEYCLOAK_CONNECT_OPTIONS],
 };
