@@ -6,5 +6,8 @@
   },
   "hooks": {
     "after:bump": ["npm run clean", "npm run build", "npm run build:copy"]
+  },
+  "npm": {
+    "publishPath": "dist"
   }
 }
