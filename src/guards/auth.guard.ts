@@ -58,27 +58,27 @@ export class AuthGuard implements CanActivate {
     const jwt =
       this.extractJwtFromCookie(request.cookies) ??
       this.extractJwt(request.headers);
-    const isInvalidJwt = jwt === null || jwt === undefined;
+    const isJwtEmpty = jwt === null || jwt === undefined;
 
-    // Invalid JWT, but skipAuth = false, isUnprotected = true allow fallback
-    if (isInvalidJwt && !skipAuth && isUnprotected) {
+    // Empty jwt, but skipAuth = false, isUnprotected = true allow fallback
+    if (isJwtEmpty && !skipAuth && isUnprotected) {
       this.logger.verbose(
-        'Invalid JWT, skipAuth disabled, and a publicly marked route, allowed for fallback',
+        'Empty JWT, skipAuth disabled, and a publicly marked route, allowed for fallback',
       );
       return true;
     }
 
-    // No jwt token given, immediate return
-    if (isInvalidJwt) {
-      this.logger.verbose('Invalid JWT, unauthorized');
+    // Empty jwt given, immediate return
+    if (isJwtEmpty) {
+      this.logger.verbose('Empty JWT, unauthorized');
       throw new UnauthorizedException();
     }
 
     this.logger.verbose(`User JWT: ${jwt}`);
 
-    const isValid = await this.validateToken(jwt);
+    const isValidToken = await this.validateToken(jwt);
 
-    if (isValid) {
+    if (isValidToken) {
       // Attach user info object
       request.user = parseToken(jwt);
       // Attach raw access token JWT extracted from bearer/cookie
@@ -98,7 +98,16 @@ export class AuthGuard implements CanActivate {
       this.keycloakOpts.tokenValidation || TokenValidation.ONLINE;
 
     const gm = this.keycloak.grantManager;
-    const grant = await gm.createGrant({ access_token: jwt });
+    let grant: KeycloakConnect.Grant;
+    
+    try {
+      grant = await gm.createGrant({ access_token: jwt });
+    } catch (ex) {
+      this.logger.warn(`Cannot validate access token: ${ex}`);
+      // It will fail to create grants on invalid access token (i.e expired or wrong domain)
+      return false;
+    }
+    
     const token = grant.access_token;
 
     this.logger.verbose(

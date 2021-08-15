@@ -31,12 +31,13 @@ export class RoleGuard implements CanActivate {
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const rolesMetaData = this.reflector.get<RoleDecoratorOptionsInterface>(
-      META_ROLES,
-      context.getHandler(),
-    );
+    const rolesMetaData = this.reflector.getAllAndOverride<
+      RoleDecoratorOptionsInterface
+    >(META_ROLES, [context.getClass(), context.getHandler()]);
 
-    if (!rolesMetaData || rolesMetaData.roles.length == 0) {
+    const rolesStr = JSON.stringify(rolesMetaData.roles);
+
+    if (!rolesMetaData || rolesMetaData.roles.length === 0) {
       return true;
     }
 
@@ -44,7 +45,7 @@ export class RoleGuard implements CanActivate {
       rolesMetaData.mode = RoleMatchingMode.ANY;
     }
 
-    this.logger.verbose(`Roles: `, JSON.stringify(rolesMetaData.roles));
+    this.logger.verbose(`Roles: ${rolesStr}`);
 
     // Extract request
     const [request] = extractRequest(context);
@@ -66,8 +67,18 @@ export class RoleGuard implements CanActivate {
     // Grab access token from grant
     const accessToken: KeycloakConnect.Token = grant.access_token as any;
 
-    return rolesMetaData.mode === RoleMatchingMode.ANY
-      ? rolesMetaData.roles.some(r => accessToken.hasRole(r))
-      : rolesMetaData.roles.every(r => accessToken.hasRole(r));
+    // For verbose logging, we store it instead of returning it immediately
+    const granted =
+      rolesMetaData.mode === RoleMatchingMode.ANY
+        ? rolesMetaData.roles.some(r => accessToken.hasRole(r))
+        : rolesMetaData.roles.every(r => accessToken.hasRole(r));
+
+    if (granted) {
+      this.logger.verbose(`Resource granted due to role(s)`);
+    } else {
+      this.logger.verbose(`Resource denied due to mismatched role(s)`);
+    }
+
+    return granted;
   }
 }

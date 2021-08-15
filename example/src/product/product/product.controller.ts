@@ -24,7 +24,7 @@ export class ProductController {
   }
 
   @Get(':code')
-  @Scopes('View')
+  @Roles({ roles: ['realm:basic'] })
   async findByCode(@Param('code') code: string) {
     return await this.service.findByCode(code);
   }
