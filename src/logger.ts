@@ -52,6 +52,7 @@ export class KeycloakLogger implements LoggerService {
   private callWrapped(
     name: 'log' | 'warn' | 'debug' | 'verbose' | 'error',
     message: any,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     context?: string,
   ) {
     if (!this.isLogLevelEnabled(name)) {

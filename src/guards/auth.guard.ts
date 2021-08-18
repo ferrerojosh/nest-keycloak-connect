@@ -99,7 +99,7 @@ export class AuthGuard implements CanActivate {
 
     const gm = this.keycloak.grantManager;
     let grant: KeycloakConnect.Grant;
-    
+
     try {
       grant = await gm.createGrant({ access_token: jwt });
     } catch (ex) {
@@ -107,7 +107,7 @@ export class AuthGuard implements CanActivate {
       // It will fail to create grants on invalid access token (i.e expired or wrong domain)
       return false;
     }
-    
+
     const token = grant.access_token;
 
     this.logger.verbose(
