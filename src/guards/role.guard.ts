@@ -35,8 +35,6 @@ export class RoleGuard implements CanActivate {
       RoleDecoratorOptionsInterface
     >(META_ROLES, [context.getClass(), context.getHandler()]);
 
-    const rolesStr = JSON.stringify(rolesMetaData.roles);
-
     if (!rolesMetaData || rolesMetaData.roles.length === 0) {
       return true;
     }
@@ -45,6 +43,7 @@ export class RoleGuard implements CanActivate {
       rolesMetaData.mode = RoleMatchingMode.ANY;
     }
 
+    const rolesStr = JSON.stringify(rolesMetaData.roles);
     this.logger.verbose(`Roles: ${rolesStr}`);
 
     // Extract request
