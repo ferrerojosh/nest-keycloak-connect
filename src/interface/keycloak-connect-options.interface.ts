@@ -139,6 +139,16 @@ export interface KeycloakConnectConfig extends NestKeycloakConfig {
    * Verify token audience.
    */
   verifyTokenAudience?: boolean;
+
+  /**
+   * Confidential port.
+   */
+  'confidential-port'?: string | number;
+
+  /**
+   * Require SSL.
+   */
+  'ssl-required'?: string;
 }
 
 /**
