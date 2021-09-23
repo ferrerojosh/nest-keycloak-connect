@@ -72,7 +72,21 @@ const parseConfig = (
   config?: NestKeycloakConfig,
 ): KeycloakConnectConfig => {
   if (typeof opts === 'string') {
-    const configPath = path.join(process.cwd(), opts);
+    const configPathRelative = path.join(__dirname, opts);
+    const configPathRoot = path.join(process.cwd(), opts);
+
+    let configPath: string;
+
+    if (fs.existsSync(configPathRelative)) {
+      configPath = configPathRelative;
+    } else if (fs.existsSync(configPathRoot)) {
+      configPath = configPathRoot;
+    } else {
+      throw new Error(
+        `Cannot find files, looked in [ ${configPathRelative}, ${configPathRoot} ]`,
+      );
+    }
+
     const json = fs.readFileSync(configPath);
     const keycloakConfig = JSON.parse(json.toString());
     return Object.assign(keycloakConfig, config);
