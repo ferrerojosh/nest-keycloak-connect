@@ -2,7 +2,9 @@ import { ContextType, ExecutionContext } from '@nestjs/common';
 
 type GqlContextType = 'graphql' | ContextType;
 
-export const extractRequest = (context: ExecutionContext): [any, any] => {
+export const extractRequest = (
+  context: ExecutionContext,
+): [any, any, string] => {
   let request: any, response: any;
 
   // Check if request is coming from graphql or http
@@ -26,9 +28,25 @@ export const extractRequest = (context: ExecutionContext): [any, any] => {
 
     request = gqlContext.req;
     response = gqlContext.res;
+  } else if (context.getType() === 'ws') {
+    const wsContext = context.switchToWs();
+    const socket = wsContext.getClient();
+
+    if (socket && socket.request) {
+      // const wrap = middleware => (socket, next) => middleware(socket.request, {}, next);
+      const wsRequest = socket.request;
+      wsRequest.headers = socket.handshake?.headers;
+
+      request = wsRequest;
+      response = {};
+    } else {
+      throw new Error(
+        `The express compatible 'request' was not found. Are you using 'ws'? Only Socket.IO platform is supported as native 'ws' cannot send headers.`,
+      );
+    }
   }
 
-  return [request, response];
+  return [request, response, context.getType()];
 };
 
 export const parseToken = (token: string): string => {

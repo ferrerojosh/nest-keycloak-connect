@@ -4,6 +4,7 @@ specifiers:
   '@nestjs/common': ^8.0.0
   '@nestjs/core': ^8.0.0
   '@nestjs/graphql': ^8.0.0
+  '@nestjs/websockets': 8.0.0
   '@types/express': 4.16.1
   '@types/node': ^13.13.5
   '@typescript-eslint/eslint-plugin': ^4.22.0
@@ -27,8 +28,9 @@ specifiers:
 
 devDependencies:
   '@nestjs/common': 8.0.5_7de7ece315067f012f2001b6a7f20971
-  '@nestjs/core': 8.0.5_1b001a5d86d3fbb71f818ebd3972ff15
+  '@nestjs/core': 8.0.5_ae3e2ddf2b33983533643575c020afbe
   '@nestjs/graphql': 8.0.2_ca28c3c4316f91f336ba4c5d137586f0
+  '@nestjs/websockets': 8.0.0_51a8a4abf73975a665d7dc8c8aa17d4b
   '@types/express': 4.16.1
   '@types/node': 13.13.52
   '@typescript-eslint/eslint-plugin': 4.29.0_48ea228fa0647506aa803d17f48b59f7
@@ -234,7 +236,7 @@ packages:
       - debug
     dev: true
 
-  /@nestjs/core/8.0.5_1b001a5d86d3fbb71f818ebd3972ff15:
+  /@nestjs/core/8.0.5_ae3e2ddf2b33983533643575c020afbe:
     resolution: {integrity: sha512-PzPWcGcTKb/LoXViviFa3qp8GyVx8dd0fRVSXOr48tK/GR5SiIiZ9hhYGonKf02mE9+WY8yn9mI5xAsglN49Yg==}
     requiresBuild: true
     peerDependencies:
@@ -253,6 +255,7 @@ packages:
         optional: true
     dependencies:
       '@nestjs/common': 8.0.5_7de7ece315067f012f2001b6a7f20971
+      '@nestjs/websockets': 8.0.0_51a8a4abf73975a665d7dc8c8aa17d4b
       '@nuxtjs/opencollective': 0.3.2
       fast-safe-stringify: 2.0.8
       iterare: 1.2.1
@@ -290,7 +293,7 @@ packages:
       '@graphql-tools/schema': 7.1.5_graphql@15.5.1
       '@graphql-tools/utils': 7.10.0_graphql@15.5.1
       '@nestjs/common': 8.0.5_7de7ece315067f012f2001b6a7f20971
-      '@nestjs/core': 8.0.5_1b001a5d86d3fbb71f818ebd3972ff15
+      '@nestjs/core': 8.0.5_ae3e2ddf2b33983533643575c020afbe
       '@nestjs/mapped-types': 1.0.0_ca79ebecbf17d4914754918c3169282c
       apollo-server-core: 2.25.2_graphql@15.5.1
       chokidar: 3.5.2
@@ -319,6 +322,27 @@ packages:
       class-transformer: 0.4.0
       class-validator: 0.13.1
       reflect-metadata: 0.1.13
+    dev: true
+
+  /@nestjs/websockets/8.0.0_51a8a4abf73975a665d7dc8c8aa17d4b:
+    resolution: {integrity: sha512-/6ZRG26DlZxWk14ph3p25kZtDWKAJAcdghdKCr/uKy5hpE4DhAsXbCSv0I02jjnWU6sgWB6UQkaZ0EMGpLsaUg==}
+    peerDependencies:
+      '@nestjs/common': ^8.0.0
+      '@nestjs/core': ^8.0.0
+      '@nestjs/platform-socket.io': ^8.0.0
+      reflect-metadata: ^0.1.12
+      rxjs: ^7.1.0
+    peerDependenciesMeta:
+      '@nestjs/platform-socket.io':
+        optional: true
+    dependencies:
+      '@nestjs/common': 8.0.5_7de7ece315067f012f2001b6a7f20971
+      '@nestjs/core': 8.0.5_ae3e2ddf2b33983533643575c020afbe
+      iterare: 1.2.1
+      object-hash: 2.2.0
+      reflect-metadata: 0.1.13
+      rxjs: 7.3.0
+      tslib: 2.3.0
     dev: true
 
   /@nodelib/fs.scandir/2.1.5:
@@ -1105,6 +1129,15 @@ packages:
       - debug
     dev: true
 
+  /axios/0.21.4:
+    resolution: {integrity: sha512-ut5vewkiu8jjGBdqpM44XxjuCjq9LAKeHVmoVfHVzy8eHgxxq8SbAVQNovDA8mVi05kP0Ea/n/UzcSHcTJQfNg==}
+    dependencies:
+      follow-redirects: 1.14.1
+    transitivePeerDependencies:
+      - debug
+    dev: true
+    optional: true
+
   /backo2/1.0.2:
     resolution: {integrity: sha1-MasayLEpNjRj41s+u2n038+6eUc=}
     dev: true
@@ -1292,14 +1325,14 @@ packages:
       fsevents: 2.3.2
     dev: true
 
-  /chromedriver/92.0.1:
-    resolution: {integrity: sha512-LptlDVCs1GgyFNVbRoHzzy948JDVzTgGiVPXjNj385qXKQP3hjAVBIgyvb/Hco0xSEW8fjwJfsm1eQRmu6t4pQ==}
+  /chromedriver/93.0.1:
+    resolution: {integrity: sha512-KDzbW34CvQLF5aTkm3b5VdlTrvdIt4wEpCzT2p4XJIQWQZEPco5pNce7Lu9UqZQGkhQ4mpZt4Ky6NKVyIS2N8A==}
     engines: {node: '>=10'}
     hasBin: true
     requiresBuild: true
     dependencies:
       '@testim/chrome-version': 1.0.7
-      axios: 0.21.1
+      axios: 0.21.4
       del: 6.0.0
       extract-zip: 2.0.1
       https-proxy-agent: 5.0.0
@@ -2695,7 +2728,7 @@ packages:
     dependencies:
       jwk-to-pem: 2.0.5
     optionalDependencies:
-      chromedriver: 92.0.1
+      chromedriver: 93.0.1
     transitivePeerDependencies:
       - debug
       - supports-color

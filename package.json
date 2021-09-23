@@ -24,8 +24,8 @@
   },
   "bugs": "https://github.com/ferrerojosh/nest-keycloak-connect/issues",
   "peerDependencies": {
-    "@nestjs/core": "^6.0.0 || ^7.0.0 || ^8.0.0",
     "@nestjs/common": "^6.0.0 || ^7.0.0 || ^8.0.0",
+    "@nestjs/core": "^6.0.0 || ^7.0.0 || ^8.0.0",
     "@nestjs/graphql": "^6.0.0 || ^7.0.0 || ^8.0.0",
     "keycloak-connect": ">= 10.0.0 < 16.0.0"
   },
@@ -33,6 +33,7 @@
     "@nestjs/common": "^8.0.0",
     "@nestjs/core": "^8.0.0",
     "@nestjs/graphql": "^8.0.0",
+    "@nestjs/websockets": "8.0.0",
     "@types/express": "4.16.1",
     "@types/node": "^13.13.5",
     "@typescript-eslint/eslint-plugin": "^4.22.0",

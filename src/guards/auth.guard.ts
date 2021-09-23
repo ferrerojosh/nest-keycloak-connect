@@ -54,7 +54,7 @@ export class AuthGuard implements CanActivate {
     }
 
     // Extract request/response
-    const [request] = extractRequest(context);
+    const [request, _, type] = extractRequest(context);
     const jwt =
       this.extractJwtFromCookie(request.cookies) ??
       this.extractJwt(request.headers);
@@ -71,7 +71,7 @@ export class AuthGuard implements CanActivate {
     // Empty jwt given, immediate return
     if (isJwtEmpty) {
       this.logger.verbose('Empty JWT, unauthorized');
-      throw new UnauthorizedException();
+      this.throwUnauthorized(type);
     }
 
     this.logger.verbose(`User JWT: ${jwt}`);
@@ -90,7 +90,22 @@ export class AuthGuard implements CanActivate {
       return true;
     }
 
-    throw new UnauthorizedException();
+    this.throwUnauthorized(type);
+  }
+
+  private throwUnauthorized(type: string) {
+    if (type === 'ws') {
+      let nws: any;
+      // Check if websockets is installed
+      try {
+        nws = require('@nestjs/websockets');
+      } catch (er) {
+        throw new Error('@nestjs/websockets is not installed, cannot proceed');
+      }
+      throw new nws.WsException(`Unauthorized`);
+    } else {
+      throw new UnauthorizedException();
+    }
   }
 
   private async validateToken(jwt: any) {
