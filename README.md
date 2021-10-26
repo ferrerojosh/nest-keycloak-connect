@@ -119,7 +119,7 @@ KeycloakConnectModule.register(`./keycloak.json`, {
 In your controllers, simply do:
 
 ```typescript
-import { Resource, Roles, Scopes, AllowAnyRole, Public, RoleMatchingMode } from 'nest-keycloak-connect';
+import { Resource, Roles, Scopes, Public, RoleMatchingMode } from 'nest-keycloak-connect';
 import { Controller, Get, Delete, Put, Post, Param } from '@nestjs/common';
 import { Product } from './product';
 import { ProductService } from './product.service';
