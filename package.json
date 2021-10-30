@@ -10,6 +10,7 @@
     "build": "tsc",
     "build:copy": "cpr README.md dist/README.md && cpr LICENSE dist/LICENSE && cpr package.json dist/package.json",
     "release": "release-it",
+    "release:alpha": "release-it --preReleaseId=alpha --npm.tag=next --github.preRelease",
     "format": "prettier --write \"src/**/*.ts\"",
     "lint": "eslint ./src --ext .ts"
   },
