@@ -9,6 +9,11 @@ export const KEYCLOAK_CONNECT_OPTIONS = 'KEYCLOAK_CONNECT_OPTIONS';
 export const KEYCLOAK_INSTANCE = 'KEYCLOAK_INSTANCE';
 
 /**
+ * Key for injecting a keycloak multi tenant service.
+ */
+export const KEYCLOAK_MULTITENANT_SERVICE = 'KEYCLOAK_MULTITENANT_SERVICE';
+
+/**
  * Key for injecting the nest keycloak logger.
  */
 export const KEYCLOAK_LOGGER = 'KEYCLOAK_LOGGER';

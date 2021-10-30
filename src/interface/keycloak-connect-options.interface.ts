@@ -6,6 +6,13 @@ import { PolicyEnforcementMode, TokenValidation } from '../constants';
 export type KeycloakConnectOptions = string | KeycloakConnectConfig;
 
 /**
+ * Multi tenant configuration.
+ */
+export interface MultiTenantOptions {
+  realm: string | ((request: any) => string);
+}
+
+/**
  * Library only configuration.
  */
 export interface NestKeycloakConfig {
@@ -33,6 +40,11 @@ export interface NestKeycloakConfig {
    * Sets the token validation method, defaults to {@link TokenValidation.ONLINE}.
    */
   tokenValidation?: TokenValidation;
+
+  /**
+   * Multi tenant options.
+   */
+  multiTenant?: MultiTenantOptions
 }
 
 /**
@@ -43,7 +55,7 @@ export interface KeycloakConnectConfig extends NestKeycloakConfig {
   /**
    * Realm ID.
    */
-  realm: string;
+  realm?: string;
 
   /**
    * Client/Application ID.

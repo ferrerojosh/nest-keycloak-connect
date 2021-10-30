@@ -11,6 +11,7 @@ import {
   keycloakProvider,
   loggerProvider,
 } from './keycloak-connect.providers';
+import { KeycloakMultiTenantService } from './services/keycloak-multitenant.service';
 
 export * from './constants';
 export * from './decorators/authenticated-user.decorator';
@@ -44,6 +45,7 @@ export class KeycloakConnectModule {
       createKeycloakConnectOptionProvider(opts, config),
       loggerProvider,
       keycloakProvider,
+      KeycloakMultiTenantService
     ];
     return {
       module: KeycloakConnectModule,

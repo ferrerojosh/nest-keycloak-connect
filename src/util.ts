@@ -1,6 +1,33 @@
 import { ContextType, ExecutionContext } from '@nestjs/common';
+import KeycloakConnect from 'keycloak-connect';
+import { KeycloakConnectConfig } from './interface/keycloak-connect-options.interface';
+import { KeycloakMultiTenantService } from './services/keycloak-multitenant.service';
 
 type GqlContextType = 'graphql' | ContextType;
+
+// Confusing and all, but I needed to extract this fn to avoid more repeating code
+// TODO: Rework in 2.0
+export const useKeycloak = (
+  request: any,
+  jwt: string,
+  singleTenant: KeycloakConnect.Keycloak,
+  multiTenant: KeycloakMultiTenantService,
+  opts: KeycloakConnectConfig,
+): KeycloakConnect.Keycloak => {
+  if (opts.multiTenant && opts.multiTenant.realm) {
+    const multitenantRealm = opts.multiTenant.realm;
+    if (typeof multitenantRealm === 'string') {
+      return multiTenant.get(multitenantRealm);
+    } else {
+      const resolvedRealm = multitenantRealm(request);
+      return multiTenant.get(resolvedRealm);
+    }
+  } else if (!opts.realm) {
+    const payload = parseToken(jwt);
+    return payload.iss.split('/').pop();
+  }
+  return singleTenant;
+};
 
 export const extractRequest = (context: ExecutionContext): [any, any] => {
   let request: any, response: any;
@@ -31,7 +58,7 @@ export const extractRequest = (context: ExecutionContext): [any, any] => {
   return [request, response];
 };
 
-export const parseToken = (token: string): string => {
+export const parseToken = (token: string): any => {
   const parts = token.split('.');
   return JSON.parse(Buffer.from(parts[1], 'base64').toString());
 };
