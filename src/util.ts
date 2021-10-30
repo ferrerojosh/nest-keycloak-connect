@@ -14,14 +14,9 @@ export const useKeycloak = (
   multiTenant: KeycloakMultiTenantService,
   opts: KeycloakConnectConfig,
 ): KeycloakConnect.Keycloak => {
-  if (opts.multiTenant && opts.multiTenant.realm) {
-    const multitenantRealm = opts.multiTenant.realm;
-    if (typeof multitenantRealm === 'string') {
-      return multiTenant.get(multitenantRealm);
-    } else {
-      const resolvedRealm = multitenantRealm(request);
-      return multiTenant.get(resolvedRealm);
-    }
+  if (opts.multiTenant && opts.multiTenant.realmResolver) {
+    const resolvedRealm = opts.multiTenant.realmResolver(request);
+    return multiTenant.get(resolvedRealm);
   } else if (!opts.realm) {
     const payload = parseToken(jwt);
     return payload.iss.split('/').pop();

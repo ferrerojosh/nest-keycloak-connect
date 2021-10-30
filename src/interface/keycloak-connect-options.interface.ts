@@ -9,7 +9,7 @@ export type KeycloakConnectOptions = string | KeycloakConnectConfig;
  * Multi tenant configuration.
  */
 export interface MultiTenantOptions {
-  realm: string | ((request: any) => string);
+  realmResolver: (request: any) => string;
 }
 
 /**
@@ -44,7 +44,7 @@ export interface NestKeycloakConfig {
   /**
    * Multi tenant options.
    */
-  multiTenant?: MultiTenantOptions
+  multiTenant?: MultiTenantOptions;
 }
 
 /**
