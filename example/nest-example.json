@@ -1,7 +1,7 @@
 {
-  "id": "Nest Example",
+  "id": "nest-example",
   "realm": "nest-example",
-  "displayName": "Nest Example",
+  "displayName": "nest-example",
   "notBefore": 0,
   "revokeRefreshToken": false,
   "refreshTokenMaxReuse": 0,
@@ -49,7 +49,7 @@
         "description": "${role_offline-access}",
         "composite": false,
         "clientRole": false,
-        "containerId": "Nest Example",
+        "containerId": "nest-example",
         "attributes": {}
       },
       {
@@ -58,7 +58,7 @@
         "description": "${role_uma_authorization}",
         "composite": false,
         "clientRole": false,
-        "containerId": "Nest Example",
+        "containerId": "nest-example",
         "attributes": {}
       }
     ],
@@ -522,14 +522,14 @@
       "clientId": "account-console",
       "name": "${client_account-console}",
       "rootUrl": "${authBaseUrl}",
-      "baseUrl": "/realms/Nest Example/account/",
+      "baseUrl": "/realms/nest-example/account/",
       "surrogateAuthRequired": false,
       "enabled": true,
       "alwaysDisplayInConsole": false,
       "clientAuthenticatorType": "client-secret",
       "secret": "**********",
       "redirectUris": [
-        "/realms/Nest Example/account/*"
+        "/realms/nest-example/account/*"
       ],
       "webOrigins": [],
       "notBefore": 0,
