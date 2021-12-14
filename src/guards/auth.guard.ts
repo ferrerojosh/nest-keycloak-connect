@@ -4,7 +4,7 @@ import {
   Inject,
   Injectable,
   Logger,
-  UnauthorizedException
+  UnauthorizedException,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import * as KeycloakConnect from 'keycloak-connect';
@@ -13,11 +13,11 @@ import {
   KEYCLOAK_COOKIE_DEFAULT,
   KEYCLOAK_INSTANCE,
   KEYCLOAK_LOGGER,
-  TokenValidation
+  TokenValidation,
 } from '../constants';
 import {
   META_SKIP_AUTH,
-  META_UNPROTECTED
+  META_UNPROTECTED,
 } from '../decorators/public.decorator';
 import { KeycloakConnectConfig } from '../interface/keycloak-connect-options.interface';
 import { KeycloakMultiTenantService } from '../services/keycloak-multitenant.service';

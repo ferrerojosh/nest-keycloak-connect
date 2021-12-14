@@ -45,7 +45,7 @@ export class KeycloakConnectModule {
       createKeycloakConnectOptionProvider(opts, config),
       loggerProvider,
       keycloakProvider,
-      KeycloakMultiTenantService
+      KeycloakMultiTenantService,
     ];
     return {
       module: KeycloakConnectModule,
