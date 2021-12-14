@@ -19,7 +19,8 @@ export const useKeycloak = (
     return multiTenant.get(resolvedRealm);
   } else if (!opts.realm) {
     const payload = parseToken(jwt);
-    return payload.iss.split('/').pop();
+    const issuerRealm = payload.iss.split('/').pop();
+    return multiTenant.get(issuerRealm);
   }
   return singleTenant;
 };
