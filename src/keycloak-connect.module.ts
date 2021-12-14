@@ -74,6 +74,7 @@ export class KeycloakConnectModule {
       this.createAsyncOptionsProvider(options),
       loggerProvider,
       keycloakProvider,
+      KeycloakMultiTenantService,
     ];
 
     if (options.useExisting || options.useFactory) {
