@@ -92,7 +92,9 @@ export class ResourceGuard implements CanActivate {
     );
 
     // Build permissions
-    const permissions = scopes.map(scope => `${resource}:${scope}`);
+    const permissions = scopes?.map(scope => `${resource}:${scope}`) ?? [
+      resource,
+    ];
     // Extract request/response
     const [request, response] = extractRequest(context);
 
