@@ -75,16 +75,9 @@ export class ResourceGuard implements CanActivate {
 
     // No scopes given, check policy enforcement mode
     if (!scopes) {
-      if (shouldAllow) {
-        this.logger.verbose(
-          `Route has no @Scope defined, request allowed due to policy enforcement`,
-        );
-      } else {
-        this.logger.verbose(
-          `Route has no @Scope defined, request denied due to policy enforcement`,
-        );
-      }
-      return shouldAllow;
+      this.logger.verbose(
+        `Route has no @Scope defined, request denied due to policy enforcement`,
+      );
     }
 
     this.logger.verbose(
