@@ -30,11 +30,7 @@ export class KeycloakMultiTenantService {
 
       // Override secret
       const creds = keycloakOpts.credentials;
-      if (
-        creds !== undefined &&
-        creds.realmSecretMap !== undefined &&
-        creds.realmSecretMap.has(realm)
-      ) {
+      if(creds?.realmSecretMap?.has(realm)) {
         keycloakOpts.secret = keycloakOpts.credentials.realmSecretMap[realm];
       } // else it it will default to global secret
 
