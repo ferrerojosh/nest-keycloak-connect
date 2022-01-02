@@ -29,6 +29,5 @@ jobs:
       with:
         version: ${{ matrix.pnpm-version }}
         run_install: true
-    - run: npm ci
-    - run: npm run lint --if-present
-    - run: npm run build --if-present
+    - run: pnpm run lint --if-present
+    - run: pnpm run build --if-present
