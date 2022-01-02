@@ -24,10 +24,10 @@ jobs:
         key: ${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
         restore-keys: |
           ${{ runner.os }}-
-    - name: Use PNPM ${{ matrix.node-version }}
+    - name: Use PNPM ${{ matrix.pnpm-version }}
       uses: pnpm/action-setup@v2.0.1
       with:
-        version: ${{ matrix.node-version }}
+        version: ${{ matrix.pnpm-version }}
         run_install: true
     - run: npm ci
     - run: npm run lint --if-present
