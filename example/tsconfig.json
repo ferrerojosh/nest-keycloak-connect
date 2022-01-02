@@ -11,9 +11,6 @@
     "outDir": "./dist",
     "baseUrl": "./",
     "incremental": true,
-    "paths": {
-      "nest-keycloak-connect": ["../dist"]
-    },
     "allowJs": true
   }
 }
