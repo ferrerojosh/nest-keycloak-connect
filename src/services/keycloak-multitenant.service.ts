@@ -24,16 +24,20 @@ export class KeycloakMultiTenantService {
     if (this.instances.has(realm)) {
       return this.instances.get(realm);
     } else {
-      // TODO: Repeating code from  provider, will need to rework this in 2.0
-      // Override realm
-      const keycloakOpts: any = Object.assign(this.keycloakOpts, { realm });
+      if (typeof this.keycloakOpts === 'string') {
+        throw new Error('Keycloak configuration is a configuration path. This should not happen after module load.');
+      }
 
+      // Resolve realm secret
+      const realmSecret = this.keycloakOpts.multiTenant?.realmSecretResolver(realm);
       // Override secret
-      const creds = keycloakOpts.credentials;
-      if(creds?.realmSecretMap?.has(realm)) {
-        keycloakOpts.secret = keycloakOpts.credentials.realmSecretMap[realm];
-      } // else it it will default to global secret
+      const creds = this.keycloakOpts.credentials;
+      // Order of priority: resolved realm secret > secret map > default global secret
+      const secret = realmSecret || creds.realmSecret[realm] || this.keycloakOpts.secret
 
+      // TODO: Repeating code from  provider, will need to rework this in 2.0
+      // Override realm and secret
+      const keycloakOpts: any = Object.assign(this.keycloakOpts, { realm, secret });
       const keycloak: any = new KeycloakConnect({}, keycloakOpts);
 
       // The most important part

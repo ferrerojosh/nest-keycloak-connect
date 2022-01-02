@@ -10,6 +10,7 @@ export type KeycloakConnectOptions = string | KeycloakConnectConfig;
  */
 export interface MultiTenantOptions {
   realmResolver: (request: any) => string;
+  realmSecretResolver?: (realm: string) => string;
 }
 
 /**
@@ -175,5 +176,5 @@ export interface KeycloakCredentials {
   /**
    * Client/Application secrets mapped per realm
    */
-  realmSecretMap?: Map<string, string>;
+  realmSecret?: Map<string, string>;
 }
