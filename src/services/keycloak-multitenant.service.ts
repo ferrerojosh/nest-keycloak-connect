@@ -27,6 +27,13 @@ export class KeycloakMultiTenantService {
       // TODO: Repeating code from  provider, will need to rework this in 2.0
       // Override realm
       const keycloakOpts: any = Object.assign(this.keycloakOpts, { realm });
+
+      // Override secret
+      const creds = keycloakOpts.credentials;
+      if(creds?.realmSecretMap?.has(realm)) {
+        keycloakOpts.secret = keycloakOpts.credentials.realmSecretMap[realm];
+      } // else it it will default to global secret
+
       const keycloak: any = new KeycloakConnect({}, keycloakOpts);
 
       // The most important part
