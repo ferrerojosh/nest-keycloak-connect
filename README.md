@@ -167,6 +167,27 @@ export class ProductController {
   }
 }
 ```
+## Configuration options
+
+### Keycloak Options
+For Keycloak options, refer to the official [keycloak-connect](https://github.com/keycloak/keycloak-nodejs-connect/blob/main/middleware/auth-utils/config.js) library.
+
+### Nest Keycloak Options
+| Option            | Description                                                                         | Required | Default      |
+|-------------------|-------------------------------------------------------------------------------------|----------|--------------|
+| cookieKey         | Cookie Key                                                                          | no       | KEYCLOAK_JWT |
+| logLevels         | Built-in logger level (deprecated, will be removed in 2.0)                          | no       | log          |
+| useNestLogger     | Use the nest logger (deprecated, will be removed in 2.0)                            | no       | true         |
+| policyEnforcement | Sets the policy enforcement mode                                                    | no       | PERMISSIVE   |
+| tokenValidation   | Sets the token validation method                                                    | no       | ONLINE       |
+| multiTenant       | Sets the options for [multi-tenant configuration](#multi-tenant-options)            | no       | -            |
+
+### Multi Tenant Options
+| Option              | Description                                                                                             | Required | Default      |
+|---------------------|---------------------------------------------------------------------------------------------------------|----------|--------------|
+| realmResolver       | A function that passes a request (from respective platform i.e express or fastify) and returns a string | yes      | -            |
+| realmSecretResolver | A function that passes the realm string and returns the secret string                                   | no       | -            |
+
 ## Example app
 
 An [example application](example) is provided in the source code with both Keycloak Realm and Postman requests for you to experiment with.
