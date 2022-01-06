@@ -8,13 +8,16 @@ import {
 import { Reflector } from '@nestjs/core';
 import * as KeycloakConnect from 'keycloak-connect';
 import {
+  KEYCLOAK_CONNECT_OPTIONS,
   KEYCLOAK_INSTANCE,
   KEYCLOAK_LOGGER,
   RoleMatchingMode,
 } from '../constants';
 import { META_ROLES } from '../decorators/roles.decorator';
+import { KeycloakConnectConfig } from '../interface/keycloak-connect-options.interface';
 import { RoleDecoratorOptionsInterface } from '../interface/role-decorator-options.interface';
-import { extractRequest } from '../util';
+import { KeycloakMultiTenantService } from '../services/keycloak-multitenant.service';
+import { extractRequest, useKeycloak } from '../util';
 
 /**
  * A permissive type of role guard. Roles are set via `@Roles` decorator.
@@ -24,9 +27,12 @@ import { extractRequest } from '../util';
 export class RoleGuard implements CanActivate {
   constructor(
     @Inject(KEYCLOAK_INSTANCE)
-    private keycloak: KeycloakConnect.Keycloak,
+    private singleTenant: KeycloakConnect.Keycloak,
+    @Inject(KEYCLOAK_CONNECT_OPTIONS)
+    private keycloakOpts: KeycloakConnectConfig,
     @Inject(KEYCLOAK_LOGGER)
     private logger: Logger,
+    private multiTenant: KeycloakMultiTenantService,
     private readonly reflector: Reflector,
   ) {}
 
@@ -59,7 +65,14 @@ export class RoleGuard implements CanActivate {
     }
 
     // Create grant
-    const grant = await this.keycloak.grantManager.createGrant({
+    const keycloak = useKeycloak(
+      request,
+      request.accessTokenJWT,
+      this.singleTenant,
+      this.multiTenant,
+      this.keycloakOpts,
+    );
+    const grant = await keycloak.grantManager.createGrant({
       access_token: accessTokenJWT,
     });
 

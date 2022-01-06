@@ -32,89 +32,102 @@ npm install nest-keycloak-connect keycloak-connect --save
 
 ## Getting Started
 
-Register the module in app.module.ts
+### Module registration
 
+Registering the module:
 ```typescript
-import { Module } from '@nestjs/common';
-import { APP_GUARD } from '@nestjs/core';
-import {
-  KeycloakConnectModule,
-  ResourceGuard,
-  RoleGuard,
-  AuthGuard,
-  PolicyEnforcementMode,
-  TokenValidation
-} from 'nest-keycloak-connect';
+KeycloakConnectModule.register({
+  authServerUrl: 'http://localhost:8080/auth',
+  realm: 'master',
+  clientId: 'my-nestjs-app',
+  secret: 'secret',   
+  policyEnforcement: PolicyEnforcementMode.PERMISSIVE, // optional
+  tokenValidation: TokenValidation.ONLINE, // optional
+})
+```
 
-@Module({
-  imports: [
-    KeycloakConnectModule.register({
+Async registration is also available:
+```typescript
+KeycloakConnectModule.registerAsync({
+  useExisting: KeycloakConfigService,
+  imports: [ConfigModule]
+})
+```
+
+#### KeycloakConfigService
+```typescript
+import { Injectable } from '@nestjs/common';
+import { KeycloakConnectOptions, KeycloakConnectOptionsFactory, PolicyEnforcementMode, TokenValidation } from 'nest-keycloak-connect';
+
+@Injectable()
+export class KeycloakConfigService implements KeycloakConnectOptionsFactory {
+
+  createKeycloakConnectOptions(): KeycloakConnectOptions {
+    return {
       authServerUrl: 'http://localhost:8080/auth',
       realm: 'master',
       clientId: 'my-nestjs-app',
       secret: 'secret',
-      // optional if you want to retrieve JWT from cookie
-      cookieKey: 'KEYCLOAK_JWT', 
-      // optional loglevels. default is verbose
-      logLevels: ['warn'],
-      // optional useNestLogger, uses the logger from app.useLogger() implementation
-      useNestLogger: false,
-      // optional, already defaults to permissive
       policyEnforcement: PolicyEnforcementMode.PERMISSIVE,
-      // optional, already defaults to online validation
       tokenValidation: TokenValidation.ONLINE,
-    }),
-  ],
-  providers: [
-    // These are in order, see https://docs.nestjs.com/guards#binding-guards
-    // for more information
-
-    // This adds a global level authentication guard, you can also have it scoped
-    // if you like.
-    //
-    // Will throw a 401 unauthorized when it is unable to
-    // verify the JWT token or Bearer header is missing.
-    {
-      provide: APP_GUARD,
-      useClass: AuthGuard,
-    },
-    // This adds a global level resource guard, which is permissive by default (can be configured).
-    //
-    // Only controllers annotated with `@Resource` and methods with `@Scopes`
-    // are handled by this guard.
-    //
-    // NOTE: This guard is not necessary if you are using role-based authorization exclusively.
-    //       You can use role guard exclusively for that.
-    //
-    {
-      provide: APP_GUARD,
-      useClass: ResourceGuard,
-    },
-    
-    // This adds a global level role guard, can only be used in conjunction with resource guard
-    // when enforcement policy is PERMISSIVE, unless you only use role guard exclusively.
-    // This adds a global level role guard, which is permissive.
-    //
-    // Used by controller methods annotated with `@Roles` (matching can be configured)
-    {
-      provide: APP_GUARD,
-      useClass: RoleGuard,
-    },
-  ],
-})
-export class AppModule {}
+    };
+  } 
+}
 ```
 
-You can also register by just providing the `keycloak.json` path:
+You can also register by just providing the `keycloak.json` path and an optional module configuration:
+
 ```typescript
 KeycloakConnectModule.register(`./keycloak.json`, {
-  cookieKey: 'KEYCLOAK_JWT',
-  logLevels: ['verbose'],
-  useNestLogger: false,
-  policyEnforcement: PolicyEnforcementMode.ENFORCING,
-  tokenValidation: TokenValidation.NONE,
+  policyEnforcement: PolicyEnforcementMode.PERMISSIVE,
+  tokenValidation: TokenValidation.ONLINE,
 })
 ```
+
+### Guards
+
+Register any of the guards either globally, or scoped in your controller.
+
+#### Global registration using APP_GUARD token
+***NOTE: These are in order, see https://docs.nestjs.com/guards#binding-guards for more information.***
+```typescript
+providers: [
+  {
+    provide: APP_GUARD,     
+    useClass: AuthGuard,
+  },
+  {
+    provide: APP_GUARD,
+    useClass: ResourceGuard,
+  },
+  {
+    provide: APP_GUARD,
+    useClass: RoleGuard,
+  },
+]
+```
+#### Scoped registration
+```typescript
+@Controller('cats')
+@UseGuards(AuthGuard, ResourceGuard)
+export class CatsController {}
+```
+
+## What does these providers do ?
+
+### AuthGuard
+Adds an authentication guard, you can also have it scoped if you like (using regular `@UseGuards(AuthGuard)` in your controllers). By default, it will throw a 401 unauthorized when it is unable to verify the JWT token or `Bearer` header is missing.
+
+### ResourceGuard
+Adds a resource guard, which is permissive by default (can be configured see [options](#nest-keycloak-options)). Only controllers annotated with `@Resource` and methods with `@Scopes` are handled by this guard.
+
+***NOTE: This guard is not necessary if you are using role-based authorization exclusively. You can use role guard exclusively for that.***
+
+### RoleGuard
+Adds a role guard, **can only be used in conjunction with resource guard when enforcement policy is PERMISSIVE**, unless you only use role guard exclusively.
+Permissive by default. Used by controller methods annotated with `@Roles` (matching can be configured)
+
+## Configuring controllers
 
 In your controllers, simply do:
 
@@ -130,7 +143,7 @@ export class ProductController {
   constructor(private service: ProductService) {}
 
   @Get()
-  @Public() // Can also use `@Unprotected`
+  @Public()
   async findAll() {
     return await this.service.findAll();
   }
@@ -167,6 +180,47 @@ export class ProductController {
   }
 }
 ```
+
+## Multi tenant configuration
+Setting up for multi-tenant is configured as an option in your configuration:
+```typescript
+{
+  authServerUrl: 'http://localhost:8180/auth',
+  clientId: 'nest-api',
+  secret: 'fallback', // will be used as fallback when resolver returns null
+  multiTenant: {
+    realmResolver: (request) => {
+      return request.get('host').split('.')[0];
+    },
+    realmSecretResolver: (realm) => {
+      const secrets = { master: 'secret', slave: 'password' };
+      return secrets[realm];
+    }
+  }
+}
+```
+
+## Configuration options
+
+### Keycloak Options
+For Keycloak options, refer to the official [keycloak-connect](https://github.com/keycloak/keycloak-nodejs-connect/blob/main/middleware/auth-utils/config.js) library.
+
+### Nest Keycloak Options
+| Option            | Description                                                                         | Required | Default      |
+|-------------------|-------------------------------------------------------------------------------------|----------|--------------|
+| cookieKey         | Cookie Key                                                                          | no       | KEYCLOAK_JWT |
+| logLevels         | Built-in logger level (deprecated, will be removed in 2.0)                          | no       | log          |
+| useNestLogger     | Use the nest logger (deprecated, will be removed in 2.0)                            | no       | true         |
+| policyEnforcement | Sets the policy enforcement mode                                                    | no       | PERMISSIVE   |
+| tokenValidation   | Sets the token validation method                                                    | no       | ONLINE       |
+| multiTenant       | Sets the options for [multi-tenant configuration](#multi-tenant-options)            | no       | -            |
+
+### Multi Tenant Options
+| Option              | Description                                                                                             | Required | Default      |
+|---------------------|---------------------------------------------------------------------------------------------------------|----------|--------------|
+| realmResolver       | A function that passes a request (from respective platform i.e express or fastify) and returns a string | yes      | -            |
+| realmSecretResolver | A function that passes the realm string and returns the secret string                                   | yes      | -            |
+
 ## Example app
 
 An [example application](example) is provided in the source code with both Keycloak Realm and Postman requests for you to experiment with.

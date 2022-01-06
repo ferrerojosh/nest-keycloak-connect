@@ -17,8 +17,9 @@ import { META_ENFORCER_OPTIONS } from '../decorators/enforcer-options.decorator'
 import { META_UNPROTECTED } from '../decorators/public.decorator';
 import { META_RESOURCE } from '../decorators/resource.decorator';
 import { META_SCOPES } from '../decorators/scopes.decorator';
-import { NestKeycloakConfig } from '../interface/keycloak-connect-options.interface';
-import { extractRequest } from '../util';
+import { KeycloakConnectConfig } from '../interface/keycloak-connect-options.interface';
+import { KeycloakMultiTenantService } from '../services/keycloak-multitenant.service';
+import { extractRequest, useKeycloak } from '../util';
 
 /**
  * This adds a resource guard, which is policy enforcement by default is permissive.
@@ -29,11 +30,12 @@ import { extractRequest } from '../util';
 export class ResourceGuard implements CanActivate {
   constructor(
     @Inject(KEYCLOAK_INSTANCE)
-    private keycloak: KeycloakConnect.Keycloak,
+    private singleTenant: KeycloakConnect.Keycloak,
     @Inject(KEYCLOAK_CONNECT_OPTIONS)
-    private keycloakOpts: NestKeycloakConfig,
+    private keycloakOpts: KeycloakConnectConfig,
     @Inject(KEYCLOAK_LOGGER)
     private logger: Logger,
+    private multiTenant: KeycloakMultiTenantService,
     private readonly reflector: Reflector,
   ) {}
 
@@ -104,7 +106,14 @@ export class ResourceGuard implements CanActivate {
     const user = request.user?.preferred_username ?? 'user';
 
     const enforcerFn = createEnforcerContext(request, response, enforcerOpts);
-    const isAllowed = await enforcerFn(this.keycloak, permissions);
+    const keycloak = useKeycloak(
+      request,
+      request.accessTokenJWT,
+      this.singleTenant,
+      this.multiTenant,
+      this.keycloakOpts,
+    );
+    const isAllowed = await enforcerFn(keycloak, permissions);
 
     // If statement for verbose logging only
     if (!isAllowed) {

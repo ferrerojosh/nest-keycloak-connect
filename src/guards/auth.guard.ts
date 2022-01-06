@@ -19,8 +19,9 @@ import {
   META_SKIP_AUTH,
   META_UNPROTECTED,
 } from '../decorators/public.decorator';
-import { NestKeycloakConfig } from '../interface/keycloak-connect-options.interface';
-import { extractRequest, parseToken } from '../util';
+import { KeycloakConnectConfig } from '../interface/keycloak-connect-options.interface';
+import { KeycloakMultiTenantService } from '../services/keycloak-multitenant.service';
+import { extractRequest, parseToken, useKeycloak } from '../util';
 
 /**
  * An authentication guard. Will return a 401 unauthorized when it is unable to
@@ -30,11 +31,12 @@ import { extractRequest, parseToken } from '../util';
 export class AuthGuard implements CanActivate {
   constructor(
     @Inject(KEYCLOAK_INSTANCE)
-    private keycloak: KeycloakConnect.Keycloak,
+    private singleTenant: KeycloakConnect.Keycloak,
     @Inject(KEYCLOAK_CONNECT_OPTIONS)
-    private keycloakOpts: NestKeycloakConfig,
+    private keycloakOpts: KeycloakConnectConfig,
     @Inject(KEYCLOAK_LOGGER)
     private logger: Logger,
+    private multiTenant: KeycloakMultiTenantService,
     private readonly reflector: Reflector,
   ) {}
 
@@ -76,7 +78,14 @@ export class AuthGuard implements CanActivate {
 
     this.logger.verbose(`User JWT: ${jwt}`);
 
-    const isValidToken = await this.validateToken(jwt);
+    const keycloak = useKeycloak(
+      request,
+      jwt,
+      this.singleTenant,
+      this.multiTenant,
+      this.keycloakOpts,
+    );
+    const isValidToken = await this.validateToken(keycloak, jwt);
 
     if (isValidToken) {
       // Attach user info object
@@ -93,11 +102,11 @@ export class AuthGuard implements CanActivate {
     throw new UnauthorizedException();
   }
 
-  private async validateToken(jwt: any) {
+  private async validateToken(keycloak: KeycloakConnect.Keycloak, jwt: any) {
     const tokenValidation =
       this.keycloakOpts.tokenValidation || TokenValidation.ONLINE;
 
-    const gm = this.keycloak.grantManager;
+    const gm = keycloak.grantManager;
     let grant: KeycloakConnect.Grant;
 
     try {
