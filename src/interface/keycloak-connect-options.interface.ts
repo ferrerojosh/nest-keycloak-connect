@@ -172,9 +172,4 @@ export interface KeycloakCredentials {
    * Client/Application secret.
    */
   secret: string;
-
-  /**
-   * Client/Application secrets mapped per realm
-   */
-  realmSecret?: Map<string, string>;
 }
