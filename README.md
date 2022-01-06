@@ -180,6 +180,26 @@ export class ProductController {
   }
 }
 ```
+
+## Multi tenant configuration
+Setting up for multi-tenant is configured as an option in your configuration:
+```typescript
+{
+  authServerUrl: 'http://localhost:8180/auth',
+  clientId: 'nest-api',
+  secret: 'fallback', // will be used as fallback when resolver returns null
+  multiTenant: {
+    realmResolver: (request) => {
+      return request.get('host').split('.')[0];
+    },
+    realmSecretResolver: (realm) => {
+      const secrets = { master: 'secret', slave: 'password' };
+      return secrets[realm];
+    }
+  }
+}
+```
+
 ## Configuration options
 
 ### Keycloak Options
@@ -199,7 +219,7 @@ For Keycloak options, refer to the official [keycloak-connect](https://github.co
 | Option              | Description                                                                                             | Required | Default      |
 |---------------------|---------------------------------------------------------------------------------------------------------|----------|--------------|
 | realmResolver       | A function that passes a request (from respective platform i.e express or fastify) and returns a string | yes      | -            |
-| realmSecretResolver | A function that passes the realm string and returns the secret string                                   | no       | -            |
+| realmSecretResolver | A function that passes the realm string and returns the secret string                                   | yes      | -            |
 
 ## Example app
 
