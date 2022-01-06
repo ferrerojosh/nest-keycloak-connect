@@ -20,7 +20,7 @@ specifiers:
   eslint-plugin-prettier: ^3.3.1
   jest: ^26.6.3
   keycloak-connect: ^14.0.0
-  nest-keycloak-connect: ^1.7.6
+  nest-keycloak-connect: ^1.8.0
   prettier: ^2.2.1
   reflect-metadata: ^0.1.13
   rimraf: ^3.0.2
@@ -38,7 +38,7 @@ dependencies:
   '@nestjs/platform-express': 8.0.6_67f7e5db8827badcb202b1d38f6b1aea
   '@nestjs/platform-fastify': 8.0.6_67f7e5db8827badcb202b1d38f6b1aea
   keycloak-connect: 14.0.0
-  nest-keycloak-connect: 1.7.6_0ad7a9440aa074af4e8d3d6f28d88f94
+  nest-keycloak-connect: 1.8.0_0ad7a9440aa074af4e8d3d6f28d88f94
   reflect-metadata: 0.1.13
   rimraf: 3.0.2
   rxjs: 7.3.0
@@ -1924,8 +1924,8 @@ packages:
     engines: {node: '>=6.0'}
     dev: true
 
-  /chromedriver/96.0.0:
-    resolution: {integrity: sha512-4g6Hn5RHGsbaBmOrJbDlz/hdVPOc22eRsbvoAAMqkZxR2NJCcddHzCw2FAQeW8lX/C7xWVz3nyDsKX3fE9lIIw==}
+  /chromedriver/97.0.0:
+    resolution: {integrity: sha512-SZ9MW+/6/Ypz20CNdRKocsmRM2AJ/YwHaWpA1Np2QVPFUbhjhus6vBtqFD+l8M5qrktLWPQSjTwIsDckNfXIRg==}
     engines: {node: '>=10'}
     hasBin: true
     requiresBuild: true
@@ -4245,7 +4245,7 @@ packages:
     dependencies:
       jwk-to-pem: 2.0.5
     optionalDependencies:
-      chromedriver: 96.0.0
+      chromedriver: 97.0.0
     transitivePeerDependencies:
       - debug
       - supports-color
@@ -4603,12 +4603,12 @@ packages:
     resolution: {integrity: sha512-Yd3UES5mWCSqR+qNT93S3UoYUkqAZ9lLg8a7g9rimsWmYGK8cVToA4/sF3RrshdyV3sAGMXVUmpMYOw+dLpOuw==}
     dev: true
 
-  /nest-keycloak-connect/1.7.6_0ad7a9440aa074af4e8d3d6f28d88f94:
-    resolution: {integrity: sha512-2BWvmYKh+Y/9xjxY9qPh0gxryMwpYyHyljT32+mcbXqzD2d/X0OU1IvlQYCpwAJA90EI/7xK/qY9E/8YY36I7Q==}
+  /nest-keycloak-connect/1.8.0_0ad7a9440aa074af4e8d3d6f28d88f94:
+    resolution: {integrity: sha512-UJgY1blB0rO1WxI6Oh80JKMNwD2CzQ3AU5Auq0La51p7HYWjEhdJxcwB6hCqnPmZs1tg9wwNexWZ72p/onyTbA==}
     peerDependencies:
       '@nestjs/common': ^6.0.0 || ^7.0.0 || ^8.0.0
       '@nestjs/core': ^6.0.0 || ^7.0.0 || ^8.0.0
-      '@nestjs/graphql': ^6.0.0 || ^7.0.0 || ^8.0.0
+      '@nestjs/graphql': ^6.0.0 || ^7.0.0 || ^8.0.0 || ^9.0.0
       keycloak-connect: '>= 10.0.0 < 16.0.0'
     peerDependenciesMeta:
       '@nestjs/graphql':
