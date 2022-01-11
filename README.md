@@ -8,6 +8,8 @@
 ![npm](https://img.shields.io/npm/dw/nest-keycloak-connect)
 ![npm](https://img.shields.io/npm/dt/nest-keycloak-connect)
 
+[![Support via PayPal](https://cdn.rawgit.com/twolfson/paypal-github-button/1.0.0/dist/button.svg)](https://www.paypal.me/ferrerojosh/)
+
 > An adapter for [keycloak-nodejs-connect](https://github.com/keycloak/keycloak-nodejs-connect).
 
 ## Features
