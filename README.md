@@ -183,6 +183,19 @@ export class ProductController {
 }
 ```
 
+## Decorators
+
+Here is the decorators you can use in your controllers.
+
+| Decorator          | Description                                                                                               |
+|--------------------|-----------------------------------------------------------------------------------------------------------|
+| @AuthenticatedUser | Retrieves the current Keycloak logged-in user. (must be per method, unless controller is request scoped.) |
+| @EnforcerOptions   | Keycloak enforcer options.                                                                                |
+| @Public            | Allow any user to use the route.                                                                          |
+| @Resource          | Keycloak application resource name.                                                                       |
+| @Scope             | Keycloak application scope name.                                                                          |
+| @Roles             | Keycloak realm/application roles.                                                                         |
+
 ## Multi tenant configuration
 Setting up for multi-tenant is configured as an option in your configuration:
 ```typescript
