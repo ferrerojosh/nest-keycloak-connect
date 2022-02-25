@@ -38,7 +38,7 @@ export class KeycloakMultiTenantService {
       }
 
       // Resolve realm secret
-      const realmSecret = this.keycloakOpts.multiTenant?.realmSecretResolver(
+      const realmSecret = this.keycloakOpts.multiTenant?.realmSecretResolver?.(
         realm,
       );
       // Override secret
