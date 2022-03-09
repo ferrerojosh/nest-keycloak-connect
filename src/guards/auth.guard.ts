@@ -57,6 +57,12 @@ export class AuthGuard implements CanActivate {
 
     // Extract request/response
     const [request] = extractRequest(context);
+
+    // if is not an HTTP request ignore this guard
+    if (!request) {
+      return true;
+    }
+    
     const jwt =
       this.extractJwtFromCookie(request.cookies) ??
       this.extractJwt(request.headers);
