@@ -27,7 +27,7 @@
   "peerDependencies": {
     "@nestjs/core": "^6.0.0 || ^7.0.0 || ^8.0.0",
     "@nestjs/common": "^6.0.0 || ^7.0.0 || ^8.0.0",
-    "@nestjs/graphql": "^6.0.0 || ^7.0.0 || ^8.0.0 || ^9.0.0",
+    "@nestjs/graphql": ">= 6",
     "keycloak-connect": ">= 10.0.0 < 16.0.0"
   },
   "devDependencies": {
