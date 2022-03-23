@@ -98,6 +98,11 @@ export class ResourceGuard implements CanActivate {
     // Extract request/response
     const [request, response] = extractRequest(context);
 
+    // if is not an HTTP request ignore this guard
+    if (!request) {
+      return true;
+    }
+
     if (!request.user && isUnprotected) {
       this.logger.verbose(`Route has no user, and is public, allowed`);
       return true;

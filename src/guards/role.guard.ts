@@ -56,6 +56,11 @@ export class RoleGuard implements CanActivate {
     const [request] = extractRequest(context);
     const { accessTokenJWT } = request;
 
+    // if is not an HTTP request ignore this guard
+    if (!request) {
+      return true;
+    }
+
     if (!accessTokenJWT) {
       // No access token attached, auth guard should have attached the necessary token
       this.logger.warn(

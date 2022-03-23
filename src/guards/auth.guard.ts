@@ -62,7 +62,7 @@ export class AuthGuard implements CanActivate {
     if (!request) {
       return true;
     }
-    
+
     const jwt =
       this.extractJwtFromCookie(request.cookies) ??
       this.extractJwt(request.headers);
