@@ -84,7 +84,7 @@ export class AuthGuard implements CanActivate {
 
     this.logger.verbose(`User JWT: ${jwt}`);
 
-    const keycloak = useKeycloak(
+    const keycloak = await useKeycloak(
       request,
       jwt,
       this.singleTenant,

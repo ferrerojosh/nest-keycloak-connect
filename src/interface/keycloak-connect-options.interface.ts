@@ -9,8 +9,8 @@ export type KeycloakConnectOptions = string | KeycloakConnectConfig;
  * Multi tenant configuration.
  */
 export interface MultiTenantOptions {
-  realmResolver: (request: any) => string;
-  realmSecretResolver?: (realm: string) => string;
+  realmResolver: (request: any) => Promise<string> | string;
+  realmSecretResolver?: (realm: string) => Promise<string> | string;
 }
 
 /**

@@ -70,7 +70,7 @@ export class RoleGuard implements CanActivate {
     }
 
     // Create grant
-    const keycloak = useKeycloak(
+    const keycloak = await useKeycloak(
       request,
       request.accessTokenJWT,
       this.singleTenant,

@@ -111,7 +111,7 @@ export class ResourceGuard implements CanActivate {
     const user = request.user?.preferred_username ?? 'user';
 
     const enforcerFn = createEnforcerContext(request, response, enforcerOpts);
-    const keycloak = useKeycloak(
+    const keycloak = await useKeycloak(
       request,
       request.accessTokenJWT,
       this.singleTenant,

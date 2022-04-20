@@ -27,7 +27,7 @@ export class KeycloakMultiTenantService {
    * @param realm the realm to retrieve from
    * @returns the multi tenant keycloak instance
    */
-  get(realm: string): KeycloakConnect.Keycloak {
+  async get(realm: string): Promise<KeycloakConnect.Keycloak> {
     if (this.instances.has(realm)) {
       return this.instances.get(realm);
     } else {
@@ -36,11 +36,24 @@ export class KeycloakMultiTenantService {
           'Keycloak configuration is a configuration path. This should not happen after module load.',
         );
       }
+      if (
+        this.keycloakOpts.multiTenant === null ||
+        this.keycloakOpts.multiTenant === undefined
+      ) {
+        throw new Error(
+          'Multi tenant is not defined yet multi tenant service is being called.',
+        );
+      }
 
       // Resolve realm secret
-      const realmSecret = this.keycloakOpts.multiTenant?.realmSecretResolver?.(
+      const resolvedRealmSecret = this.keycloakOpts.multiTenant.realmSecretResolver(
         realm,
       );
+      const realmSecret =
+        resolvedRealmSecret || resolvedRealmSecret instanceof Promise
+          ? await resolvedRealmSecret
+          : resolvedRealmSecret;
+
       // Override secret
       // Order of priority: resolved realm secret > default global secret
       const secret = realmSecret || this.keycloakOpts.secret;

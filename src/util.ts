@@ -7,20 +7,22 @@ type GqlContextType = 'graphql' | ContextType;
 
 // Confusing and all, but I needed to extract this fn to avoid more repeating code
 // TODO: Rework in 2.0
-export const useKeycloak = (
+export const useKeycloak = async (
   request: any,
   jwt: string,
   singleTenant: KeycloakConnect.Keycloak,
   multiTenant: KeycloakMultiTenantService,
   opts: KeycloakConnectConfig,
-): KeycloakConnect.Keycloak => {
+): Promise<KeycloakConnect.Keycloak> => {
   if (opts.multiTenant && opts.multiTenant.realmResolver) {
     const resolvedRealm = opts.multiTenant.realmResolver(request);
-    return multiTenant.get(resolvedRealm);
+    const realm =
+      resolvedRealm instanceof Promise ? await resolvedRealm : resolvedRealm;
+    return await multiTenant.get(realm);
   } else if (!opts.realm) {
     const payload = parseToken(jwt);
     const issuerRealm = payload.iss.split('/').pop();
-    return multiTenant.get(issuerRealm);
+    return await multiTenant.get(issuerRealm);
   }
   return singleTenant;
 };
