@@ -12,6 +12,7 @@ import {
   KEYCLOAK_INSTANCE,
   KEYCLOAK_LOGGER,
   RoleMatchingMode,
+  RoleMerge,
 } from '../constants';
 import { META_ROLES } from '../decorators/roles.decorator';
 import { KeycloakConnectConfig } from '../interface/keycloak-connect-options.interface';
@@ -37,20 +38,46 @@ export class RoleGuard implements CanActivate {
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const rolesMetaData = this.reflector.getAllAndOverride<
-      RoleDecoratorOptionsInterface
-    >(META_ROLES, [context.getClass(), context.getHandler()]);
+    const roleMerge = this.keycloakOpts.roleMerge
+      ? this.keycloakOpts.roleMerge
+      : RoleMerge.OVERRIDE;
 
-    if (!rolesMetaData || rolesMetaData.roles.length === 0) {
+    const rolesMetaDatas: RoleDecoratorOptionsInterface[] = [];
+
+    if (roleMerge == RoleMerge.ALL) {
+      const mergedRoleMetaData = this.reflector.getAllAndMerge<
+        RoleDecoratorOptionsInterface[]
+      >(META_ROLES, [context.getClass(), context.getHandler()]);
+
+      if (mergedRoleMetaData) {
+        rolesMetaDatas.push(...mergedRoleMetaData);
+      }
+    } else if (roleMerge == RoleMerge.OVERRIDE) {
+      const roleMetaData = this.reflector.getAllAndOverride<
+        RoleDecoratorOptionsInterface
+      >(META_ROLES, [context.getClass(), context.getHandler()]);
+
+      if (roleMetaData) {
+        rolesMetaDatas.push(roleMetaData);
+      }
+    } else {
+      throw Error(`Unknown role merge: ${roleMerge}`);
+    }
+
+    const combinedRoles = rolesMetaDatas.flatMap(x => x.roles);
+
+    if (combinedRoles.length === 0) {
       return true;
     }
 
-    if (rolesMetaData && !rolesMetaData.mode) {
-      rolesMetaData.mode = RoleMatchingMode.ANY;
-    }
+    // Use matching mode of first item
+    const roleMetaData = rolesMetaDatas[0];
+    const roleMatchingMode = roleMetaData.mode
+      ? roleMetaData.mode
+      : RoleMatchingMode.ANY;
 
-    const rolesStr = JSON.stringify(rolesMetaData.roles);
-    this.logger.verbose(`Roles: ${rolesStr}`);
+    this.logger.verbose(`Using matching mode: ${roleMatchingMode}`);
+    this.logger.verbose(`Roles: ${JSON.stringify(combinedRoles)}`);
 
     // Extract request
     const [request] = extractRequest(context);
@@ -86,9 +113,9 @@ export class RoleGuard implements CanActivate {
 
     // For verbose logging, we store it instead of returning it immediately
     const granted =
-      rolesMetaData.mode === RoleMatchingMode.ANY
-        ? rolesMetaData.roles.some(r => accessToken.hasRole(r))
-        : rolesMetaData.roles.every(r => accessToken.hasRole(r));
+      roleMatchingMode === RoleMatchingMode.ANY
+        ? combinedRoles.some(r => accessToken.hasRole(r))
+        : combinedRoles.every(r => accessToken.hasRole(r));
 
     if (granted) {
       this.logger.verbose(`Resource granted due to role(s)`);

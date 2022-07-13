@@ -68,3 +68,14 @@ export enum TokenValidation {
    */
   NONE = 'none',
 }
+
+export enum RoleMerge {
+  /**
+   * Overrides roles if defined both controller and handlers, with controller taking over.
+   */
+  OVERRIDE,
+  /**
+   * Merges all roles from both controller and handlers.
+   */
+  ALL,
+}

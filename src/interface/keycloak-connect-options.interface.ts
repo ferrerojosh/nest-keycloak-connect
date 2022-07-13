@@ -1,7 +1,11 @@
 // The typings are a bit of a mess, I'm sure there's a better way to do this.
 
 import { LogLevel } from '@nestjs/common';
-import { PolicyEnforcementMode, TokenValidation } from '../constants';
+import {
+  PolicyEnforcementMode,
+  RoleMerge,
+  TokenValidation,
+} from '../constants';
 
 export type KeycloakConnectOptions = string | KeycloakConnectConfig;
 
@@ -56,6 +60,11 @@ export interface NestKeycloakConfig {
    * Multi tenant options.
    */
   multiTenant?: MultiTenantOptions;
+
+  /**
+   * Role merging options.
+   */
+  roleMerge?: RoleMerge;
 }
 
 /**

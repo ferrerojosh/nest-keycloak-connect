@@ -229,6 +229,7 @@ For Keycloak options, refer to the official [keycloak-connect](https://github.co
 | policyEnforcement | Sets the policy enforcement mode                                                    | no       | PERMISSIVE   |
 | tokenValidation   | Sets the token validation method                                                    | no       | ONLINE       |
 | multiTenant       | Sets the options for [multi-tenant configuration](#multi-tenant-options)            | no       | -            |
+| roleMerge         | Sets the merge mode for @Role decorator                                             | no       | OVERRIDE     |
 
 ### Multi Tenant Options
 | Option              | Description                                                                                             | Required | Default      |
