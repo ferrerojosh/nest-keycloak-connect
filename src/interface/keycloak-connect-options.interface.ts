@@ -9,7 +9,17 @@ export type KeycloakConnectOptions = string | KeycloakConnectConfig;
  * Multi tenant configuration.
  */
 export interface MultiTenantOptions {
+  /**
+   * Option to always resolve the realm and secret. Disabled by default.
+   */
+  resolveAlways?: boolean;
+  /**
+   * The realm resolver function.
+   */
   realmResolver: (request: any) => Promise<string> | string;
+  /**
+   * The realm secret resolver function.
+   */
   realmSecretResolver?: (realm: string) => Promise<string> | string;
 }
 

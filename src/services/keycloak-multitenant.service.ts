@@ -28,36 +28,36 @@ export class KeycloakMultiTenantService {
    * @returns the multi tenant keycloak instance
    */
   async get(realm: string): Promise<KeycloakConnect.Keycloak> {
+    if (typeof this.keycloakOpts === 'string') {
+      throw new Error(
+        'Keycloak configuration is a configuration path. This should not happen after module load.',
+      );
+    }
+    if (
+      this.keycloakOpts.multiTenant === null ||
+      this.keycloakOpts.multiTenant === undefined
+    ) {
+      throw new Error(
+        'Multi tenant is not defined yet multi tenant service is being called.',
+      );
+    }
+
     if (this.instances.has(realm)) {
+      if (this.keycloakOpts.multiTenant.resolveAlways) {
+        const keycloak: any = this.instances.get(realm);
+        const secret = this.resolveSecret(realm);
+
+        keycloak.config.secret = secret;
+        keycloak.grantManager.secret = secret;
+
+        // Save instance
+        this.instances.set(realm, keycloak);
+
+        return keycloak;
+      }
       return this.instances.get(realm);
     } else {
-      if (typeof this.keycloakOpts === 'string') {
-        throw new Error(
-          'Keycloak configuration is a configuration path. This should not happen after module load.',
-        );
-      }
-      if (
-        this.keycloakOpts.multiTenant === null ||
-        this.keycloakOpts.multiTenant === undefined
-      ) {
-        throw new Error(
-          'Multi tenant is not defined yet multi tenant service is being called.',
-        );
-      }
-
-      // Resolve realm secret
-      const resolvedRealmSecret = this.keycloakOpts.multiTenant.realmSecretResolver(
-        realm,
-      );
-      const realmSecret =
-        resolvedRealmSecret || resolvedRealmSecret instanceof Promise
-          ? await resolvedRealmSecret
-          : resolvedRealmSecret;
-
-      // Override secret
-      // Order of priority: resolved realm secret > default global secret
-      const secret = realmSecret || this.keycloakOpts.secret;
-
+      const secret = await this.resolveSecret(realm);
       // TODO: Repeating code from  provider, will need to rework this in 2.0
       // Override realm and secret
       const keycloakOpts: any = Object.assign(this.keycloakOpts, {
@@ -75,5 +75,34 @@ export class KeycloakMultiTenantService {
       this.instances.set(realm, keycloak);
       return keycloak;
     }
+  }
+
+  async resolveSecret(realm: string): Promise<string> {
+    if (typeof this.keycloakOpts === 'string') {
+      throw new Error(
+        'Keycloak configuration is a configuration path. This should not happen after module load.',
+      );
+    }
+    if (
+      this.keycloakOpts.multiTenant === null ||
+      this.keycloakOpts.multiTenant === undefined
+    ) {
+      throw new Error(
+        'Multi tenant is not defined yet multi tenant service is being called.',
+      );
+    }
+
+    // Resolve realm secret
+    const resolvedRealmSecret = this.keycloakOpts.multiTenant.realmSecretResolver(
+      realm,
+    );
+    const realmSecret =
+      resolvedRealmSecret || resolvedRealmSecret instanceof Promise
+        ? await resolvedRealmSecret
+        : resolvedRealmSecret;
+
+    // Override secret
+    // Order of priority: resolved realm secret > default global secret
+    return realmSecret || this.keycloakOpts.secret;
   }
 }

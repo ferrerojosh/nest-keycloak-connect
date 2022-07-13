@@ -233,6 +233,7 @@ For Keycloak options, refer to the official [keycloak-connect](https://github.co
 ### Multi Tenant Options
 | Option              | Description                                                                                             | Required | Default      |
 |---------------------|---------------------------------------------------------------------------------------------------------|----------|--------------|
+| resolveAlways       | Option to always resolve the realm and secret. Disabled by default.                                     | no       | false        |
 | realmResolver       | A function that passes a request (from respective platform i.e express or fastify) and returns a string | yes      | -            |
 | realmSecretResolver | A function that passes the realm string and returns the secret string                                   | yes      | -            |
 
