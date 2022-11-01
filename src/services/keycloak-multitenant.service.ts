@@ -46,35 +46,41 @@ export class KeycloakMultiTenantService {
       if (this.keycloakOpts.multiTenant.resolveAlways) {
         const keycloak: any = this.instances.get(realm);
         const secret = this.resolveSecret(realm);
+        const authServerUrl = this.resolveAuthServerUrl(realm);
 
         keycloak.config.secret = secret;
         keycloak.grantManager.secret = secret;
+        keycloak.config.authServerUrl = authServerUrl;
 
         // Save instance
         this.instances.set(realm, keycloak);
 
         return keycloak;
       }
+
       return this.instances.get(realm);
-    } else {
-      const secret = await this.resolveSecret(realm);
-      // TODO: Repeating code from  provider, will need to rework this in 2.0
-      // Override realm and secret
-      const keycloakOpts: any = Object.assign(this.keycloakOpts, {
-        realm,
-        secret,
-      });
-      const keycloak: any = new KeycloakConnect({}, keycloakOpts);
-
-      // The most important part
-      keycloak.accessDenied = (req: any, res: any, next: any) => {
-        req.resourceDenied = true;
-        next();
-      };
-
-      this.instances.set(realm, keycloak);
-      return keycloak;
     }
+
+    const secret = await this.resolveSecret(realm);
+    const authServerUrl = await this.resolveAuthServerUrl(realm);
+    // TODO: Repeating code from  provider, will need to rework this in 2.0
+    // Override realm and secret
+    const keycloakOpts: any = Object.assign(this.keycloakOpts, {
+      realm,
+      secret,
+      authServerUrl,
+    });
+    const keycloak: any = new KeycloakConnect({}, keycloakOpts);
+
+    // The most important part
+    keycloak.accessDenied = (req: any, res: any, next: any) => {
+      req.resourceDenied = true;
+      next();
+    };
+
+    this.instances.set(realm, keycloak);
+
+    return keycloak;
   }
 
   async resolveSecret(realm: string): Promise<string> {
@@ -104,5 +110,35 @@ export class KeycloakMultiTenantService {
     // Override secret
     // Order of priority: resolved realm secret > default global secret
     return realmSecret || this.keycloakOpts.secret;
+  }
+
+  async resolveAuthServerUrl(realm: string): Promise<string> {
+    if (typeof this.keycloakOpts === 'string') {
+      throw new Error(
+        'Keycloak configuration is a configuration path. This should not happen after module load.',
+      );
+    }
+
+    if (
+      this.keycloakOpts.multiTenant === null ||
+      this.keycloakOpts.multiTenant === undefined
+    ) {
+      throw new Error(
+        'Multi tenant is not defined yet multi tenant service is being called.',
+      );
+    }
+
+    // Resolve auth server url
+    const resolvedAuthServerUrl = this.keycloakOpts.multiTenant.authServerUrlResolver(
+      realm,
+    );
+    const authServerUrl =
+      resolvedAuthServerUrl || resolvedAuthServerUrl instanceof Promise
+        ? await resolvedAuthServerUrl
+        : resolvedAuthServerUrl;
+
+    // Override auth server url
+    // Order of priority: resolved auth server url > default auth server url
+    return authServerUrl || this.keycloakOpts.authServerUrl;
   }
 }
