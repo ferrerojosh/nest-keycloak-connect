@@ -20,11 +20,15 @@ export interface MultiTenantOptions {
   /**
    * The realm resolver function.
    */
-  realmResolver: (request: any) => Promise<string> | string;
+  realmResolver?: (request: any) => Promise<string> | string;
   /**
    * The realm secret resolver function.
    */
   realmSecretResolver?: (realm: string) => Promise<string> | string;
+  /**
+   * Auth server url resolver function.
+   */
+  authServerUrlResolver?: (realm: string) => Promise<string> | string;
 }
 
 /**
