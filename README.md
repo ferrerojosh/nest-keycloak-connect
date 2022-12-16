@@ -39,7 +39,7 @@ npm install nest-keycloak-connect keycloak-connect --save
 Registering the module:
 ```typescript
 KeycloakConnectModule.register({
-  authServerUrl: 'http://localhost:8080/auth',
+  authServerUrl: 'http://localhost:8080', // might be http://localhost:8080/auth for older keycloak versions
   realm: 'master',
   clientId: 'my-nestjs-app',
   secret: 'secret',   
@@ -66,7 +66,7 @@ export class KeycloakConfigService implements KeycloakConnectOptionsFactory {
 
   createKeycloakConnectOptions(): KeycloakConnectOptions {
     return {
-      authServerUrl: 'http://localhost:8080/auth',
+      authServerUrl: 'http://localhost:8080', // might be http://localhost:8080/auth for older keycloak versions
       realm: 'master',
       clientId: 'my-nestjs-app',
       secret: 'secret',
