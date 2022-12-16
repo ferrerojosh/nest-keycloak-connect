@@ -45,7 +45,7 @@ export class KeycloakMultiTenantService {
     if (this.instances.has(realm)) {
       if (this.keycloakOpts.multiTenant.resolveAlways) {
         const keycloak: any = this.instances.get(realm);
-        const secret = this.resolveSecret(realm);
+        const secret = await this.resolveSecret(realm);
 
         keycloak.config.secret = secret;
         keycloak.grantManager.secret = secret;
