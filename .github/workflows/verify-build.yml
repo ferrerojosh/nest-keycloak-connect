@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        pnpm-version: [latest]
+        pnpm-version: [7]
     steps:
     - uses: actions/checkout@v2
     - name: Cache pnpm modules
