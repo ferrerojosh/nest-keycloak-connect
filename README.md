@@ -193,7 +193,7 @@ Here is the decorators you can use in your controllers.
 | @EnforcerOptions   | Keycloak enforcer options.                                                                                |
 | @Public            | Allow any user to use the route.                                                                          |
 | @Resource          | Keycloak application resource name.                                                                       |
-| @Scope             | Keycloak application scope name.                                                                          |
+| @Scopes            | Keycloak application scope name.                                                                          |
 | @Roles             | Keycloak realm/application roles.                                                                         |
 
 ## Multi tenant configuration
