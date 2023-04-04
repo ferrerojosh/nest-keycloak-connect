@@ -28,7 +28,7 @@
     "@nestjs/common": ">=6.0.0 <10.0.0",
     "@nestjs/core": ">=6.0.0 <10.0.0",
     "@nestjs/graphql": ">=6",
-    "keycloak-connect": ">=10.0.0 <21.0.0"
+    "keycloak-connect": ">=10.0.0 <22.0.0"
   },
   "devDependencies": {
     "@nestjs/common": "^9.0.0",
