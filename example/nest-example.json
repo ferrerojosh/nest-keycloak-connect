@@ -778,17 +778,6 @@
           ],
           "policies": [
             {
-              "id": "ccba6768-3282-4807-a0fb-0ee7475d8df4",
-              "name": "Default Policy",
-              "description": "A policy that grants access only for users within this realm",
-              "type": "js",
-              "logic": "POSITIVE",
-              "decisionStrategy": "AFFIRMATIVE",
-              "config": {
-                "code": "// by default, grants any permission associated with this policy\n$evaluation.grant();\n"
-              }
-            },
-            {
               "id": "2cca82f4-f4a5-410f-b913-ee02c84ca30e",
               "name": "User Policy",
               "description": "\"user\" policy",
@@ -808,18 +797,6 @@
               "decisionStrategy": "UNANIMOUS",
               "config": {
                 "users": "[\"admin\"]"
-              }
-            },
-            {
-              "id": "10b15b1e-1b43-4083-b816-b2b9b8168d34",
-              "name": "Default Permission",
-              "description": "A permission that applies to the default resource type",
-              "type": "resource",
-              "logic": "POSITIVE",
-              "decisionStrategy": "UNANIMOUS",
-              "config": {
-                "defaultResourceType": "urn:nest-api:resources:default",
-                "applyPolicies": "[\"Default Policy\"]"
               }
             },
             {
