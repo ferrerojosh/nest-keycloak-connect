@@ -13,7 +13,7 @@
     "release:alpha": "release-it --preReleaseId=alpha --npm.tag=next --github.preRelease",
     "format": "prettier --write \"src/**/*.ts\"",
     "lint": "eslint ./src --ext .ts",
-    "postinstall": "npm run build && npm run build:copy"
+    "install": "npm run build && npm run build:copy"
   },
   "keywords": [
     "nestjs",
