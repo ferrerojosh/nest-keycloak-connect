@@ -12,8 +12,7 @@
     "release": "release-it",
     "release:alpha": "release-it --preReleaseId=alpha --npm.tag=next --github.preRelease",
     "format": "prettier --write \"src/**/*.ts\"",
-    "lint": "eslint ./src --ext .ts",
-    "install": "npm run build && npm run build:copy"
+    "lint": "eslint ./src --ext .ts"
   },
   "keywords": [
     "nestjs",
