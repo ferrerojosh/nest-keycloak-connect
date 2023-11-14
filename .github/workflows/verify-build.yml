@@ -13,22 +13,15 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        pnpm-version: [7]
     steps:
     - uses: actions/checkout@v2
-    - name: Cache pnpm modules
-      uses: actions/cache@v2
+    - uses: actions/setup-node@v3
       with:
-        path: ~/.pnpm-store
-        key: ${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
-        restore-keys: |
-          ${{ runner.os }}-
-    - name: Use PNPM ${{ matrix.pnpm-version }}
-      uses: pnpm/action-setup@v2.0.1
+        node-version: 20
+    - uses: pnpm/action-setup@v2
       with:
-        version: ${{ matrix.pnpm-version }}
-        run_install: true
+        version: 8
+        run_install: false
+    - run: pnpm install
     - run: pnpm run --if-present lint 
     - run: pnpm run --if-present build 
