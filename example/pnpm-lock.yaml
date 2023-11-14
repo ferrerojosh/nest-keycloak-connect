@@ -18,11 +18,11 @@ dependencies:
     specifier: ^8.0.0
     version: 8.4.7(@nestjs/common@8.4.7)(@nestjs/core@8.4.7)
   keycloak-connect:
-    specifier: ^14.0.0
-    version: 14.0.0
+    specifier: ^22.0.5
+    version: 22.0.5
   nest-keycloak-connect:
-    specifier: ^1.8.0
-    version: link:..
+    specifier: ^1.9.3
+    version: 1.9.3(@nestjs/common@8.4.7)(@nestjs/core@8.4.7)(keycloak-connect@22.0.5)
   reflect-metadata:
     specifier: ^0.1.13
     version: 0.1.13
@@ -4481,10 +4481,9 @@ packages:
       safe-buffer: 5.2.1
     dev: false
 
-  /keycloak-connect@14.0.0:
-    resolution: {integrity: sha512-A/xJRgVGOu7RjFH9ZVDdAezteEAj0tQ7We+jXtpj28I4Vx8ceqXsffR/1+e+h6DQ5LN5izx52TLZdnkm/YZmkg==}
-    engines: {node: '>=4.6.2'}
-    deprecated: This package is deprecated and will be removed in the future. We will shortly provide more details on removal date, and recommended alternatives.
+  /keycloak-connect@22.0.5:
+    resolution: {integrity: sha512-3aTU3m/hA9to6NhC1pLK6Rv/9zqJuvmX5J5C4LkKXF64ejQk/nlUnPw2hrBky+s6eJneFQ/sCWf4OSNGsenAYw==}
+    engines: {node: '>=14'}
     dependencies:
       jwk-to-pem: 2.0.5
     optionalDependencies:
@@ -4846,6 +4845,22 @@ packages:
   /neo-async@2.6.2:
     resolution: {integrity: sha512-Yd3UES5mWCSqR+qNT93S3UoYUkqAZ9lLg8a7g9rimsWmYGK8cVToA4/sF3RrshdyV3sAGMXVUmpMYOw+dLpOuw==}
     dev: true
+
+  /nest-keycloak-connect@1.9.3(@nestjs/common@8.4.7)(@nestjs/core@8.4.7)(keycloak-connect@22.0.5):
+    resolution: {integrity: sha512-N054oiu2IXFuzfVpXbt3Oy5pc5UEsg1WaWLg1/BHeHEXGJCsCnmr/+HZooJN39Q+L4LsA90iyuGQwLA9Ggavlg==}
+    peerDependencies:
+      '@nestjs/common': '>=6.0.0 <11.0.0'
+      '@nestjs/core': '>=6.0.0 <11.0.0'
+      '@nestjs/graphql': '>=6'
+      keycloak-connect: '>=10.0.0 <23.0.0'
+    peerDependenciesMeta:
+      '@nestjs/graphql':
+        optional: true
+    dependencies:
+      '@nestjs/common': 8.4.7(reflect-metadata@0.1.13)(rxjs@7.8.1)
+      '@nestjs/core': 8.4.7(@nestjs/common@8.4.7)(@nestjs/platform-express@8.4.7)(reflect-metadata@0.1.13)(rxjs@7.8.1)
+      keycloak-connect: 22.0.5
+    dev: false
 
   /nice-try@1.0.5:
     resolution: {integrity: sha512-1nh45deeb5olNY7eX82BkPO7SSxR5SSYJiPTrTdFUVYwAl8CKMA5N9PjTYkHiRjisVcxcQ1HXdLhx2qxxJzLNQ==}

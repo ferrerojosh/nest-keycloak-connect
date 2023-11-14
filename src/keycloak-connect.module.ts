@@ -26,6 +26,8 @@ export * from './guards/role.guard';
 export * from './interface/keycloak-connect-module-async-options.interface';
 export * from './interface/keycloak-connect-options-factory.interface';
 export * from './interface/keycloak-connect-options.interface';
+export * from './interface/role-decorator-options.interface';
+export * from './services/keycloak-multitenant.service';
 
 @Module({})
 export class KeycloakConnectModule {
