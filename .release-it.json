@@ -5,6 +5,6 @@
     "tagArgs": ["-s"]
   },
   "hooks": {
-    "after:bump": ["npm run clean", "npm run build"]
+    "after:bump": ["pnpm run clean", "pnpm run build"]
   }
 }
