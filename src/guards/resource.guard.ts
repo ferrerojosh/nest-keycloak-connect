@@ -11,6 +11,7 @@ import {
   KEYCLOAK_CONNECT_OPTIONS,
   KEYCLOAK_INSTANCE,
   KEYCLOAK_LOGGER,
+  KEYCLOAK_MULTITENANT_SERVICE,
   PolicyEnforcementMode,
 } from '../constants';
 import { META_ENFORCER_OPTIONS } from '../decorators/enforcer-options.decorator';
@@ -35,6 +36,7 @@ export class ResourceGuard implements CanActivate {
     private keycloakOpts: KeycloakConnectConfig,
     @Inject(KEYCLOAK_LOGGER)
     private logger: Logger,
+    @Inject(KEYCLOAK_MULTITENANT_SERVICE)
     private multiTenant: KeycloakMultiTenantService,
     private readonly reflector: Reflector,
   ) {}

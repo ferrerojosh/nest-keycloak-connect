@@ -1,5 +1,5 @@
 import { DynamicModule, Logger, Module, Provider } from '@nestjs/common';
-import { KEYCLOAK_CONNECT_OPTIONS } from './constants';
+import { KEYCLOAK_CONNECT_OPTIONS, KEYCLOAK_MULTITENANT_SERVICE } from './constants';
 import { KeycloakConnectModuleAsyncOptions } from './interface/keycloak-connect-module-async-options.interface';
 import { KeycloakConnectOptionsFactory } from './interface/keycloak-connect-options-factory.interface';
 import {
@@ -48,6 +48,10 @@ export class KeycloakConnectModule {
       loggerProvider,
       keycloakProvider,
       KeycloakMultiTenantService,
+      {
+        provide: KEYCLOAK_MULTITENANT_SERVICE,
+        useClass: KeycloakMultiTenantService
+      }
     ];
     return {
       module: KeycloakConnectModule,
@@ -77,6 +81,10 @@ export class KeycloakConnectModule {
       loggerProvider,
       keycloakProvider,
       KeycloakMultiTenantService,
+      {
+        provide: KEYCLOAK_MULTITENANT_SERVICE,
+        useClass: KeycloakMultiTenantService
+      }
     ];
 
     if (options.useExisting || options.useFactory) {
