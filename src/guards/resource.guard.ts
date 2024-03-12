@@ -54,9 +54,11 @@ export class ResourceGuard implements CanActivate {
       META_UNPROTECTED,
       [context.getClass(), context.getHandler()],
     );
-    const enforcerOpts = this.reflector.getAllAndOverride<
-      KeycloakConnect.EnforcerOptions
-    >(META_ENFORCER_OPTIONS, [context.getClass(), context.getHandler()]);
+    const enforcerOpts =
+      this.reflector.getAllAndOverride<KeycloakConnect.EnforcerOptions>(
+        META_ENFORCER_OPTIONS,
+        [context.getClass(), context.getHandler()],
+      );
 
     // Default to permissive
     const pem =
@@ -96,7 +98,7 @@ export class ResourceGuard implements CanActivate {
     );
 
     // Build permissions
-    const permissions = scopes.map(scope => `${resource}:${scope}`);
+    const permissions = scopes.map((scope) => `${resource}:${scope}`);
     // Extract request/response
     const [request, response] = extractRequest(context);
 
@@ -133,19 +135,17 @@ export class ResourceGuard implements CanActivate {
   }
 }
 
-const createEnforcerContext = (
-  request: any,
-  response: any,
-  options?: KeycloakConnect.EnforcerOptions,
-) => (keycloak: KeycloakConnect.Keycloak, permissions: string[]) =>
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  new Promise<boolean>((resolve, _) =>
+const createEnforcerContext =
+  (request: any, response: any, options?: KeycloakConnect.EnforcerOptions) =>
+  (keycloak: KeycloakConnect.Keycloak, permissions: string[]) =>
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    keycloak.enforcer(permissions, options)(request, response, (_: any) => {
-      if (request.resourceDenied) {
-        resolve(false);
-      } else {
-        resolve(true);
-      }
-    }),
-  );
+    new Promise<boolean>((resolve, _) =>
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      keycloak.enforcer(permissions, options)(request, response, (_: any) => {
+        if (request.resourceDenied) {
+          resolve(false);
+        } else {
+          resolve(true);
+        }
+      }),
+    );

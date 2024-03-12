@@ -55,9 +55,11 @@ export class RoleGuard implements CanActivate {
         rolesMetaDatas.push(...mergedRoleMetaData);
       }
     } else if (roleMerge == RoleMerge.OVERRIDE) {
-      const roleMetaData = this.reflector.getAllAndOverride<
-        RoleDecoratorOptionsInterface
-      >(META_ROLES, [context.getClass(), context.getHandler()]);
+      const roleMetaData =
+        this.reflector.getAllAndOverride<RoleDecoratorOptionsInterface>(
+          META_ROLES,
+          [context.getClass(), context.getHandler()],
+        );
 
       if (roleMetaData) {
         rolesMetaDatas.push(roleMetaData);
@@ -66,7 +68,7 @@ export class RoleGuard implements CanActivate {
       throw Error(`Unknown role merge: ${roleMerge}`);
     }
 
-    const combinedRoles = rolesMetaDatas.flatMap(x => x.roles);
+    const combinedRoles = rolesMetaDatas.flatMap((x) => x.roles);
 
     if (combinedRoles.length === 0) {
       return true;
@@ -116,8 +118,8 @@ export class RoleGuard implements CanActivate {
     // For verbose logging, we store it instead of returning it immediately
     const granted =
       roleMatchingMode === RoleMatchingMode.ANY
-        ? combinedRoles.some(r => accessToken.hasRole(r))
-        : combinedRoles.every(r => accessToken.hasRole(r));
+        ? combinedRoles.some((r) => accessToken.hasRole(r))
+        : combinedRoles.every((r) => accessToken.hasRole(r));
 
     if (granted) {
       this.logger.verbose(`Resource granted due to role(s)`);

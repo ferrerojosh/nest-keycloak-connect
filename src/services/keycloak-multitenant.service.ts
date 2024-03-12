@@ -117,10 +117,8 @@ export class KeycloakMultiTenantService {
     }
 
     // Resolve realm authServerUrl
-    const resolvedAuthServerUrl = this.keycloakOpts.multiTenant.realmAuthServerUrlResolver(
-      realm,
-      request,
-    );
+    const resolvedAuthServerUrl =
+      this.keycloakOpts.multiTenant.realmAuthServerUrlResolver(realm, request);
     const authServerUrl =
       resolvedAuthServerUrl || resolvedAuthServerUrl instanceof Promise
         ? await resolvedAuthServerUrl
@@ -161,10 +159,8 @@ export class KeycloakMultiTenantService {
     }
 
     // Resolve realm secret
-    const resolvedRealmSecret = this.keycloakOpts.multiTenant.realmSecretResolver(
-      realm,
-      request,
-    );
+    const resolvedRealmSecret =
+      this.keycloakOpts.multiTenant.realmSecretResolver(realm, request);
     const realmSecret =
       resolvedRealmSecret || resolvedRealmSecret instanceof Promise
         ? await resolvedRealmSecret
