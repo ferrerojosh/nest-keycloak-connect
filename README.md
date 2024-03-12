@@ -1,15 +1,22 @@
+<div align="center">
+  
 # Nest Keycloak Connect
-
+  
 ![GitHub Issues or Pull Requests](https://img.shields.io/github/issues/ferrerojosh/nest-keycloak-connect?style=for-the-badge)
 ![GitHub License](https://img.shields.io/github/license/ferrerojosh/nest-keycloak-connect?style=for-the-badge)
+  
 ![NPM Version](https://img.shields.io/npm/v/nest-keycloak-connect?style=for-the-badge)
 ![NPM dev or peer Dependency Version](https://img.shields.io/npm/dependency-version/nest-keycloak-connect/peer/%40nestjs%2Fcommon?style=for-the-badge)
 ![NPM dev or peer Dependency Version](https://img.shields.io/npm/dependency-version/nest-keycloak-connect/peer/keycloak-connect?style=for-the-badge)
+
 ![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/ferrerojosh/nest-keycloak-connect/build.yml?style=for-the-badge)
 ![NPM Weekly Downloads](https://img.shields.io/npm/dw/nest-keycloak-connect?style=for-the-badge)
 ![NPM Total Downloads](https://img.shields.io/npm/dt/nest-keycloak-connect?style=for-the-badge)
 
-> An adapter for [keycloak-nodejs-connect](https://github.com/keycloak/keycloak-nodejs-connect).
+An adapter for [keycloak-nodejs-connect](https://github.com/keycloak/keycloak-nodejs-connect)
+
+</div>
+
 
 ## Features
 
