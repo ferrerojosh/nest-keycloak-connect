@@ -76,5 +76,15 @@
     "@nestjs/graphql": {
       "optional": true
     }
-  }
+  },
+  "funding": [
+    {
+      "type": "individual",
+      "url": "https://www.paypal.me/ferrerojosh/"
+    },
+    {
+      "type": "github",
+      "url": "https://github.com/sponsors/ferrerojosh"
+    }
+  ]
 }
