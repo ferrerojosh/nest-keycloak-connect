@@ -63,7 +63,7 @@
     "eslint-config-prettier": "8.5.0",
     "eslint-plugin-prettier": "3.4.0",
     "graphql": "^16.6.0",
-    "keycloak-connect": "18.0.2",
+    "keycloak-connect": "24.0.1",
     "prettier": "1.19.1",
     "reflect-metadata": "0.1.13",
     "release-it": "14.13.1",
