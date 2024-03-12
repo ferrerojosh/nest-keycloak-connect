@@ -18,11 +18,11 @@ export const useKeycloak = async (
     const resolvedRealm = opts.multiTenant.realmResolver(request);
     const realm =
       resolvedRealm instanceof Promise ? await resolvedRealm : resolvedRealm;
-    return await multiTenant.get(realm);
+    return await multiTenant.get(realm, request);
   } else if (!opts.realm) {
     const payload = parseToken(jwt);
     const issuerRealm = payload.iss.split('/').pop();
-    return await multiTenant.get(issuerRealm);
+    return await multiTenant.get(issuerRealm, request);
   }
   return singleTenant;
 };

@@ -25,9 +25,13 @@ export class KeycloakMultiTenantService {
   /**
    * Retrieves a keycloak instance based on the realm provided.
    * @param realm the realm to retrieve from
+   * @param request the request instance, defaults to undefined
    * @returns the multi tenant keycloak instance
    */
-  async get(realm: string): Promise<KeycloakConnect.Keycloak> {
+  async get(
+    realm: string,
+    request: any = undefined,
+  ): Promise<KeycloakConnect.Keycloak> {
     if (typeof this.keycloakOpts === 'string') {
       throw new Error(
         'Keycloak configuration is a configuration path. This should not happen after module load.',
@@ -42,11 +46,16 @@ export class KeycloakMultiTenantService {
       );
     }
 
+    const authServerUrl = await this.resolveAuthServerUrl(realm, request);
+    const secret = await this.resolveSecret(realm, request);
+
+    // Check if existing
     if (this.instances.has(realm)) {
+      // If resolve always is enabled, resolve everything again
       if (this.keycloakOpts.multiTenant.resolveAlways) {
         const keycloak: any = this.instances.get(realm);
-        const secret = await this.resolveSecret(realm);
 
+        keycloak.config.authServerUrl = authServerUrl;
         keycloak.config.secret = secret;
         keycloak.grantManager.secret = secret;
 
@@ -55,12 +64,13 @@ export class KeycloakMultiTenantService {
 
         return keycloak;
       }
+      // Otherwise return the instance
       return this.instances.get(realm);
     } else {
-      const secret = await this.resolveSecret(realm);
       // TODO: Repeating code from  provider, will need to rework this in 2.0
-      // Override realm and secret
+      // Override realm, secret, and authServerUrl
       const keycloakOpts: any = Object.assign(this.keycloakOpts, {
+        authServerUrl,
         realm,
         secret,
       });
@@ -72,12 +82,16 @@ export class KeycloakMultiTenantService {
         next();
       };
 
+      // Save instance
       this.instances.set(realm, keycloak);
       return keycloak;
     }
   }
 
-  async resolveSecret(realm: string): Promise<string> {
+  async resolveAuthServerUrl(
+    realm: string,
+    request: any = undefined,
+  ): Promise<string> {
     if (typeof this.keycloakOpts === 'string') {
       throw new Error(
         'Keycloak configuration is a configuration path. This should not happen after module load.',
@@ -92,9 +106,64 @@ export class KeycloakMultiTenantService {
       );
     }
 
+    // If no realm auth server url resolver is defined, return defaults
+    if (!this.keycloakOpts.multiTenant.realmAuthServerUrlResolver) {
+      return (
+        this.keycloakOpts.authServerUrl ||
+        this.keycloakOpts['auth-server-url'] ||
+        this.keycloakOpts.serverUrl ||
+        this.keycloakOpts['server-url']
+      );
+    }
+
+    // Resolve realm authServerUrl
+    const resolvedAuthServerUrl = this.keycloakOpts.multiTenant.realmAuthServerUrlResolver(
+      realm,
+      request,
+    );
+    const authServerUrl =
+      resolvedAuthServerUrl || resolvedAuthServerUrl instanceof Promise
+        ? await resolvedAuthServerUrl
+        : resolvedAuthServerUrl;
+
+    // Override auth server url
+    // Order of priority: resolved realm auth server url > provided auth server url
+    return (
+      authServerUrl ||
+      this.keycloakOpts.authServerUrl ||
+      this.keycloakOpts['auth-server-url'] ||
+      this.keycloakOpts.serverUrl ||
+      this.keycloakOpts['server-url']
+    );
+  }
+
+  async resolveSecret(
+    realm: string,
+    request: any = undefined,
+  ): Promise<string> {
+    if (typeof this.keycloakOpts === 'string') {
+      throw new Error(
+        'Keycloak configuration is a configuration path. This should not happen after module load.',
+      );
+    }
+    if (
+      this.keycloakOpts.multiTenant === null ||
+      this.keycloakOpts.multiTenant === undefined
+    ) {
+      throw new Error(
+        'Multi tenant is not defined yet multi tenant service is being called.',
+      );
+    }
+
+    // If no realm secret resolver is defined, return defaults
+    if (!this.keycloakOpts.multiTenant.realmSecretResolver) {
+      return this.keycloakOpts.secret;
+    }
+
     // Resolve realm secret
     const resolvedRealmSecret = this.keycloakOpts.multiTenant.realmSecretResolver(
       realm,
+      request,
     );
     const realmSecret =
       resolvedRealmSecret || resolvedRealmSecret instanceof Promise
