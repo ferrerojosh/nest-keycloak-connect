@@ -1,0 +1,32 @@
+# This workflow will do a clean install of node dependencies, cache/restore them, build the source code and run tests across different versions of node
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
+
+name: Build
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master, dev ]
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        name: Checkout
+      - uses: pnpm/action-setup@v3
+        name: Install pnpm
+        with:
+          run_install: true
+      - uses: actions/setup-node@v4
+        name: Install Node.js
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'pnpm'
+      - run: pnpm run --if-present lint
+        name: Lint
+      - run: pnpm run --if-present build
+        name: Build
