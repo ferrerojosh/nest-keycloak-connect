@@ -1,14 +1,13 @@
 # Nest Keycloak Connect
 
-![GitHub](https://img.shields.io/github/license/ferrerojosh/nest-keycloak-connect)
-![npm](https://img.shields.io/npm/v/nest-keycloak-connect)
-![npm peer dependency version](https://img.shields.io/npm/dependency-version/nest-keycloak-connect/peer/@nestjs/common)
-![npm peer dependency version](https://img.shields.io/npm/dependency-version/nest-keycloak-connect/peer/keycloak-connect)
-[![Verify Build](https://github.com/ferrerojosh/nest-keycloak-connect/actions/workflows/verify-build.yml/badge.svg?branch=master)](https://github.com/ferrerojosh/nest-keycloak-connect/actions/workflows/verify-build.yml)
-![npm](https://img.shields.io/npm/dw/nest-keycloak-connect)
-![npm](https://img.shields.io/npm/dt/nest-keycloak-connect)
-
-[![Support via PayPal](https://cdn.rawgit.com/twolfson/paypal-github-button/1.0.0/dist/button.svg)](https://www.paypal.me/ferrerojosh/)
+![GitHub Issues or Pull Requests](https://img.shields.io/github/issues/ferrerojosh/nest-keycloak-connect?style=for-the-badge)
+![GitHub License](https://img.shields.io/github/license/ferrerojosh/nest-keycloak-connect?style=for-the-badge)
+![NPM Version](https://img.shields.io/npm/v/nest-keycloak-connect?style=for-the-badge)
+![NPM dev or peer Dependency Version](https://img.shields.io/npm/dependency-version/nest-keycloak-connect/peer/%40nestjs%2Fcommon?style=for-the-badge)
+![NPM dev or peer Dependency Version](https://img.shields.io/npm/dependency-version/nest-keycloak-connect/peer/keycloak-connect?style=for-the-badge)
+![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/ferrerojosh/nest-keycloak-connect/build.yml?style=for-the-badge)
+![NPM Weekly Downloads](https://img.shields.io/npm/dw/nest-keycloak-connect?style=for-the-badge)
+![NPM Total Downloads](https://img.shields.io/npm/dt/nest-keycloak-connect?style=for-the-badge)
 
 > An adapter for [keycloak-nodejs-connect](https://github.com/keycloak/keycloak-nodejs-connect).
 
