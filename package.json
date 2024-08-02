@@ -1,6 +1,6 @@
 {
   "name": "nest-keycloak-connect",
-  "version": "1.10.0",
+  "version": "1.10.1",
   "description": "keycloak-nodejs-connect module for Nest",
   "author": "John Joshua Ferrer <johnjoshuaferrer@disroot.org>",
   "license": "MIT",
