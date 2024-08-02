@@ -97,5 +97,6 @@
       "prettier --write",
       "eslint"
     ]
-  }
+  },
+  "packageManager": "pnpm@9.1.0-0+sha512.568e95e38592215a03fa2cb02a58b67c6452e51b176d9941d546a59a471c42e2b4c2428bf286addcbe4e2dec98e682e2df0fa93a5082cf3493afc496affd8ffb"
 }
