@@ -79,7 +79,8 @@ import {
 export class KeycloakConfigService implements KeycloakConnectOptionsFactory {
   createKeycloakConnectOptions(): KeycloakConnectOptions {
     return {
-      authServerUrl: 'http://localhost:8080', // might be http://localhost:8080/auth for older keycloak versions
+      // http://localhost:8080/auth for older keycloak versions
+      authServerUrl: 'http://localhost:8080',
       realm: 'master',
       clientId: 'my-nestjs-app',
       secret: 'secret',
@@ -228,7 +229,8 @@ Setting up for multi-tenant is configured as an option in your configuration:
 
 ```typescript
 {
-  authServerUrl: 'http://localhost:8180/auth',
+  // Add /auth for older keycloak versions
+  authServerUrl: 'http://localhost:8180/', 
   clientId: 'nest-api',
   secret: 'fallback', // will be used as fallback when resolver returns null
   multiTenant: {
@@ -239,8 +241,9 @@ Setting up for multi-tenant is configured as an option in your configuration:
       const secrets = { master: 'secret', slave: 'password' };
       return secrets[realm];
     },
+    // note to add /auth for older keycloak versions
     realmAuthServerUrlResolver: (realm, request) => {
-      const authServerUrls = { master: 'https://master.local/auth', slave: 'https://slave.local/auth' };
+      const authServerUrls = { master: 'https://master.local/', slave: 'https://slave.local/' };
       return authServerUrls[realm];
     }
   }
