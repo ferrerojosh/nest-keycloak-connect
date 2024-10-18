@@ -7,7 +7,7 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { Public, Resource, Roles, Scopes, Unprotected } from 'nest-keycloak-connect';
+import { Public, Resource, Roles, Scopes } from 'nest-keycloak-connect';
 import { Product } from './product';
 import { ProductService } from './product.service';
 
@@ -17,7 +17,7 @@ export class ProductController {
   constructor(private service: ProductService) {}
 
   @Get()
-  @Public(false)
+  @Public()
   @Scopes('View')
   async findAll() {
     return await this.service.findAll();
