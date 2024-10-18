@@ -19,31 +19,31 @@ export class ProductController {
   @Get()
   @Public()
   @Scopes('View')
-  async findAll() {
-    return await this.service.findAll();
+  findAll() {
+    return this.service.findAll();
   }
 
   @Get(':code')
   @Roles({ roles: ['realm:basic'] })
-  async findByCode(@Param('code') code: string) {
-    return await this.service.findByCode(code);
+  findByCode(@Param('code') code: string) {
+    return this.service.findByCode(code);
   }
 
   @Post()
   @Scopes('Create')
-  async create(@Body() product: Product) {
-    return await this.service.create(product);
+  create(@Body() product: Product) {
+    return this.service.create(product);
   }
 
   @Delete(':code')
   @Scopes('Delete')
-  async deleteByCode(@Param('code') code: string) {
-    return await this.service.deleteByCode(code);
+  deleteByCode(@Param('code') code: string) {
+    return this.service.deleteByCode(code);
   }
 
   @Put(':code')
   @Scopes('Edit')
-  async update(@Param('code') code: string, @Body() product: Product) {
-    return await this.service.update(code, product);
+  update(@Param('code') code: string, @Body() product: Product) {
+    return this.service.update(code, product);
   }
 }
