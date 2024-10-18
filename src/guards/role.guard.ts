@@ -12,12 +12,14 @@ import {
   KEYCLOAK_COOKIE_DEFAULT,
   KEYCLOAK_INSTANCE,
   KEYCLOAK_MULTITENANT_SERVICE,
-  RoleMatchingMode,
+  RoleMatch,
   RoleMerge,
 } from '../constants';
-import { META_ROLES } from '../decorators/roles.decorator';
+import {
+  META_ROLE_MATCHING_MODE,
+  META_ROLES,
+} from '../decorators/roles.decorator';
 import { KeycloakConnectConfig } from '../interface/keycloak-connect-options.interface';
-import { RoleDecoratorOptionsInterface } from '../interface/role-decorator-options.interface';
 import { extractRequestAndAttachCookie, useKeycloak } from '../internal.util';
 import { KeycloakMultiTenantService } from '../services/keycloak-multitenant.service';
 
@@ -44,44 +46,42 @@ export class RoleGuard implements CanActivate {
       ? this.keycloakOpts.roleMerge
       : RoleMerge.OVERRIDE;
 
-    const rolesMetaDatas: RoleDecoratorOptionsInterface[] = [];
+    const roles: string[] = [];
+
+    const matchingMode = this.reflector.getAllAndOverride<RoleMatch>(
+      META_ROLE_MATCHING_MODE,
+      [context.getClass(), context.getHandler()],
+    );
 
     if (roleMerge == RoleMerge.ALL) {
-      const mergedRoleMetaData = this.reflector.getAllAndMerge<
-        RoleDecoratorOptionsInterface[]
-      >(META_ROLES, [context.getClass(), context.getHandler()]);
+      const mergedRoles = this.reflector.getAllAndMerge<string[]>(META_ROLES, [
+        context.getClass(),
+        context.getHandler(),
+      ]);
 
-      if (mergedRoleMetaData) {
-        rolesMetaDatas.push(...mergedRoleMetaData);
+      if (mergedRoles) {
+        roles.push(...mergedRoles);
       }
     } else if (roleMerge == RoleMerge.OVERRIDE) {
-      const roleMetaData =
-        this.reflector.getAllAndOverride<RoleDecoratorOptionsInterface>(
-          META_ROLES,
-          [context.getClass(), context.getHandler()],
-        );
+      const resultRoles = this.reflector.getAllAndOverride<string>(META_ROLES, [
+        context.getClass(),
+        context.getHandler(),
+      ]);
 
-      if (roleMetaData) {
-        rolesMetaDatas.push(roleMetaData);
+      if (resultRoles) {
+        roles.push(resultRoles);
       }
     } else {
       throw Error(`Unknown role merge: ${roleMerge}`);
     }
 
-    const combinedRoles = rolesMetaDatas.flatMap((x) => x.roles);
-
-    if (combinedRoles.length === 0) {
+    if (roles.length === 0) {
       return true;
     }
 
-    // Use matching mode of first item
-    const roleMetaData = rolesMetaDatas[0];
-    const roleMatchingMode = roleMetaData.mode
-      ? roleMetaData.mode
-      : RoleMatchingMode.ANY;
+    const roleMatchingMode = matchingMode ?? RoleMatch.ANY;
 
-    this.logger.verbose(`Using matching mode: ${roleMatchingMode}`);
-    this.logger.verbose(`Roles: ${JSON.stringify(combinedRoles)}`);
+    this.logger.verbose(`Using matching mode: ${roleMatchingMode}`, { roles });
 
     // Extract request
     const cookieKey = this.keycloakOpts.cookieKey || KEYCLOAK_COOKIE_DEFAULT;
@@ -118,9 +118,9 @@ export class RoleGuard implements CanActivate {
 
     // For verbose logging, we store it instead of returning it immediately
     const granted =
-      roleMatchingMode === RoleMatchingMode.ANY
-        ? combinedRoles.some((r) => grantAccessToken.hasRole(r))
-        : combinedRoles.every((r) => grantAccessToken.hasRole(r));
+      roleMatchingMode === RoleMatch.ANY
+        ? roles.some((r) => grantAccessToken.hasRole(r))
+        : roles.every((r) => grantAccessToken.hasRole(r));
 
     if (granted) {
       this.logger.verbose(`Resource granted due to role(s)`);

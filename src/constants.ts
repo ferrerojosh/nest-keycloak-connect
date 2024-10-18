@@ -21,7 +21,7 @@ export const KEYCLOAK_COOKIE_DEFAULT = 'KEYCLOAK_JWT';
 /**
  * Role matching mode.
  */
-export enum RoleMatchingMode {
+export enum RoleMatch {
   /**
    * Match all roles
    */
