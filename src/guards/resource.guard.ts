@@ -20,7 +20,7 @@ import { META_RESOURCE } from '../decorators/resource.decorator';
 import { META_SCOPES } from '../decorators/scopes.decorator';
 import { KeycloakConnectConfig } from '../interface/keycloak-connect-options.interface';
 import { KeycloakMultiTenantService } from '../services/keycloak-multitenant.service';
-import { extractRequest, useKeycloak } from '../util';
+import { extractRequestAndAttachCookie, useKeycloak } from '../util';
 
 /**
  * This adds a resource guard, which is policy enforcement by default is permissive.
@@ -101,7 +101,10 @@ export class ResourceGuard implements CanActivate {
     const permissions = scopes.map((scope) => `${resource}:${scope}`);
     // Extract request/response
     const cookieKey = this.keycloakOpts.cookieKey || KEYCLOAK_COOKIE_DEFAULT;
-    const [request, response] = extractRequest(context, cookieKey);
+    const [request, response] = extractRequestAndAttachCookie(
+      context,
+      cookieKey,
+    );
 
     // if is not an HTTP request ignore this guard
     if (!request) {

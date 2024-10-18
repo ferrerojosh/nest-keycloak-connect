@@ -19,7 +19,7 @@ import { META_ROLES } from '../decorators/roles.decorator';
 import { KeycloakConnectConfig } from '../interface/keycloak-connect-options.interface';
 import { RoleDecoratorOptionsInterface } from '../interface/role-decorator-options.interface';
 import { KeycloakMultiTenantService } from '../services/keycloak-multitenant.service';
-import { extractRequest, useKeycloak } from '../util';
+import { extractRequestAndAttachCookie, useKeycloak } from '../util';
 
 /**
  * A permissive type of role guard. Roles are set via `@Roles` decorator.
@@ -85,7 +85,7 @@ export class RoleGuard implements CanActivate {
 
     // Extract request
     const cookieKey = this.keycloakOpts.cookieKey || KEYCLOAK_COOKIE_DEFAULT;
-    const [request] = extractRequest(context, cookieKey);
+    const [request] = extractRequestAndAttachCookie(context, cookieKey);
     const { accessTokenJWT } = request;
 
     // if is not an HTTP request ignore this guard

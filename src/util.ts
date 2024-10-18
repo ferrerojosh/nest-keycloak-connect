@@ -27,10 +27,16 @@ export const useKeycloak = async (
   return singleTenant;
 };
 
-export const extractRequest = (
-  context: ExecutionContext,
-  cookieKey: string,
-): [any, any] => {
+export const attachCookieToHeader = (request: any, cookieKey: string) => {
+  // Attach cookie as authorization header
+  if (request.cookies && request.cookies[cookieKey]) {
+    request.headers.authorization = `Bearer ${request.cookies[cookieKey]}`;
+  }
+
+  return request;
+};
+
+export const extractRequest = (context: ExecutionContext): [any, any] => {
   let request: any, response: any;
 
   // Check if request is coming from graphql or http
@@ -56,10 +62,15 @@ export const extractRequest = (
     response = gqlContext.res;
   }
 
-  // Attach cookie as authorization header
-  if (request.cookies && request.cookies[cookieKey]) {
-    request.headers.authorization = `Bearer ${request.cookies[cookieKey]}`;
-  }
+  return [request, response];
+};
+
+export const extractRequestAndAttachCookie = (
+  context: ExecutionContext,
+  cookieKey: string,
+) => {
+  const [tmpRequest, response] = extractRequest(context);
+  const request = attachCookieToHeader(tmpRequest, cookieKey);
 
   return [request, response];
 };

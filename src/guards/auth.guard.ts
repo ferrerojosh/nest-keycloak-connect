@@ -21,7 +21,11 @@ import {
 } from '../decorators/public.decorator';
 import { KeycloakConnectConfig } from '../interface/keycloak-connect-options.interface';
 import { KeycloakMultiTenantService } from '../services/keycloak-multitenant.service';
-import { extractRequest, parseToken, useKeycloak } from '../util';
+import {
+  extractRequestAndAttachCookie,
+  parseToken,
+  useKeycloak,
+} from '../util';
 
 /**
  * An authentication guard. Will return a 401 unauthorized when it is unable to
@@ -58,7 +62,7 @@ export class AuthGuard implements CanActivate {
 
     // Extract request/response
     const cookieKey = this.keycloakOpts.cookieKey || KEYCLOAK_COOKIE_DEFAULT;
-    const [request] = extractRequest(context, cookieKey);
+    const [request] = extractRequestAndAttachCookie(context, cookieKey);
 
     // if is not an HTTP request ignore this guard
     if (!request) {
