@@ -28,6 +28,7 @@ import { extractRequestAndAttachCookie, useKeycloak } from '../util';
 @Injectable()
 export class RoleGuard implements CanActivate {
   private readonly logger = new Logger(RoleGuard.name);
+  private readonly reflector = new Reflector();
 
   constructor(
     @Inject(KEYCLOAK_INSTANCE)
@@ -36,7 +37,6 @@ export class RoleGuard implements CanActivate {
     private keycloakOpts: KeycloakConnectConfig,
     @Inject(KEYCLOAK_MULTITENANT_SERVICE)
     private multiTenant: KeycloakMultiTenantService,
-    private readonly reflector: Reflector,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
