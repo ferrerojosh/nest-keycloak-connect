@@ -9,14 +9,14 @@ importers:
   .:
     devDependencies:
       '@nestjs/common':
-        specifier: ^10.3.3
-        version: 10.3.3(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.1)(rxjs@7.8.1)
+        specifier: ^10.4.5
+        version: 10.4.5(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.1)(rxjs@7.8.1)
       '@nestjs/core':
-        specifier: ^10.3.3
-        version: 10.3.3(@nestjs/common@10.3.3)(reflect-metadata@0.2.1)(rxjs@7.8.1)
+        specifier: ^10.4.5
+        version: 10.4.5(@nestjs/common@10.4.5(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.1)(rxjs@7.8.1))(reflect-metadata@0.2.1)(rxjs@7.8.1)
       '@nestjs/graphql':
         specifier: ^12.1.1
-        version: 12.1.1(@nestjs/common@10.3.3)(@nestjs/core@10.3.3)(class-transformer@0.5.1)(class-validator@0.14.1)(graphql@16.8.1)(reflect-metadata@0.2.1)
+        version: 12.1.1(@nestjs/common@10.4.5(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.1)(rxjs@7.8.1))(@nestjs/core@10.4.5(@nestjs/common@10.4.5(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.1)(rxjs@7.8.1))(reflect-metadata@0.2.1)(rxjs@7.8.1))(class-transformer@0.5.1)(class-validator@0.14.1)(graphql@16.8.1)(reflect-metadata@0.2.1)
       '@types/express':
         specifier: ^4.17.21
         version: 4.17.21
@@ -40,7 +40,7 @@ importers:
         version: 9.1.0(eslint@8.57.0)
       eslint-plugin-prettier:
         specifier: 5.1.3
-        version: 5.1.3(eslint-config-prettier@9.1.0)(eslint@8.57.0)(prettier@3.2.5)
+        version: 5.1.3(eslint-config-prettier@9.1.0(eslint@8.57.0))(eslint@8.57.0)(prettier@3.2.5)
       graphql:
         specifier: ^16.8.1
         version: 16.8.1
@@ -173,8 +173,8 @@ packages:
     resolution: {integrity: sha512-Z7C/xXCiGWsg0KuKsHTKJxbWhpI3Vs5GwLfOean7MGyVFGqdRgBbAjOCh6u4bbjPc/8MJ2pZmK/0DLdCbivLDA==}
     engines: {node: '>=8'}
 
-  '@nestjs/common@10.3.3':
-    resolution: {integrity: sha512-LAkTe8/CF0uNWM0ecuDwUNTHCi1lVSITmmR4FQ6Ftz1E7ujQCnJ5pMRzd8JRN14vdBkxZZ8VbVF0BDUKoKNxMQ==}
+  '@nestjs/common@10.4.5':
+    resolution: {integrity: sha512-N/yUyuYCBMb0+H6jHhntR7PURzji0usID/DByhOfooyk/aPGscI0aQKwOA6edlJlT92hHUvXYLJ5p3npj7KcjQ==}
     peerDependencies:
       class-transformer: '*'
       class-validator: '*'
@@ -186,8 +186,8 @@ packages:
       class-validator:
         optional: true
 
-  '@nestjs/core@10.3.3':
-    resolution: {integrity: sha512-kxJWggQAPX3RuZx9JVec69eSLaYLNIox2emkZJpfBJ5Qq7cAq7edQIt1r4LGjTKq6kFubNTPsqhWf5y7yFRBPw==}
+  '@nestjs/core@10.4.5':
+    resolution: {integrity: sha512-wk0KJ+6tuidqAdeemsQ40BCp1BgMsSuSLG577aqXLxXYoa8FQYPrdxoSzd05znYLwJYM55fisZWb3FLF9HT2qw==}
     peerDependencies:
       '@nestjs/common': ^10.0.0
       '@nestjs/microservices': ^10.0.0
@@ -559,8 +559,8 @@ packages:
     resolution: {integrity: sha512-wvUjBtSGN7+7SjNpq/9M2Tg350UZD3q62IFZLbRAR1bSMlCo1ZaeW+BJ+D090e4hIIZLBcTDWe4Mh4jvUDajzQ==}
     engines: {node: '>= 0.4'}
 
-  axios@1.6.7:
-    resolution: {integrity: sha512-/hDJGff6/c7u0hDkvkGxR/oy6CbCs8ziCsC7SqmhjfozqiJGc8Z11wrv9z9lYfY4K8l+H9TpjcMDX0xOZmx+RA==}
+  axios@1.7.7:
+    resolution: {integrity: sha512-S4kL7XrjgBmvdGut0sN3yJxqYzrDOnivkBiN0OFs6hLiUam3UPvswUo0kqGyhqUZGEOytHyumEdXsAkgCOUf3Q==}
 
   backo2@1.0.2:
     resolution: {integrity: sha512-zj6Z6M7Eq+PBZ7PQxl5NT665MvJdAkzp0f60nAJ+sLaSCBPMwVak5ZegFbgVCzFcCJTKFoMizvM5Ld7+JrRJHA==}
@@ -654,8 +654,8 @@ packages:
     resolution: {integrity: sha512-7VT13fmjotKpGipCW9JEQAusEPE+Ei8nl6/g4FBAmIm0GOOLMua9NDDo/DWp0ZAxCr3cPq5ZpBqmPAQgDda2Pw==}
     engines: {node: '>= 8.10.0'}
 
-  chromedriver@122.0.5:
-    resolution: {integrity: sha512-5WkCY4ioJZ1Qna6KWqPSrIz1MwGh6tHW7F67XTSbZn/GaMJrpiuy6b5c1BetrddSax+NX8u4tg4l3Wy1THecLQ==}
+  chromedriver@130.0.0:
+    resolution: {integrity: sha512-1g1eMoKF22Uh6l8DTFOPvWLovINPrkAMw7yDHlF6Rx+4W4JI9aGdCZ2Cx7c181hUgALU1oSKGH3uKNryYM5DaQ==}
     engines: {node: '>=18'}
     hasBin: true
 
@@ -1061,8 +1061,8 @@ packages:
   flatted@3.3.1:
     resolution: {integrity: sha512-X8cqMLLie7KsNUDSdzeN8FYK9rEt4Dt67OsG/DNGnYTSDBG4uFAJFBnUeiV+zCVAvwFy56IjM9sH51jVaEhNxw==}
 
-  follow-redirects@1.15.5:
-    resolution: {integrity: sha512-vSFWUON1B+yAw1VN4xMfxgn5fTUiaOzAJCKBwIIgT/+7CuGy9+r+5gITvP62j3RmaD5Ph65UaERdOSRGUzZtgw==}
+  follow-redirects@1.15.9:
+    resolution: {integrity: sha512-gew4GsXizNgdoRyqmyfMHyAmXsZDk6mHkSxZFCzW9gwlbtOW44CDtYavM+y+72qD/Vq2l550kMF52DT8fOLJqQ==}
     engines: {node: '>=4.0'}
     peerDependencies:
       debug: '*'
@@ -1854,8 +1854,8 @@ packages:
   path-parse@1.0.7:
     resolution: {integrity: sha512-LDJzPVEEEPR+y48z93A0Ed0yXb8pAByGWo/k5YYdYgpY2/2EsOsksJrq7lOHxryrVOn1ejG6oAp8ahvOIQD8sw==}
 
-  path-to-regexp@3.2.0:
-    resolution: {integrity: sha512-jczvQbCUS7XmS7o+y1aEO9OBVFeZBQ1MDSEqmO7xSoPgOPoowY/SxLpZ6Vh97/8qHZOteiCKb7gkG9gA2ZUxJA==}
+  path-to-regexp@3.3.0:
+    resolution: {integrity: sha512-qyCH421YQPS2WFDxDjftfc1ZR5WKQzVzqsp4n9M2kQhVOo/ByahFoUNJfl58kOcEGfQ//7weFTDhm+ss8Ecxgw==}
 
   path-type@4.0.0:
     resolution: {integrity: sha512-gDKb8aZMDeD/tZWs9P6+q0J9Mwkdl6xMV8TjnGP3qJVJ06bdMgkbBlLU8IdfOsIsFz2BW1rNVT3XuNEl8zPAvw==}
@@ -2238,6 +2238,9 @@ packages:
   tslib@2.6.2:
     resolution: {integrity: sha512-AEYxH93jGFPn/a2iVAwW87VuUIkR1FVUKB77NwMF7nBTDkDrrT/Hpt/IrCJ0QXhW27jTBDcf5ZY7w6RiqTMw2Q==}
 
+  tslib@2.7.0:
+    resolution: {integrity: sha512-gLXCKdN1/j47AiHiOkJN69hJmcbGTHI0ImLmbYLHykhgeN0jVGola9yVjFgzCUklsZQMW55o+dW7IXv3RCXDzA==}
+
   type-check@0.4.0:
     resolution: {integrity: sha512-XleUoc9uwGXqjWwXaUTZAmzMcFZ5858QA2vvx1Ur5xIcixXIP+8LnFDgRplU30us6teqdlskFfu+ae4K79Ooew==}
     engines: {node: '>= 0.8.0'}
@@ -2502,14 +2505,14 @@ snapshots:
     dependencies:
       '@graphql-tools/utils': 10.0.13(graphql@16.8.1)
       graphql: 16.8.1
-      tslib: 2.6.2
+      tslib: 2.7.0
 
   '@graphql-tools/schema@10.0.2(graphql@16.8.1)':
     dependencies:
       '@graphql-tools/merge': 9.0.1(graphql@16.8.1)
       '@graphql-tools/utils': 10.0.13(graphql@16.8.1)
       graphql: 16.8.1
-      tslib: 2.6.2
+      tslib: 2.7.0
       value-or-promise: 1.0.12
 
   '@graphql-tools/utils@10.0.13(graphql@16.8.1)':
@@ -2518,7 +2521,7 @@ snapshots:
       cross-inspect: 1.0.0
       dset: 3.1.3
       graphql: 16.8.1
-      tslib: 2.6.2
+      tslib: 2.7.0
 
   '@graphql-typed-document-node/core@3.2.0(graphql@16.8.1)':
     dependencies:
@@ -2553,41 +2556,40 @@ snapshots:
 
   '@lukeed/csprng@1.1.0': {}
 
-  '@nestjs/common@10.3.3(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.1)(rxjs@7.8.1)':
+  '@nestjs/common@10.4.5(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.1)(rxjs@7.8.1)':
     dependencies:
-      class-transformer: 0.5.1
-      class-validator: 0.14.1
       iterare: 1.2.1
       reflect-metadata: 0.2.1
       rxjs: 7.8.1
-      tslib: 2.6.2
+      tslib: 2.7.0
       uid: 2.0.2
+    optionalDependencies:
+      class-transformer: 0.5.1
+      class-validator: 0.14.1
 
-  '@nestjs/core@10.3.3(@nestjs/common@10.3.3)(reflect-metadata@0.2.1)(rxjs@7.8.1)':
+  '@nestjs/core@10.4.5(@nestjs/common@10.4.5(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.1)(rxjs@7.8.1))(reflect-metadata@0.2.1)(rxjs@7.8.1)':
     dependencies:
-      '@nestjs/common': 10.3.3(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.1)(rxjs@7.8.1)
+      '@nestjs/common': 10.4.5(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.1)(rxjs@7.8.1)
       '@nuxtjs/opencollective': 0.3.2
       fast-safe-stringify: 2.1.1
       iterare: 1.2.1
-      path-to-regexp: 3.2.0
+      path-to-regexp: 3.3.0
       reflect-metadata: 0.2.1
       rxjs: 7.8.1
-      tslib: 2.6.2
+      tslib: 2.7.0
       uid: 2.0.2
     transitivePeerDependencies:
       - encoding
 
-  '@nestjs/graphql@12.1.1(@nestjs/common@10.3.3)(@nestjs/core@10.3.3)(class-transformer@0.5.1)(class-validator@0.14.1)(graphql@16.8.1)(reflect-metadata@0.2.1)':
+  '@nestjs/graphql@12.1.1(@nestjs/common@10.4.5(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.1)(rxjs@7.8.1))(@nestjs/core@10.4.5(@nestjs/common@10.4.5(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.1)(rxjs@7.8.1))(reflect-metadata@0.2.1)(rxjs@7.8.1))(class-transformer@0.5.1)(class-validator@0.14.1)(graphql@16.8.1)(reflect-metadata@0.2.1)':
     dependencies:
       '@graphql-tools/merge': 9.0.1(graphql@16.8.1)
       '@graphql-tools/schema': 10.0.2(graphql@16.8.1)
       '@graphql-tools/utils': 10.0.13(graphql@16.8.1)
-      '@nestjs/common': 10.3.3(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.1)(rxjs@7.8.1)
-      '@nestjs/core': 10.3.3(@nestjs/common@10.3.3)(reflect-metadata@0.2.1)(rxjs@7.8.1)
-      '@nestjs/mapped-types': 2.0.5(@nestjs/common@10.3.3)(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.1)
+      '@nestjs/common': 10.4.5(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.1)(rxjs@7.8.1)
+      '@nestjs/core': 10.4.5(@nestjs/common@10.4.5(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.1)(rxjs@7.8.1))(reflect-metadata@0.2.1)(rxjs@7.8.1)
+      '@nestjs/mapped-types': 2.0.5(@nestjs/common@10.4.5(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.1)(rxjs@7.8.1))(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.1)
       chokidar: 3.6.0
-      class-transformer: 0.5.1
-      class-validator: 0.14.1
       fast-glob: 3.3.2
       graphql: 16.8.1
       graphql-tag: 2.12.6(graphql@16.8.1)
@@ -2599,16 +2601,20 @@ snapshots:
       tslib: 2.6.2
       uuid: 9.0.1
       ws: 8.16.0
+    optionalDependencies:
+      class-transformer: 0.5.1
+      class-validator: 0.14.1
     transitivePeerDependencies:
       - bufferutil
       - utf-8-validate
 
-  '@nestjs/mapped-types@2.0.5(@nestjs/common@10.3.3)(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.1)':
+  '@nestjs/mapped-types@2.0.5(@nestjs/common@10.4.5(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.1)(rxjs@7.8.1))(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.1)':
     dependencies:
-      '@nestjs/common': 10.3.3(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.1)(rxjs@7.8.1)
+      '@nestjs/common': 10.4.5(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.1)(rxjs@7.8.1)
+      reflect-metadata: 0.2.1
+    optionalDependencies:
       class-transformer: 0.5.1
       class-validator: 0.14.1
-      reflect-metadata: 0.2.1
 
   '@nodelib/fs.scandir@2.1.5':
     dependencies:
@@ -2789,7 +2795,7 @@ snapshots:
       '@types/node': 18.19.23
     optional: true
 
-  '@typescript-eslint/eslint-plugin@7.2.0(@typescript-eslint/parser@7.2.0)(eslint@8.57.0)(typescript@5.4.2)':
+  '@typescript-eslint/eslint-plugin@7.2.0(@typescript-eslint/parser@7.2.0(eslint@8.57.0)(typescript@5.4.2))(eslint@8.57.0)(typescript@5.4.2)':
     dependencies:
       '@eslint-community/regexpp': 4.10.0
       '@typescript-eslint/parser': 7.2.0(eslint@8.57.0)(typescript@5.4.2)
@@ -2804,6 +2810,7 @@ snapshots:
       natural-compare: 1.4.0
       semver: 7.6.0
       ts-api-utils: 1.3.0(typescript@5.4.2)
+    optionalDependencies:
       typescript: 5.4.2
     transitivePeerDependencies:
       - supports-color
@@ -2816,6 +2823,7 @@ snapshots:
       '@typescript-eslint/visitor-keys': 7.2.0
       debug: 4.3.4
       eslint: 8.57.0
+    optionalDependencies:
       typescript: 5.4.2
     transitivePeerDependencies:
       - supports-color
@@ -2832,6 +2840,7 @@ snapshots:
       debug: 4.3.4
       eslint: 8.57.0
       ts-api-utils: 1.3.0(typescript@5.4.2)
+    optionalDependencies:
       typescript: 5.4.2
     transitivePeerDependencies:
       - supports-color
@@ -2848,6 +2857,7 @@ snapshots:
       minimatch: 9.0.3
       semver: 7.6.0
       ts-api-utils: 1.3.0(typescript@5.4.2)
+    optionalDependencies:
       typescript: 5.4.2
     transitivePeerDependencies:
       - supports-color
@@ -2964,7 +2974,7 @@ snapshots:
 
   ast-types@0.13.4:
     dependencies:
-      tslib: 2.6.2
+      tslib: 2.7.0
 
   async-retry@1.3.3:
     dependencies:
@@ -2977,9 +2987,9 @@ snapshots:
     dependencies:
       possible-typed-array-names: 1.0.0
 
-  axios@1.6.7:
+  axios@1.7.7:
     dependencies:
-      follow-redirects: 1.15.5
+      follow-redirects: 1.15.9
       form-data: 4.0.0
       proxy-from-env: 1.1.0
     transitivePeerDependencies:
@@ -3095,10 +3105,10 @@ snapshots:
     optionalDependencies:
       fsevents: 2.3.3
 
-  chromedriver@122.0.5:
+  chromedriver@130.0.0:
     dependencies:
       '@testim/chrome-version': 1.1.4
-      axios: 1.6.7
+      axios: 1.7.7
       compare-versions: 6.1.0
       extract-zip: 2.0.1
       proxy-agent: 6.4.0
@@ -3187,6 +3197,7 @@ snapshots:
       import-fresh: 3.3.0
       js-yaml: 4.1.0
       parse-json: 5.2.0
+    optionalDependencies:
       typescript: 5.4.2
 
   cpr@3.0.1:
@@ -3200,7 +3211,7 @@ snapshots:
 
   cross-inspect@1.0.0:
     dependencies:
-      tslib: 2.6.2
+      tslib: 2.7.0
 
   cross-spawn@7.0.3:
     dependencies:
@@ -3410,13 +3421,14 @@ snapshots:
     dependencies:
       eslint: 8.57.0
 
-  eslint-plugin-prettier@5.1.3(eslint-config-prettier@9.1.0)(eslint@8.57.0)(prettier@3.2.5):
+  eslint-plugin-prettier@5.1.3(eslint-config-prettier@9.1.0(eslint@8.57.0))(eslint@8.57.0)(prettier@3.2.5):
     dependencies:
       eslint: 8.57.0
-      eslint-config-prettier: 9.1.0(eslint@8.57.0)
       prettier: 3.2.5
       prettier-linter-helpers: 1.0.0
       synckit: 0.8.8
+    optionalDependencies:
+      eslint-config-prettier: 9.1.0(eslint@8.57.0)
 
   eslint-scope@7.2.2:
     dependencies:
@@ -3590,7 +3602,7 @@ snapshots:
 
   flatted@3.3.1: {}
 
-  follow-redirects@1.15.5:
+  follow-redirects@1.15.9:
     optional: true
 
   for-each@0.3.3:
@@ -3763,7 +3775,7 @@ snapshots:
   graphql-tag@2.12.6(graphql@16.8.1):
     dependencies:
       graphql: 16.8.1
-      tslib: 2.6.2
+      tslib: 2.7.0
 
   graphql-ws@5.14.3(graphql@16.8.1):
     dependencies:
@@ -4091,7 +4103,7 @@ snapshots:
     dependencies:
       jwk-to-pem: 2.0.5
     optionalDependencies:
-      chromedriver: 122.0.5
+      chromedriver: 130.0.0
     transitivePeerDependencies:
       - debug
       - supports-color
@@ -4398,7 +4410,7 @@ snapshots:
 
   path-parse@1.0.7: {}
 
-  path-to-regexp@3.2.0: {}
+  path-to-regexp@3.3.0: {}
 
   path-type@4.0.0: {}
 
@@ -4775,7 +4787,7 @@ snapshots:
   synckit@0.8.8:
     dependencies:
       '@pkgr/core': 0.1.1
-      tslib: 2.6.2
+      tslib: 2.7.0
 
   tcp-port-used@1.0.2:
     dependencies:
@@ -4820,6 +4832,8 @@ snapshots:
       yn: 3.1.1
 
   tslib@2.6.2: {}
+
+  tslib@2.7.0: {}
 
   type-check@0.4.0:
     dependencies:
@@ -4873,9 +4887,10 @@ snapshots:
 
   typescript-eslint@7.2.0(eslint@8.57.0)(typescript@5.4.2):
     dependencies:
-      '@typescript-eslint/eslint-plugin': 7.2.0(@typescript-eslint/parser@7.2.0)(eslint@8.57.0)(typescript@5.4.2)
+      '@typescript-eslint/eslint-plugin': 7.2.0(@typescript-eslint/parser@7.2.0(eslint@8.57.0)(typescript@5.4.2))(eslint@8.57.0)(typescript@5.4.2)
       '@typescript-eslint/parser': 7.2.0(eslint@8.57.0)(typescript@5.4.2)
       eslint: 8.57.0
+    optionalDependencies:
       typescript: 5.4.2
     transitivePeerDependencies:
       - supports-color
