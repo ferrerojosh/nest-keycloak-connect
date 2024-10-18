@@ -12,7 +12,6 @@ import {
 import {
   createKeycloakConnectOptionProvider,
   keycloakProvider,
-  loggerProvider,
 } from './keycloak-connect.providers';
 import { KeycloakMultiTenantService } from './services/keycloak-multitenant.service';
 
@@ -48,7 +47,6 @@ export class KeycloakConnectModule {
   ): DynamicModule {
     const keycloakConnectProviders = [
       createKeycloakConnectOptionProvider(opts, config),
-      loggerProvider,
       keycloakProvider,
       KeycloakMultiTenantService,
       {
@@ -81,7 +79,6 @@ export class KeycloakConnectModule {
   ): Provider[] {
     const reqProviders = [
       this.createAsyncOptionsProvider(options),
-      loggerProvider,
       keycloakProvider,
       KeycloakMultiTenantService,
       {

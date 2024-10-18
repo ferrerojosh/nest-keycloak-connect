@@ -1,11 +1,10 @@
-import { Logger, Provider } from '@nestjs/common';
+import { Provider } from '@nestjs/common';
 import * as fs from 'fs';
 import KeycloakConnect from 'keycloak-connect';
 import * as path from 'path';
 import {
   KEYCLOAK_CONNECT_OPTIONS,
   KEYCLOAK_INSTANCE,
-  KEYCLOAK_LOGGER,
   TokenValidation,
 } from './constants';
 import {
@@ -14,30 +13,6 @@ import {
   NestKeycloakConfig,
 } from './interface/keycloak-connect-options.interface';
 import { KeycloakConnectModule } from './keycloak-connect.module';
-import { KeycloakLogger } from './logger';
-
-export const loggerProvider: Provider = {
-  provide: KEYCLOAK_LOGGER,
-  useFactory: (opts: KeycloakConnectOptions) => {
-    if (typeof opts === 'string') {
-      return new Logger(KeycloakConnect.name);
-    }
-    if (opts.logLevels) {
-      KeycloakConnectModule.logger.warn(
-        `Option 'logLevels' will be deprecated in the future. It is recommended to override or extend NestJS logger instead.`,
-      );
-    }
-    if (opts.useNestLogger !== null && opts.useNestLogger === false) {
-      KeycloakConnectModule.logger.warn(
-        `Setting 'useNestLogger' to false will be deprecated in the future. It is recommended to override or extend NestJS logger instead.`,
-      );
-      return new KeycloakLogger(opts.logLevels);
-    }
-
-    return new Logger(KeycloakConnect.name);
-  },
-  inject: [KEYCLOAK_CONNECT_OPTIONS],
-};
 
 export const keycloakProvider: Provider = {
   provide: KEYCLOAK_INSTANCE,

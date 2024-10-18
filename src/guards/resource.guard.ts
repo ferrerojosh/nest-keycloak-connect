@@ -10,7 +10,6 @@ import * as KeycloakConnect from 'keycloak-connect';
 import {
   KEYCLOAK_CONNECT_OPTIONS,
   KEYCLOAK_INSTANCE,
-  KEYCLOAK_LOGGER,
   KEYCLOAK_MULTITENANT_SERVICE,
   PolicyEnforcementMode,
 } from '../constants';
@@ -29,13 +28,13 @@ import { extractRequest, useKeycloak } from '../util';
  */
 @Injectable()
 export class ResourceGuard implements CanActivate {
+  private readonly logger = new Logger(ResourceGuard.name);
+
   constructor(
     @Inject(KEYCLOAK_INSTANCE)
     private singleTenant: KeycloakConnect.Keycloak,
     @Inject(KEYCLOAK_CONNECT_OPTIONS)
     private keycloakOpts: KeycloakConnectConfig,
-    @Inject(KEYCLOAK_LOGGER)
-    private logger: Logger,
     @Inject(KEYCLOAK_MULTITENANT_SERVICE)
     private multiTenant: KeycloakMultiTenantService,
     private readonly reflector: Reflector,

@@ -14,11 +14,6 @@ export const KEYCLOAK_INSTANCE = 'KEYCLOAK_INSTANCE';
 export const KEYCLOAK_MULTITENANT_SERVICE = 'KEYCLOAK_MULTITENANT_SERVICE';
 
 /**
- * Key for injecting the nest keycloak logger.
- */
-export const KEYCLOAK_LOGGER = 'KEYCLOAK_LOGGER';
-
-/**
  * Default cookie key.
  */
 export const KEYCLOAK_COOKIE_DEFAULT = 'KEYCLOAK_JWT';

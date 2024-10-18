@@ -12,7 +12,6 @@ import {
   KEYCLOAK_CONNECT_OPTIONS,
   KEYCLOAK_COOKIE_DEFAULT,
   KEYCLOAK_INSTANCE,
-  KEYCLOAK_LOGGER,
   KEYCLOAK_MULTITENANT_SERVICE,
   TokenValidation,
 } from '../constants';
@@ -30,13 +29,13 @@ import { extractRequest, parseToken, useKeycloak } from '../util';
  */
 @Injectable()
 export class AuthGuard implements CanActivate {
+  private readonly logger = new Logger(AuthGuard.name);
+
   constructor(
     @Inject(KEYCLOAK_INSTANCE)
     private singleTenant: KeycloakConnect.Keycloak,
     @Inject(KEYCLOAK_CONNECT_OPTIONS)
     private keycloakOpts: KeycloakConnectConfig,
-    @Inject(KEYCLOAK_LOGGER)
-    private logger: Logger,
     @Inject(KEYCLOAK_MULTITENANT_SERVICE)
     private multiTenant: KeycloakMultiTenantService,
     private readonly reflector: Reflector,
