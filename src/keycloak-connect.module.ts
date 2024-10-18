@@ -31,6 +31,7 @@ export * from './interface/keycloak-connect-options-factory.interface';
 export * from './interface/keycloak-connect-options.interface';
 export * from './interface/role-decorator-options.interface';
 export * from './services/keycloak-multitenant.service';
+export * from './util';
 
 @Module({})
 export class KeycloakConnectModule {

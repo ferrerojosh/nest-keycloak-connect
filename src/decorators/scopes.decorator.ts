@@ -24,7 +24,7 @@ export const ConditionalScopes = (resolver: ConditionalScopeFn) =>
   SetMetadata(META_CONDITIONAL_SCOPES, resolver);
 
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
-import { extractRequest } from '../util';
+import { extractRequest } from '../internal.util';
 
 /**
  * Retrieves the resolved scopes.

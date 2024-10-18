@@ -23,8 +23,8 @@ import {
   META_SCOPES,
 } from '../decorators/scopes.decorator';
 import { KeycloakConnectConfig } from '../interface/keycloak-connect-options.interface';
+import { extractRequestAndAttachCookie, useKeycloak } from '../internal.util';
 import { KeycloakMultiTenantService } from '../services/keycloak-multitenant.service';
-import { extractRequestAndAttachCookie, useKeycloak } from '../util';
 
 /**
  * This adds a resource guard, which is policy enforcement by default is permissive.

@@ -18,8 +18,8 @@ import {
 import { META_ROLES } from '../decorators/roles.decorator';
 import { KeycloakConnectConfig } from '../interface/keycloak-connect-options.interface';
 import { RoleDecoratorOptionsInterface } from '../interface/role-decorator-options.interface';
+import { extractRequestAndAttachCookie, useKeycloak } from '../internal.util';
 import { KeycloakMultiTenantService } from '../services/keycloak-multitenant.service';
-import { extractRequestAndAttachCookie, useKeycloak } from '../util';
 
 /**
  * A permissive type of role guard. Roles are set via `@Roles` decorator.

@@ -17,12 +17,9 @@ import {
 } from '../constants';
 import { META_PUBLIC } from '../decorators/public.decorator';
 import { KeycloakConnectConfig } from '../interface/keycloak-connect-options.interface';
+import { extractRequestAndAttachCookie, useKeycloak } from '../internal.util';
 import { KeycloakMultiTenantService } from '../services/keycloak-multitenant.service';
-import {
-  extractRequestAndAttachCookie,
-  parseToken,
-  useKeycloak,
-} from '../util';
+import { parseToken } from '../util';
 
 /**
  * An authentication guard. Will return a 401 unauthorized when it is unable to
