@@ -15,10 +15,7 @@ import {
   KEYCLOAK_MULTITENANT_SERVICE,
   TokenValidation,
 } from '../constants';
-import {
-  META_SKIP_AUTH,
-  META_UNPROTECTED,
-} from '../decorators/public.decorator';
+import { META_PUBLIC } from '../decorators/public.decorator';
 import { KeycloakConnectConfig } from '../interface/keycloak-connect-options.interface';
 import { KeycloakMultiTenantService } from '../services/keycloak-multitenant.service';
 import {
@@ -46,19 +43,10 @@ export class AuthGuard implements CanActivate {
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const isUnprotected = this.reflector.getAllAndOverride<boolean>(
-      META_UNPROTECTED,
-      [context.getClass(), context.getHandler()],
-    );
-    const skipAuth = this.reflector.getAllAndOverride<boolean>(META_SKIP_AUTH, [
+    const isPublic = this.reflector.getAllAndOverride<boolean>(META_PUBLIC, [
       context.getClass(),
       context.getHandler(),
     ]);
-
-    // If unprotected is set skip Keycloak authentication
-    if (isUnprotected && skipAuth) {
-      return true;
-    }
 
     // Extract request/response
     const cookieKey = this.keycloakOpts.cookieKey || KEYCLOAK_COOKIE_DEFAULT;
@@ -72,21 +60,13 @@ export class AuthGuard implements CanActivate {
     const jwt = this.extractJwt(request.headers);
     const isJwtEmpty = jwt === null || jwt === undefined;
 
-    // Empty jwt, but skipAuth = false, isUnprotected = true allow fallback
-    if (isJwtEmpty && !skipAuth && isUnprotected) {
-      this.logger.verbose(
-        'Empty JWT, skipAuth disabled, and a publicly marked route, allowed for fallback',
-      );
-      return true;
-    }
-
-    // Empty jwt given, immediate return
-    if (isJwtEmpty) {
-      this.logger.verbose('Empty JWT, unauthorized');
+    // Not a public route, require jwt
+    if (!isPublic && isJwtEmpty) {
+      this.logger.verbose('Empty jwt, unauthorized');
       throw new UnauthorizedException();
     }
 
-    this.logger.verbose(`User JWT: ${jwt}`);
+    this.logger.verbose(`Validating jwt`, { jwt });
 
     const keycloak = await useKeycloak(
       request,
@@ -101,11 +81,17 @@ export class AuthGuard implements CanActivate {
       // Attach user info object
       request.user = parseToken(jwt);
       // Attach raw access token JWT extracted from bearer/cookie
-      request.accessTokenJWT = jwt;
+      request.accessToken = jwt;
 
-      this.logger.verbose(
-        `Authenticated User: ${JSON.stringify(request.user)}`,
-      );
+      this.logger.verbose(`User authenticated`, { user: request.user });
+      return true;
+    }
+
+    // Valid token should return, this time we warn
+    if (isPublic) {
+      this.logger.warn(`A jwt token was retrieved but failed validation.`, {
+        jwt,
+      });
       return true;
     }
 
@@ -171,11 +157,5 @@ export class AuthGuard implements CanActivate {
     }
 
     return auth[1];
-  }
-
-  private extractJwtFromCookie(cookies: { [key: string]: string }) {
-    const cookieKey = this.keycloakOpts.cookieKey || KEYCLOAK_COOKIE_DEFAULT;
-
-    return cookies && cookies[cookieKey];
   }
 }

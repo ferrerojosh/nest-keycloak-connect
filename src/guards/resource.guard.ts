@@ -15,7 +15,7 @@ import {
   PolicyEnforcementMode,
 } from '../constants';
 import { META_ENFORCER_OPTIONS } from '../decorators/enforcer-options.decorator';
-import { META_UNPROTECTED } from '../decorators/public.decorator';
+import { META_PUBLIC } from '../decorators/public.decorator';
 import { META_RESOURCE } from '../decorators/resource.decorator';
 import { META_SCOPES } from '../decorators/scopes.decorator';
 import { KeycloakConnectConfig } from '../interface/keycloak-connect-options.interface';
@@ -50,10 +50,10 @@ export class ResourceGuard implements CanActivate {
       META_SCOPES,
       context.getHandler(),
     );
-    const isUnprotected = this.reflector.getAllAndOverride<boolean>(
-      META_UNPROTECTED,
-      [context.getClass(), context.getHandler()],
-    );
+    const isPublic = this.reflector.getAllAndOverride<boolean>(META_PUBLIC, [
+      context.getClass(),
+      context.getHandler(),
+    ]);
     const enforcerOpts =
       this.reflector.getAllAndOverride<KeycloakConnect.EnforcerOptions>(
         META_ENFORCER_OPTIONS,
@@ -111,7 +111,7 @@ export class ResourceGuard implements CanActivate {
       return true;
     }
 
-    if (!request.user && isUnprotected) {
+    if (!request.user && isPublic) {
       this.logger.verbose(`Route has no user, and is public, allowed`);
       return true;
     }

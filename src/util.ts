@@ -29,7 +29,7 @@ export const useKeycloak = async (
 
 export const attachCookieToHeader = (request: any, cookieKey: string) => {
   // Attach cookie as authorization header
-  if (request.cookies && request.cookies[cookieKey]) {
+  if (request && request.cookies && request.cookies[cookieKey]) {
     request.headers.authorization = `Bearer ${request.cookies[cookieKey]}`;
   }
 

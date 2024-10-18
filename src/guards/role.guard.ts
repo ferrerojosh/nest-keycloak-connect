@@ -86,14 +86,14 @@ export class RoleGuard implements CanActivate {
     // Extract request
     const cookieKey = this.keycloakOpts.cookieKey || KEYCLOAK_COOKIE_DEFAULT;
     const [request] = extractRequestAndAttachCookie(context, cookieKey);
-    const { accessTokenJWT } = request;
+    const { accessToken } = request;
 
     // if is not an HTTP request ignore this guard
     if (!request) {
       return true;
     }
 
-    if (!accessTokenJWT) {
+    if (!accessToken) {
       // No access token attached, auth guard should have attached the necessary token
       this.logger.warn(
         'No access token found in request, are you sure AuthGuard is first in the chain?',
@@ -104,23 +104,23 @@ export class RoleGuard implements CanActivate {
     // Create grant
     const keycloak = await useKeycloak(
       request,
-      request.accessTokenJWT,
+      request.accessToken,
       this.singleTenant,
       this.multiTenant,
       this.keycloakOpts,
     );
     const grant = await keycloak.grantManager.createGrant({
-      access_token: accessTokenJWT,
+      access_token: accessToken,
     });
 
     // Grab access token from grant
-    const accessToken: KeycloakConnect.Token = grant.access_token as any;
+    const grantAccessToken: KeycloakConnect.Token = grant.access_token as any;
 
     // For verbose logging, we store it instead of returning it immediately
     const granted =
       roleMatchingMode === RoleMatchingMode.ANY
-        ? combinedRoles.some((r) => accessToken.hasRole(r))
-        : combinedRoles.every((r) => accessToken.hasRole(r));
+        ? combinedRoles.some((r) => grantAccessToken.hasRole(r))
+        : combinedRoles.every((r) => grantAccessToken.hasRole(r));
 
     if (granted) {
       this.logger.verbose(`Resource granted due to role(s)`);
