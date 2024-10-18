@@ -16,8 +16,9 @@ import {
 import { KeycloakMultiTenantService } from './services/keycloak-multitenant.service';
 
 export * from './constants';
-export * from './decorators/keycloak-user.decorator';
+export * from './decorators/access-token.decorator';
 export * from './decorators/enforcer-options.decorator';
+export * from './decorators/keycloak-user.decorator';
 export * from './decorators/public.decorator';
 export * from './decorators/resource.decorator';
 export * from './decorators/roles.decorator';

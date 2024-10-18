@@ -216,6 +216,7 @@ Here is the decorators you can use in your controllers.
 | Decorator        | Description                                                                                               |
 | ---------------- | --------------------------------------------------------------------------------------------------------- |
 | @KeycloakUser    | Retrieves the current Keycloak logged-in user. (must be per method, unless controller is request scoped.) |
+| @AccessToken     | Retrieves the access token used in the request                                                            |
 | @EnforcerOptions | Keycloak enforcer options.                                                                                |
 | @Public          | Allow any user to use the route.                                                                          |
 | @Resource        | Keycloak application resource name.                                                                       |
