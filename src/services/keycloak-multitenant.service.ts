@@ -48,6 +48,7 @@ export class KeycloakMultiTenantService {
 
     const authServerUrl = await this.resolveAuthServerUrl(realm, request);
     const secret = await this.resolveSecret(realm, request);
+    const clientId = await this.resolveClientId(realm, request);
 
     // Check if existing
     if (this.instances.has(realm)) {
@@ -57,6 +58,7 @@ export class KeycloakMultiTenantService {
 
         keycloak.config.authServerUrl = authServerUrl;
         keycloak.config.secret = secret;
+        keycloak.config.clientId = clientId;
         keycloak.grantManager.secret = secret;
 
         // Save instance
@@ -73,6 +75,7 @@ export class KeycloakMultiTenantService {
         authServerUrl,
         realm,
         secret,
+        clientId,
       });
       const keycloak: any = new KeycloakConnect({}, keycloakOpts);
 
@@ -132,6 +135,46 @@ export class KeycloakMultiTenantService {
       this.keycloakOpts['auth-server-url'] ||
       this.keycloakOpts.serverUrl ||
       this.keycloakOpts['server-url']
+    );
+  }
+
+  async resolveClientId(
+    realm: string,
+    request: any = undefined,
+  ): Promise<string> {
+    if (typeof this.keycloakOpts === 'string') {
+      throw new Error(
+        'Keycloak configuration is a configuration path. This should not happen after module load.',
+      );
+    }
+    if (
+      this.keycloakOpts.multiTenant === null ||
+      this.keycloakOpts.multiTenant === undefined
+    ) {
+      throw new Error(
+        'Multi tenant is not defined yet multi tenant service is being called.',
+      );
+    }
+
+    // If no realm client-id resolver is defined, return defaults
+    if (!this.keycloakOpts.multiTenant.realmClientIdResolver) {
+      return this.keycloakOpts.clientId || this.keycloakOpts['client-id'];
+    }
+
+    // Resolve realm client-id
+    const resolvedClientId =
+      this.keycloakOpts.multiTenant.realmClientIdResolver(realm, request);
+    const realmClientId =
+      resolvedClientId || resolvedClientId instanceof Promise
+        ? await resolvedClientId
+        : resolvedClientId;
+
+    // Override client-id
+    // Order of priority: resolved realm secret > default global secret
+    return (
+      realmClientId ||
+      this.keycloakOpts.clientId ||
+      this.keycloakOpts['client-id']
     );
   }
 

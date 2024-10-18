@@ -17,7 +17,6 @@ An adapter for [keycloak-nodejs-connect](https://github.com/keycloak/keycloak-no
 
 </div>
 
-
 ## Features
 
 - Protect your resources using [Keycloak's Authorization Services](https://www.keycloak.org/docs/latest/authorization_services/).
@@ -214,14 +213,14 @@ export class ProductController {
 
 Here is the decorators you can use in your controllers.
 
-| Decorator          | Description                                                                                               |
-| ------------------ | --------------------------------------------------------------------------------------------------------- |
-| @AuthenticatedUser | Retrieves the current Keycloak logged-in user. (must be per method, unless controller is request scoped.) |
-| @EnforcerOptions   | Keycloak enforcer options.                                                                                |
-| @Public            | Allow any user to use the route.                                                                          |
-| @Resource          | Keycloak application resource name.                                                                       |
-| @Scopes            | Keycloak application scope name.                                                                          |
-| @Roles             | Keycloak realm/application roles.                                                                         |
+| Decorator        | Description                                                                                               |
+| ---------------- | --------------------------------------------------------------------------------------------------------- |
+| @KeycloakUser    | Retrieves the current Keycloak logged-in user. (must be per method, unless controller is request scoped.) |
+| @EnforcerOptions | Keycloak enforcer options.                                                                                |
+| @Public          | Allow any user to use the route.                                                                          |
+| @Resource        | Keycloak application resource name.                                                                       |
+| @Scopes          | Keycloak application scope name.                                                                          |
+| @Roles           | Keycloak realm/application roles.                                                                         |
 
 ## Multi tenant configuration
 
@@ -230,16 +229,21 @@ Setting up for multi-tenant is configured as an option in your configuration:
 ```typescript
 {
   // Add /auth for older keycloak versions
-  authServerUrl: 'http://localhost:8180/', 
-  clientId: 'nest-api',
-  secret: 'fallback', // will be used as fallback when resolver returns null
+  authServerUrl: 'http://localhost:8180/', // will be used as fallback
+  clientId: 'nest-api', // will be used as fallback
+  secret: 'fallback', // will be used as fallback
   multiTenant: {
+    resolveAlways: true,
     realmResolver: (request) => {
       return request.get('host').split('.')[0];
     },
     realmSecretResolver: (realm, request) => {
       const secrets = { master: 'secret', slave: 'password' };
       return secrets[realm];
+    },
+    realmClientIdResolver: (realm, request) => {
+      const clientIds = { master: 'angular-app', slave: 'vue-app' };
+      return clientIds[realm];
     },
     // note to add /auth for older keycloak versions
     realmAuthServerUrlResolver: (realm, request) => {
@@ -276,6 +280,7 @@ For Keycloak options, refer to the official [keycloak-connect](https://github.co
 | realmResolver              | A function that passes a request (from respective platform i.e express or fastify) and returns a string | yes      | -       |
 | realmSecretResolver        | A function that passes the realm string, and an optional request and returns the secret string          | no       | -       |
 | realmAuthServerUrlResolver | A function that passes the realm string, and an optional request and returns the auth server url string | no       | -       |
+| realmClientIdResolver      | A function that passes the realm string, and an optional request and returns the client-id string       | no       | -       |
 
 ## Example app
 

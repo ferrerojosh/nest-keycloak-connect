@@ -35,6 +35,13 @@ export interface MultiTenantOptions {
     realm: string,
     request?: any,
   ) => Promise<string> | string;
+  /**
+   * The realm client id resolver function.
+   */
+  realmClientIdResolver: (
+    realm: string,
+    request?: any,
+  ) => Promise<string> | string;
 }
 
 /**
