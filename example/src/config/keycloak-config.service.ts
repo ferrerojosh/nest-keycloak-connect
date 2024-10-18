@@ -10,7 +10,7 @@ import {
 export class KeycloakConfigService implements KeycloakConnectOptionsFactory {
   createKeycloakConnectOptions(): KeycloakConnectOptions {
     return {
-      authServerUrl: 'http://localhost:8180',
+      authServerUrl: 'http://localhost:8080',
       realm: 'nest-example',
       clientId: 'nest-api',
       secret: '05c1ff5e-f9ba-4622-98e3-c4c9d280546e',

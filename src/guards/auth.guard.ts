@@ -66,6 +66,11 @@ export class AuthGuard implements CanActivate {
       throw new UnauthorizedException();
     }
 
+    // Public route, no jwt sent
+    if (isPublic && isJwtEmpty) {
+      return true;
+    }
+
     this.logger.verbose(`Validating jwt`, { jwt });
 
     const keycloak = await useKeycloak(

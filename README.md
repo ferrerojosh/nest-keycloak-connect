@@ -190,6 +190,12 @@ export class ProductController {
 
   @Post()
   @Scopes('Create')
+  @ConditionalScopes((request, token) => {
+    if (token.hasRealmRole('sysadmin')) {
+      return ['Overwrite'];
+    }
+    return [];
+  })
   async create(@Body() product: Product) {
     return await this.service.create(product);
   }
@@ -213,15 +219,17 @@ export class ProductController {
 
 Here is the decorators you can use in your controllers.
 
-| Decorator        | Description                                                                                               |
-| ---------------- | --------------------------------------------------------------------------------------------------------- |
-| @KeycloakUser    | Retrieves the current Keycloak logged-in user. (must be per method, unless controller is request scoped.) |
-| @AccessToken     | Retrieves the access token used in the request                                                            |
-| @EnforcerOptions | Keycloak enforcer options.                                                                                |
-| @Public          | Allow any user to use the route.                                                                          |
-| @Resource        | Keycloak application resource name.                                                                       |
-| @Scopes          | Keycloak application scope name.                                                                          |
-| @Roles           | Keycloak realm/application roles.                                                                         |
+| Decorator          | Description                                                                                               |
+| ------------------ | --------------------------------------------------------------------------------------------------------- |
+| @KeycloakUser      | Retrieves the current Keycloak logged-in user. (must be per method, unless controller is request scoped.) |
+| @AccessToken       | Retrieves the access token used in the request                                                            |
+| @ResolvedScopes    | Retrieves the resolved scopes (used in @ConditionalScopes)                                                |
+| @EnforcerOptions   | Keycloak enforcer options.                                                                                |
+| @Public            | Allow any user to use the route.                                                                          |
+| @Resource          | Keycloak application resource name.                                                                       |
+| @Scopes            | Keycloak application scopes.                                                                              |
+| @ConditionalScopes | Conditional keycloak application scopes.                                                                  |
+| @Roles             | Keycloak realm/application roles.                                                                         |
 
 ## Multi tenant configuration
 
