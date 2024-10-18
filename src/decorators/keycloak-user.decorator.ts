@@ -1,5 +1,5 @@
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
-import { extractRequest } from '../util';
+import { extractRequest } from '../internal.util';
 
 /**
  * Retrieves the current Keycloak logged-in user.
