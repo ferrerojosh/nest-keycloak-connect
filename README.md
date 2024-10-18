@@ -265,8 +265,6 @@ For Keycloak options, refer to the official [keycloak-connect](https://github.co
 | Option            | Description                                                              | Required | Default      |
 | ----------------- | ------------------------------------------------------------------------ | -------- | ------------ |
 | cookieKey         | Cookie Key                                                               | no       | KEYCLOAK_JWT |
-| logLevels         | Built-in logger level (deprecated, will be removed in 2.0)               | no       | log          |
-| useNestLogger     | Use the nest logger (deprecated, will be removed in 2.0)                 | no       | true         |
 | policyEnforcement | Sets the policy enforcement mode                                         | no       | PERMISSIVE   |
 | tokenValidation   | Sets the token validation method                                         | no       | ONLINE       |
 | multiTenant       | Sets the options for [multi-tenant configuration](#multi-tenant-options) | no       | -            |
