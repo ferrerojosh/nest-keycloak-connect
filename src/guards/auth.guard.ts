@@ -57,16 +57,15 @@ export class AuthGuard implements CanActivate {
     }
 
     // Extract request/response
-    const [request] = extractRequest(context);
+    const cookieKey = this.keycloakOpts.cookieKey || KEYCLOAK_COOKIE_DEFAULT;
+    const [request] = extractRequest(context, cookieKey);
 
     // if is not an HTTP request ignore this guard
     if (!request) {
       return true;
     }
 
-    const jwt =
-      this.extractJwtFromCookie(request.cookies) ??
-      this.extractJwt(request.headers);
+    const jwt = this.extractJwt(request.headers);
     const isJwtEmpty = jwt === null || jwt === undefined;
 
     // Empty jwt, but skipAuth = false, isUnprotected = true allow fallback

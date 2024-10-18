@@ -9,6 +9,7 @@ import { Reflector } from '@nestjs/core';
 import * as KeycloakConnect from 'keycloak-connect';
 import {
   KEYCLOAK_CONNECT_OPTIONS,
+  KEYCLOAK_COOKIE_DEFAULT,
   KEYCLOAK_INSTANCE,
   KEYCLOAK_MULTITENANT_SERVICE,
   RoleMatchingMode,
@@ -83,7 +84,8 @@ export class RoleGuard implements CanActivate {
     this.logger.verbose(`Roles: ${JSON.stringify(combinedRoles)}`);
 
     // Extract request
-    const [request] = extractRequest(context);
+    const cookieKey = this.keycloakOpts.cookieKey || KEYCLOAK_COOKIE_DEFAULT;
+    const [request] = extractRequest(context, cookieKey);
     const { accessTokenJWT } = request;
 
     // if is not an HTTP request ignore this guard

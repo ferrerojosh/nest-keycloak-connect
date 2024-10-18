@@ -9,6 +9,7 @@ import { Reflector } from '@nestjs/core';
 import * as KeycloakConnect from 'keycloak-connect';
 import {
   KEYCLOAK_CONNECT_OPTIONS,
+  KEYCLOAK_COOKIE_DEFAULT,
   KEYCLOAK_INSTANCE,
   KEYCLOAK_MULTITENANT_SERVICE,
   PolicyEnforcementMode,
@@ -99,7 +100,8 @@ export class ResourceGuard implements CanActivate {
     // Build permissions
     const permissions = scopes.map((scope) => `${resource}:${scope}`);
     // Extract request/response
-    const [request, response] = extractRequest(context);
+    const cookieKey = this.keycloakOpts.cookieKey || KEYCLOAK_COOKIE_DEFAULT;
+    const [request, response] = extractRequest(context, cookieKey);
 
     // if is not an HTTP request ignore this guard
     if (!request) {
