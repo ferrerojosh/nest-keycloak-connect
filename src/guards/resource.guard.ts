@@ -46,6 +46,22 @@ export class ResourceGuard implements CanActivate {
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
+    const defaultEnforcerOpts: KeycloakConnect.EnforcerOptions = {
+      claims: (request: any) => {
+        const httpUri = request.url;
+        const userAgent = request.headers['user-agent'];
+
+        this.logger.verbose(
+          `Enforcing claims, http.uri: ${httpUri}, user.agent: ${userAgent}`,
+        );
+
+        return {
+          'http.uri': [httpUri],
+          'user.agent': userAgent,
+        };
+      },
+    };
+
     const resource = this.reflector.get<string>(
       META_RESOURCE,
       context.getClass(),
@@ -64,7 +80,7 @@ export class ResourceGuard implements CanActivate {
       this.reflector.getAllAndOverride<KeycloakConnect.EnforcerOptions>(
         META_ENFORCER_OPTIONS,
         [context.getClass(), context.getHandler()],
-      );
+      ) ?? defaultEnforcerOpts;
 
     // Default to permissive
     const policyEnforcementMode =

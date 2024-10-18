@@ -44,7 +44,7 @@ export class ProductController {
   }
 
   @Get(':code')
-  @Roles({ roles: ['realm:basic', 'realm:admin'] })
+  @Roles('realm:basic', 'realm:admin')
   findByCode(@Param('code') code: string) {
     return this.service.findByCode(code);
   }

@@ -4,6 +4,7 @@ import {
   Public,
   Roles,
   RoleMatchingMode,
+  RoleMatch,
 } from 'nest-keycloak-connect';
 
 @Controller()
@@ -27,7 +28,8 @@ export class AppController {
   }
 
   @Get('admin')
-  @Roles({ roles: ['admin'], mode: RoleMatchingMode.ALL })
+  @Roles('admin')
+  @RoleMatchingMode(RoleMatch.ANY)
   adminRole() {
     return 'Admin only!';
   }
