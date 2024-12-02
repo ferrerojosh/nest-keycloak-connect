@@ -1,12 +1,18 @@
 import { Controller, Get } from '@nestjs/common';
-import { AuthenticatedUser, Public, Roles, RoleMatchingMode } from 'nest-keycloak-connect';
+import {
+  KeycloakUser,
+  Public,
+  Roles,
+  RoleMatchingMode,
+  RoleMatch,
+} from 'nest-keycloak-connect';
 
 @Controller()
 export class AppController {
   @Get()
-  @Public(false)
+  @Public()
   getHello(
-    @AuthenticatedUser()
+    @KeycloakUser()
     user: any,
   ): string {
     if (user) {
@@ -22,8 +28,9 @@ export class AppController {
   }
 
   @Get('admin')
-  @Roles({ roles: ['admin'], mode: RoleMatchingMode.ALL })
+  @Roles('admin')
+  @RoleMatchingMode(RoleMatch.ANY)
   adminRole() {
-    return 'Admin only!'
+    return 'Admin only!';
   }
 }

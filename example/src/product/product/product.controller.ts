@@ -3,47 +3,67 @@ import {
   Controller,
   Delete,
   Get,
+  Logger,
   Param,
   Post,
   Put,
 } from '@nestjs/common';
-import { Public, Resource, Roles, Scopes, Unprotected } from 'nest-keycloak-connect';
+import {
+  ConditionalScopes,
+  Public,
+  ResolvedScopes,
+  Resource,
+  Roles,
+  Scopes,
+} from 'nest-keycloak-connect';
 import { Product } from './product';
 import { ProductService } from './product.service';
 
 @Controller('product')
 @Resource(Product.name)
 export class ProductController {
+  private readonly logger = new Logger(ProductController.name);
   constructor(private service: ProductService) {}
 
   @Get()
-  @Public(false)
-  @Scopes('View')
-  async findAll() {
-    return await this.service.findAll();
+  @Public()
+  @ConditionalScopes((request, token) => {
+    if (token.hasRealmRole('basic')) {
+      return ['View'];
+    }
+    if (token.hasRealmRole('admin')) {
+      return ['View.All'];
+    }
+    return [];
+  })
+  findAll(@ResolvedScopes() scopes: string[]) {
+    if (scopes.includes('View.All')) {
+      return this.service.findAll();
+    }
+    return this.service.findByCode('1-00-1');
   }
 
   @Get(':code')
-  @Roles({ roles: ['realm:basic'] })
-  async findByCode(@Param('code') code: string) {
-    return await this.service.findByCode(code);
+  @Roles('realm:basic', 'realm:admin')
+  findByCode(@Param('code') code: string) {
+    return this.service.findByCode(code);
   }
 
   @Post()
   @Scopes('Create')
-  async create(@Body() product: Product) {
-    return await this.service.create(product);
+  create(@Body() product: Product) {
+    return this.service.create(product);
   }
 
   @Delete(':code')
   @Scopes('Delete')
-  async deleteByCode(@Param('code') code: string) {
-    return await this.service.deleteByCode(code);
+  deleteByCode(@Param('code') code: string) {
+    return this.service.deleteByCode(code);
   }
 
   @Put(':code')
   @Scopes('Edit')
-  async update(@Param('code') code: string, @Body() product: Product) {
-    return await this.service.update(code, product);
+  update(@Param('code') code: string, @Body() product: Product) {
+    return this.service.update(code, product);
   }
 }

@@ -17,7 +17,6 @@ An adapter for [keycloak-nodejs-connect](https://github.com/keycloak/keycloak-no
 
 </div>
 
-
 ## Features
 
 - Protect your resources using [Keycloak's Authorization Services](https://www.keycloak.org/docs/latest/authorization_services/).
@@ -79,7 +78,8 @@ import {
 export class KeycloakConfigService implements KeycloakConnectOptionsFactory {
   createKeycloakConnectOptions(): KeycloakConnectOptions {
     return {
-      authServerUrl: 'http://localhost:8080', // might be http://localhost:8080/auth for older keycloak versions
+      // http://localhost:8080/auth for older keycloak versions
+      authServerUrl: 'http://localhost:8080',
       realm: 'master',
       clientId: 'my-nestjs-app',
       secret: 'secret',
@@ -190,6 +190,12 @@ export class ProductController {
 
   @Post()
   @Scopes('Create')
+  @ConditionalScopes((request, token) => {
+    if (token.hasRealmRole('sysadmin')) {
+      return ['Overwrite'];
+    }
+    return [];
+  })
   async create(@Body() product: Product) {
     return await this.service.create(product);
   }
@@ -215,11 +221,14 @@ Here is the decorators you can use in your controllers.
 
 | Decorator          | Description                                                                                               |
 | ------------------ | --------------------------------------------------------------------------------------------------------- |
-| @AuthenticatedUser | Retrieves the current Keycloak logged-in user. (must be per method, unless controller is request scoped.) |
+| @KeycloakUser      | Retrieves the current Keycloak logged-in user. (must be per method, unless controller is request scoped.) |
+| @AccessToken       | Retrieves the access token used in the request                                                            |
+| @ResolvedScopes    | Retrieves the resolved scopes (used in @ConditionalScopes)                                                |
 | @EnforcerOptions   | Keycloak enforcer options.                                                                                |
 | @Public            | Allow any user to use the route.                                                                          |
 | @Resource          | Keycloak application resource name.                                                                       |
-| @Scopes            | Keycloak application scope name.                                                                          |
+| @Scopes            | Keycloak application scopes.                                                                              |
+| @ConditionalScopes | Conditional keycloak application scopes.                                                                  |
 | @Roles             | Keycloak realm/application roles.                                                                         |
 
 ## Multi tenant configuration
@@ -228,10 +237,12 @@ Setting up for multi-tenant is configured as an option in your configuration:
 
 ```typescript
 {
-  authServerUrl: 'http://localhost:8180/auth',
-  clientId: 'nest-api',
-  secret: 'fallback', // will be used as fallback when resolver returns null
+  // Add /auth for older keycloak versions
+  authServerUrl: 'http://localhost:8180/', // will be used as fallback
+  clientId: 'nest-api', // will be used as fallback
+  secret: 'fallback', // will be used as fallback
   multiTenant: {
+    resolveAlways: true,
     realmResolver: (request) => {
       return request.get('host').split('.')[0];
     },
@@ -239,8 +250,13 @@ Setting up for multi-tenant is configured as an option in your configuration:
       const secrets = { master: 'secret', slave: 'password' };
       return secrets[realm];
     },
+    realmClientIdResolver: (realm, request) => {
+      const clientIds = { master: 'angular-app', slave: 'vue-app' };
+      return clientIds[realm];
+    },
+    // note to add /auth for older keycloak versions
     realmAuthServerUrlResolver: (realm, request) => {
-      const authServerUrls = { master: 'https://master.local/auth', slave: 'https://slave.local/auth' };
+      const authServerUrls = { master: 'https://master.local/', slave: 'https://slave.local/' };
       return authServerUrls[realm];
     }
   }
@@ -258,8 +274,6 @@ For Keycloak options, refer to the official [keycloak-connect](https://github.co
 | Option            | Description                                                              | Required | Default      |
 | ----------------- | ------------------------------------------------------------------------ | -------- | ------------ |
 | cookieKey         | Cookie Key                                                               | no       | KEYCLOAK_JWT |
-| logLevels         | Built-in logger level (deprecated, will be removed in 2.0)               | no       | log          |
-| useNestLogger     | Use the nest logger (deprecated, will be removed in 2.0)                 | no       | true         |
 | policyEnforcement | Sets the policy enforcement mode                                         | no       | PERMISSIVE   |
 | tokenValidation   | Sets the token validation method                                         | no       | ONLINE       |
 | multiTenant       | Sets the options for [multi-tenant configuration](#multi-tenant-options) | no       | -            |
@@ -273,6 +287,7 @@ For Keycloak options, refer to the official [keycloak-connect](https://github.co
 | realmResolver              | A function that passes a request (from respective platform i.e express or fastify) and returns a string | yes      | -       |
 | realmSecretResolver        | A function that passes the realm string, and an optional request and returns the secret string          | no       | -       |
 | realmAuthServerUrlResolver | A function that passes the realm string, and an optional request and returns the auth server url string | no       | -       |
+| realmClientIdResolver      | A function that passes the realm string, and an optional request and returns the client-id string       | no       | -       |
 
 ## Example app
 

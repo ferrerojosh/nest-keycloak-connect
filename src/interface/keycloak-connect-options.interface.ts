@@ -1,6 +1,5 @@
 // The typings are a bit of a mess, I'm sure there's a better way to do this.
 
-import { LogLevel } from '@nestjs/common';
 import {
   PolicyEnforcementMode,
   RoleMerge,
@@ -35,6 +34,13 @@ export interface MultiTenantOptions {
     realm: string,
     request?: any,
   ) => Promise<string> | string;
+  /**
+   * The realm client id resolver function.
+   */
+  realmClientIdResolver: (
+    realm: string,
+    request?: any,
+  ) => Promise<string> | string;
 }
 
 /**
@@ -45,16 +51,6 @@ export interface NestKeycloakConfig {
    * Cookie key.
    */
   cookieKey?: string;
-
-  /**
-   * Log level.
-   */
-  logLevels?: LogLevel[];
-
-  /**
-   * Use the nest logger.
-   */
-  useNestLogger?: boolean;
 
   /**
    * Sets the policy enforcement mode for this adapter, defaults to {@link PolicyEnforcementMode.PERMISSIVE}.

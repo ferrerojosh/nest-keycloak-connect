@@ -12,13 +12,13 @@ import {
 import {
   createKeycloakConnectOptionProvider,
   keycloakProvider,
-  loggerProvider,
 } from './keycloak-connect.providers';
 import { KeycloakMultiTenantService } from './services/keycloak-multitenant.service';
 
 export * from './constants';
-export * from './decorators/authenticated-user.decorator';
+export * from './decorators/access-token.decorator';
 export * from './decorators/enforcer-options.decorator';
+export * from './decorators/keycloak-user.decorator';
 export * from './decorators/public.decorator';
 export * from './decorators/resource.decorator';
 export * from './decorators/roles.decorator';
@@ -29,8 +29,8 @@ export * from './guards/role.guard';
 export * from './interface/keycloak-connect-module-async-options.interface';
 export * from './interface/keycloak-connect-options-factory.interface';
 export * from './interface/keycloak-connect-options.interface';
-export * from './interface/role-decorator-options.interface';
 export * from './services/keycloak-multitenant.service';
+export * from './util';
 
 @Module({})
 export class KeycloakConnectModule {
@@ -48,7 +48,6 @@ export class KeycloakConnectModule {
   ): DynamicModule {
     const keycloakConnectProviders = [
       createKeycloakConnectOptionProvider(opts, config),
-      loggerProvider,
       keycloakProvider,
       KeycloakMultiTenantService,
       {
@@ -81,7 +80,6 @@ export class KeycloakConnectModule {
   ): Provider[] {
     const reqProviders = [
       this.createAsyncOptionsProvider(options),
-      loggerProvider,
       keycloakProvider,
       KeycloakMultiTenantService,
       {

@@ -12,22 +12,22 @@ const CustomRules = {
     '@typescript-eslint/interface-name-prefix': 'off',
     '@typescript-eslint/explicit-function-return-type': 'off',
     '@typescript-eslint/explicit-module-boundary-types': 'off',
-    '@typescript-eslint/no-explicit-any': 'off'
-  }
-}
+    '@typescript-eslint/no-explicit-any': 'off',
+  },
+};
 
 const PerformanceParser = {
   languageOptions: {
     parserOptions: {
       project: true,
-      tsconfigRootDir: import.meta.dirname
-    }
-  }
+      tsconfigRootDir: import.meta.dirname,
+    },
+  },
 };
 
 const NoTypeCheckOnJavascript = {
   files: ['**/*.js'],
-  ...TSESLint.configs.disableTypeChecked
+  ...TSESLint.configs.disableTypeChecked,
 };
 
 /** @type {import('@typescript-eslint/utils').TSESLint.FlatConfig.ConfigFile} */
@@ -36,5 +36,8 @@ export default [
   PerformanceParser,
   CustomRules,
   NoTypeCheckOnJavascript,
-  EslintPluginPrettierRecommended
+  EslintPluginPrettierRecommended,
+  {
+    ignores: ['eslint.config.mjs'],
+  },
 ];

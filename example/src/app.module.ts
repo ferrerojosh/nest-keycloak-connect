@@ -1,9 +1,10 @@
 import { Module } from '@nestjs/common';
 import { APP_GUARD } from '@nestjs/core';
 import {
-  AuthGuard, KeycloakConnectModule,
+  AuthGuard,
+  KeycloakConnectModule,
   ResourceGuard,
-  RoleGuard
+  RoleGuard,
 } from 'nest-keycloak-connect';
 import { AppController } from './app.controller';
 import { ConfigModule } from './config/config.module';
@@ -14,7 +15,7 @@ import { ProductModule } from './product/product.module';
   imports: [
     KeycloakConnectModule.registerAsync({
       useExisting: KeycloakConfigService,
-      imports: [ConfigModule]
+      imports: [ConfigModule],
     }),
     ProductModule,
   ],
