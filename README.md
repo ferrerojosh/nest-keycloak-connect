@@ -1,6 +1,10 @@
 <div align="center">
   
 # Nest Keycloak Connect
+
+### You are currently viewing the pre-release documentation for version 2.0. 
+## Click [here](https://github.com/ferrerojosh/nest-keycloak-connect/tree/v1.0) for the 1.0 stable release documentation.
+
   
 ![GitHub Issues or Pull Requests](https://img.shields.io/github/issues/ferrerojosh/nest-keycloak-connect?style=for-the-badge)
 ![GitHub License](https://img.shields.io/github/license/ferrerojosh/nest-keycloak-connect?style=for-the-badge)
