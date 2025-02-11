@@ -63,13 +63,13 @@ export class RoleGuard implements CanActivate {
         roles.push(...mergedRoles);
       }
     } else if (roleMerge == RoleMerge.OVERRIDE) {
-      const resultRoles = this.reflector.getAllAndOverride<string>(META_ROLES, [
-        context.getClass(),
-        context.getHandler(),
-      ]);
+      const resultRoles = this.reflector.getAllAndOverride<string[]>(
+        META_ROLES,
+        [context.getClass(), context.getHandler()],
+      );
 
       if (resultRoles) {
-        roles.push(resultRoles);
+        roles.push(...resultRoles);
       }
     } else {
       throw Error(`Unknown role merge: ${roleMerge}`);
