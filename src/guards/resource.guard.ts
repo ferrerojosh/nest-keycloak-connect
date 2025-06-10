@@ -57,7 +57,7 @@ export class ResourceGuard implements CanActivate {
 
         return {
           'http.uri': [httpUri],
-          'user.agent': userAgent,
+          'user.agent': [userAgent],
         };
       },
     };
