@@ -225,7 +225,7 @@ Here is the decorators you can use in your controllers.
 
 | Decorator          | Description                                                                                               |
 | ------------------ | --------------------------------------------------------------------------------------------------------- |
-| @KeycloakUser      | Retrieves the current Keycloak logged-in user. (must be per method, unless controller is request scoped.) |
+| @AuthenticatedUser | Retrieves the current Keycloak logged-in user. (must be per method, unless controller is request scoped.) |
 | @AccessToken       | Retrieves the access token used in the request                                                            |
 | @ResolvedScopes    | Retrieves the resolved scopes (used in @ConditionalScopes)                                                |
 | @EnforcerOptions   | Keycloak enforcer options.                                                                                |
