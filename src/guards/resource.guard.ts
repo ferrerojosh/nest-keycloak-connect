@@ -28,8 +28,8 @@ import { KeycloakMultiTenantService } from '../services/keycloak-multitenant.ser
 
 /**
  * This adds a resource guard, which is policy enforcement by default is permissive.
- * Only controllers annotated with `@Resource` and methods with `@Scopes`
- * are handled by this guard.
+ * Only controllers or handlers annotated with `@Resource` and methods with
+ * `@Scopes` are handled by this guard.
  */
 @Injectable()
 export class ResourceGuard implements CanActivate {
@@ -62,10 +62,10 @@ export class ResourceGuard implements CanActivate {
       },
     };
 
-    const resource = this.reflector.get<string>(
-      META_RESOURCE,
+    const resource = this.reflector.getAllAndOverride<string>(META_RESOURCE, [
+      context.getHandler(),
       context.getClass(),
-    );
+    ]);
     const explicitScopes =
       this.reflector.get<string[]>(META_SCOPES, context.getHandler()) ?? [];
     const conditionalScopes = this.reflector.get<ConditionalScopeFn>(
