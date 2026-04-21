@@ -206,7 +206,8 @@ export class ProductController {
 
   @Delete(':code')
   @Scopes('Delete')
-  @Roles({ roles: ['admin', 'realm:sysadmin'], mode: RoleMatchingMode.ALL })
+  @Roles('admin', 'realm:sysadmin')
+  @RoleMatchingMode(RoleMatch.ALL)
   async deleteByCode(@Param('code') code: string) {
     return await this.service.deleteByCode(code);
   }
@@ -234,6 +235,7 @@ Here is the decorators you can use in your controllers.
 | @Scopes            | Keycloak application scopes.                                                                              |
 | @ConditionalScopes | Conditional keycloak application scopes.                                                                  |
 | @Roles             | Keycloak realm/application roles.                                                                         |
+| @RolesMatchingMode | Either RoleMatch.All or RoleMatch.Any (default)                                                           |
 
 ## Multi tenant configuration
 
